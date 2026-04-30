@@ -37,6 +37,20 @@ add_action(
 			array( 'mercantile-hook-loop-fonts' ),
 			wp_get_theme()->get( 'Version' )
 		);
+
+		// In-place catalog filter swap. Intercepts clicks on the
+		// category filter chips and swaps the grid in place via fetch
+		// rather than full-page navigation.
+		wp_enqueue_script(
+			'mercantile-hook-loop-filter-swap',
+			get_template_directory_uri() . '/assets/js/filter-swap.js',
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 );
 

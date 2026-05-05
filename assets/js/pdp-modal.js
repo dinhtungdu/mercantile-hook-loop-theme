@@ -43,7 +43,14 @@ const { state, actions } = store( NAMESPACE, {
 			document.body.style.overflow = 'hidden';
 
 			try {
-				const response = yield fetch( url, { credentials: 'same-origin' } );
+				// Always fetch fresh — the browser otherwise serves a stale
+				// cached HTML, which means template / inline-style changes
+				// (e.g. tweaks to padding on .mh-pdp__side) only show up
+				// after a hard refresh of the product URL itself.
+				const response = yield fetch( url, {
+					credentials: 'same-origin',
+					cache: 'no-store',
+				} );
 				if ( ! response.ok ) {
 					throw new Error( 'Fetch failed: ' + response.status );
 				}

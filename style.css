@@ -1048,7 +1048,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	padding-bottom: 10px;
 	border-bottom: 1px dashed var(--mh-rule);
 	word-break: break-all;
-	margin: 0;
+	margin: 0 0 14px;
 }
 
 .mh-pdp__permalink .k { color: var(--mh-wp); }

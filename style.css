@@ -2549,6 +2549,7 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	position: relative;
 	width: calc(100% - 40px);
 	max-width: 1040px;
+	min-height: 120px;                 /* visible even during loading */
 	max-height: calc(100vh - 80px);
 	margin: 40px auto;
 	overflow-y: auto;

@@ -983,12 +983,14 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 10px 16px;
+	padding: 14px 20px;
 	background: var(--mh-paper-2);
 	border-bottom: 1px solid var(--mh-rule);
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 11px;
 	color: var(--mh-slate);
+	min-height: 56px;
+	box-sizing: border-box;
 }
 
 .mh-pdp__crumb { letter-spacing: 0.02em; }

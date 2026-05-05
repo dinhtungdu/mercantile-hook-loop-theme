@@ -958,13 +958,23 @@ body.post-type-archive-product .mh-filters .mh-filter {
 /* ===== Single product (admin-editor framing) ===== */
 .mh-breadcrumbs.wc-block-components-breadcrumbs { display: none; } /* prefer custom crumb header */
 
-.mh-pdp-wrap { padding-top: 32px; }
+/* PDP wrapper acts as a backdrop "scrim" so the card sits on a different
+   plane than the rest of the page chrome — same modal-card feel as the
+   prototype. The card itself is capped narrower than alignwide. */
+.mh-pdp-wrap {
+	background: var(--mh-rule-soft);
+	padding-top: 40px;
+	padding-bottom: 64px;
+}
 
 .mh-pdp {
+	max-width: 1040px;
+	margin-left: auto;
+	margin-right: auto;
 	background: var(--mh-paper);
 	border: 1px solid var(--mh-rule);
 	border-radius: 6px;
-	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.08), 0 6px 18px -6px rgba(17, 18, 20, 0.05);
+	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
 	overflow: hidden;
 }
 

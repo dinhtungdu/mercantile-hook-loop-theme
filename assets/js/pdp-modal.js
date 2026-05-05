@@ -24,7 +24,7 @@
  * products in another modal, mini-cart line items, etc.).
  */
 
-import { store, getContext } from '@wordpress/interactivity';
+import { store, getContext, getElement } from '@wordpress/interactivity';
 
 const NAMESPACE = 'mercantile/pdp-modal';
 
@@ -119,6 +119,19 @@ const { state, actions } = store( NAMESPACE, {
 		onKeydown( event ) {
 			if ( event.key === 'Escape' && state.isOpen ) {
 				actions.close();
+			}
+		},
+		// Imperatively syncs state.html into the element's innerHTML when
+		// state.html changes. There's no native data-wp-html directive in
+		// the Interactivity API (only data-wp-text for textContent), so we
+		// use data-wp-watch on the content element which fires this callback
+		// any time the watched state changes.
+		onContentChange() {
+			const { ref } = getElement();
+			if ( ! ref ) return;
+			if ( ref.innerHTML !== state.html ) {
+				ref.innerHTML = state.html || '';
+				console.info( '[mh-pdp-modal] innerHTML synced, length:', ref.innerHTML.length );
 			}
 		},
 	},

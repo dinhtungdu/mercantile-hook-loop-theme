@@ -64,6 +64,16 @@ body {
 	margin-bottom: 0 !important;
 }
 
+/* The cart tab lives in a `wp:shortcode` block. `wpautop` can wrap a
+   bare `<a>` shortcode output in `<p>`, which then becomes the flex
+   child of `.mh-ticker` and pushes the `<a>` inside it to the top of
+   the 34px row. `display: contents` removes the `<p>` from layout so
+   the `<a>` is a direct flex child again and `align-items: stretch` +
+   the tab's own `align-items: center` give vertical centering. */
+.mh-ticker > p {
+	display: contents;
+}
+
 .mh-ticker .mh-ticker__lead {
 	padding: 0 12px;
 	display: flex;

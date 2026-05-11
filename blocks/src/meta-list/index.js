@@ -1,69 +1,57 @@
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import {
-	PanelBody,
-	TextControl,
-	Button,
-	ButtonGroup,
-} from '@wordpress/components';
+	useBlockProps,
+	InspectorControls,
+	RichText,
+} from '@wordpress/block-editor';
+import { PanelBody, Button, ButtonGroup } from '@wordpress/components';
 import metadata from './block.json';
 import './style.css';
 
-const ItemEditor = ( { item, index, total, update, remove, move } ) => (
+const ALLOWED_FORMATS = [ 'core/bold', 'core/italic' ];
+
+const ItemControls = ( { index, total, remove, move } ) => (
 	<div
 		style={ {
 			borderBottom: '1px solid #e0e0e0',
 			paddingBottom: 12,
 			marginBottom: 12,
+			display: 'flex',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			gap: 8,
 		} }
 	>
-		<TextControl
-			label={ __( 'Label', 'mercantile-hook-loop' ) + ` #${ index + 1 }` }
-			value={ item.label || '' }
-			onChange={ ( label ) => update( index, { label } ) }
-		/>
-		<TextControl
-			label={ __( 'Value', 'mercantile-hook-loop' ) }
-			value={ item.value || '' }
-			onChange={ ( value ) => update( index, { value } ) }
-		/>
-		<div
-			style={ {
-				display: 'flex',
-				justifyContent: 'space-between',
-				marginTop: 6,
-			} }
-		>
-			<ButtonGroup>
-				<Button
-					size="small"
-					variant="secondary"
-					onClick={ () => move( index, -1 ) }
-					disabled={ index === 0 }
-					accessibleWhenDisabled
-				>
-					↑
-				</Button>
-				<Button
-					size="small"
-					variant="secondary"
-					onClick={ () => move( index, 1 ) }
-					disabled={ index === total - 1 }
-					accessibleWhenDisabled
-				>
-					↓
-				</Button>
-			</ButtonGroup>
+		<span>{ `#${ index + 1 }` }</span>
+		<ButtonGroup>
 			<Button
 				size="small"
 				variant="secondary"
-				isDestructive
-				onClick={ () => remove( index ) }
+				onClick={ () => move( index, -1 ) }
+				disabled={ index === 0 }
+				accessibleWhenDisabled
 			>
-				{ __( 'Remove', 'mercantile-hook-loop' ) }
+				↑
 			</Button>
-		</div>
+			<Button
+				size="small"
+				variant="secondary"
+				onClick={ () => move( index, 1 ) }
+				disabled={ index === total - 1 }
+				accessibleWhenDisabled
+			>
+				↓
+			</Button>
+		</ButtonGroup>
+		<Button
+			size="small"
+			variant="secondary"
+			isDestructive
+			onClick={ () => remove( index ) }
+		>
+			{ __( 'Remove', 'mercantile-hook-loop' ) }
+		</Button>
 	</div>
 );
 
@@ -107,12 +95,10 @@ registerBlockType( metadata.name, {
 						title={ __( 'Meta items', 'mercantile-hook-loop' ) }
 					>
 						{ items.map( ( item, i ) => (
-							<ItemEditor
+							<ItemControls
 								key={ i }
-								item={ item }
 								index={ i }
 								total={ items.length }
-								update={ update }
 								remove={ remove }
 								move={ move }
 							/>
@@ -125,10 +111,37 @@ registerBlockType( metadata.name, {
 				<div { ...blockProps }>
 					{ items.map( ( item, i ) => (
 						<div key={ i } className="mh-meta-row">
-							<span>{ item.label || '' }</span>
-							<b>{ item.value || '' }</b>
+							<RichText
+								tagName="span"
+								identifier={ `label-${ i }` }
+								value={ item.label || '' }
+								onChange={ ( label ) => update( i, { label } ) }
+								placeholder={ __(
+									'Label',
+									'mercantile-hook-loop'
+								) }
+								allowedFormats={ ALLOWED_FORMATS }
+								disableLineBreaks
+							/>
+							<RichText
+								tagName="b"
+								identifier={ `value-${ i }` }
+								value={ item.value || '' }
+								onChange={ ( value ) => update( i, { value } ) }
+								placeholder={ __(
+									'Value',
+									'mercantile-hook-loop'
+								) }
+								allowedFormats={ ALLOWED_FORMATS }
+								disableLineBreaks
+							/>
 						</div>
 					) ) }
+					{ items.length === 0 && (
+						<Button variant="secondary" onClick={ add }>
+							{ __( 'Add first item', 'mercantile-hook-loop' ) }
+						</Button>
+					) }
 				</div>
 			</>
 		);

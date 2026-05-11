@@ -28,14 +28,13 @@
 
 				<!-- wp:woocommerce/product-summary {"className":"mh-pdp__blurb"} /-->
 
-				<!-- wp:html -->
-				<div class="mh-marginalia">
-					<span class="mh-pill is-blue">highlighted</span>
-					<span class="mh-pill">indexed</span>
-					<span class="mh-pill is-pink">in stock</span>
-					<span class="mh-pill">cross-ref · §shop</span>
-				</div>
-				<!-- /wp:html -->
+				<!-- Marginalia pill row — `highlighted` / `indexed` stay
+				     decorative; the stock pill reflects real product
+				     state, and `cross-ref` uses the product's category
+				     slug. See [mh_pdp_marginalia]. -->
+				<!-- wp:shortcode -->
+				[mh_pdp_marginalia]
+				<!-- /wp:shortcode -->
 
 				<!-- wp:group {"className":"mh-pdp__gallery","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
 				<div class="wp-block-group mh-pdp__gallery">

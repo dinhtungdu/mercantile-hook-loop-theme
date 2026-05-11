@@ -447,3 +447,167 @@ add_shortcode(
 		return ob_get_clean();
 	}
 );
+
+/**
+ * `[mh_hero_meta_strip]` — the 3-column meta line above the wordmark.
+ *
+ * Replaces hard-coded "17 products · 3 categories", "vol. 03 ·
+ * 2026-04-27", "updated 14:32 UTC", "made with ♥︎ & PHP" with values
+ * pulled from real WP / WC state at render time. Volume number is
+ * derived from the theme version so it stays put when content changes
+ * but rolls forward when the theme does. The "updated" timestamp uses
+ * the most-recently-modified product so it reflects real catalog
+ * activity rather than the server clock.
+ */
+add_shortcode(
+	'mh_hero_meta_strip',
+	function () {
+		// "Volume" from theme version — "0.1.0" → "01".
+		$version = wp_get_theme()->get( 'Version' );
+		$major   = (int) explode( '.', $version )[0];
+		$minor   = (int) ( explode( '.', $version )[1] ?? 0 );
+		$volume  = str_pad( (string) max( 1, $major * 10 + $minor ), 2, '0', STR_PAD_LEFT );
+
+		// Today's date.
+		$today = date_i18n( 'Y-m-d' );
+
+		// Real product / category counts.
+		$product_count = (int) wp_count_posts( 'product' )->publish;
+		$category_count = (int) wp_count_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => true,
+			)
+		);
+
+		// "updated <relative>" — most recently modified published product.
+		$updated_label = 'just now';
+		$latest = get_posts(
+			array(
+				'post_type'      => 'product',
+				'posts_per_page' => 1,
+				'orderby'        => 'modified',
+				'order'          => 'DESC',
+				'post_status'    => 'publish',
+				'fields'         => 'ids',
+			)
+		);
+		if ( ! empty( $latest ) ) {
+			$mod = get_post_modified_time( 'U', true, $latest[0] );
+			$updated_label = human_time_diff( $mod, current_time( 'timestamp', true ) ) . ' ago';
+		}
+
+		$php_version = PHP_VERSION;
+
+		ob_start();
+		?>
+		<div class="mh-meta-strip">
+			<div class="mh-col">
+				<span><b>Mercantile</b> &middot; wordpress.org / shop</span>
+				<span>vol. <?php echo esc_html( $volume ); ?> &middot; <?php echo esc_html( $today ); ?></span>
+			</div>
+			<div class="mh-col" style="text-align:center">
+				<span><b><?php echo esc_html( $product_count ); ?></b> products &middot; <b><?php echo esc_html( $category_count ); ?></b> categories</span>
+				<span>updated <?php echo esc_html( $updated_label ); ?></span>
+			</div>
+			<div class="mh-col is-right">
+				<span>GPLv2 &middot; made with &#9829;&#xfe0e; &amp; PHP <?php echo esc_html( $php_version ); ?></span>
+				<span>shipping worldwide</span>
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+);
+
+/**
+ * `[mh_hero_rail_row]` — three-column rail below the wordmark.
+ *
+ * Left column is the editorial blurb (kept static — it's the strongest
+ * design copy on the page). Middle column was hard-coded fake-feeling
+ * dev stats ("hooks fired: 847", "commits today: 47"); now reads
+ * real WordPress / WC / PHP versions plus a real product count, which
+ * preserves the dev-feel without lying. Right column is shipping /
+ * support info that already matched the real mercantile setup.
+ *
+ * Keeps the existing `.mh-blurb` / `.mh-kv` markup so the rail-row CSS
+ * still applies.
+ */
+add_shortcode(
+	'mh_hero_rail_row',
+	function () {
+		global $wp_version;
+		$wc_version    = defined( 'WC_VERSION' ) ? WC_VERSION : '';
+		$product_count = (int) wp_count_posts( 'product' )->publish;
+
+		ob_start();
+		?>
+		<div class="mh-rail-row">
+			<div class="mh-blurb">
+				Objects, tactile and typographic, for the people who make the <em>open web</em>. Cotton, ceramic, vinyl, and mascots &mdash; shipped out of <em style="white-space:nowrap">wp-content/merch</em>.
+			</div>
+			<div>
+				<div class="mh-kv"><span>editor</span><b>wapuu</b></div>
+				<div class="mh-kv"><span>WordPress</span><b><?php echo esc_html( $wp_version ); ?></b></div>
+				<div class="mh-kv"><span>runtime</span><b>PHP <?php echo esc_html( PHP_VERSION ); ?></b></div>
+				<?php if ( $wc_version ) : ?>
+					<div class="mh-kv"><span>WooCommerce</span><b><?php echo esc_html( $wc_version ); ?></b></div>
+				<?php else : ?>
+					<div class="mh-kv"><span>products</span><b><?php echo esc_html( $product_count ); ?></b></div>
+				<?php endif; ?>
+			</div>
+			<div>
+				<div class="mh-kv"><span>ships from</span><b>San Francisco, CA</b></div>
+				<div class="mh-kv"><span>dispatch</span><b>1&ndash;2 business days</b></div>
+				<div class="mh-kv"><span>returns</span><b>14-day defect window</b></div>
+				<div class="mh-kv"><span>help</span><b>mercantile@wordpress.org</b></div>
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+);
+
+/**
+ * `[mh_pdp_marginalia]` — the row of pill labels under the PDP blurb.
+ *
+ * `highlighted` + `indexed` stay as decorative editorial signals (they
+ * mimic the look of an annotated zine). `in stock` / `out of stock`
+ * now reflects real product stock state — turns pink when OOS. The
+ * `cross-ref` pill picks up the product's primary category slug so
+ * it reads like a real index entry (`cross-ref · §apparel`) instead
+ * of the hard-coded `§shop`.
+ */
+add_shortcode(
+	'mh_pdp_marginalia',
+	function () {
+		global $product;
+		if ( ! is_a( $product, 'WC_Product' ) ) {
+			return '';
+		}
+
+		$in_stock        = $product->is_in_stock();
+		$stock_class     = $in_stock ? 'is-pink' : 'is-out';
+		$stock_text      = $in_stock ? 'in stock' : 'out of stock';
+
+		// Primary product category slug for the cross-ref pill.
+		$cat_slug = 'shop';
+		$terms    = get_the_terms( $product->get_id(), 'product_cat' );
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			$primary  = reset( $terms );
+			$cat_slug = $primary->slug;
+		}
+
+		return sprintf(
+			'<div class="mh-marginalia">' .
+			'<span class="mh-pill is-blue">highlighted</span>' .
+			'<span class="mh-pill">indexed</span>' .
+			'<span class="mh-pill %s">%s</span>' .
+			'<span class="mh-pill">cross-ref &middot; &sect;%s</span>' .
+			'</div>',
+			esc_attr( $stock_class ),
+			esc_html( $stock_text ),
+			esc_html( $cat_slug )
+		);
+	}
+);

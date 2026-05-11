@@ -1272,6 +1272,17 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	color: var(--mh-ink);
 }
 
+/* Out-of-stock variant of the "in stock" pill — same shape, muted
+   palette + strikethrough so it reads as a "this entry was indexed
+   but isn't currently available" editorial signal. */
+.mh-pdp .mh-marginalia .mh-pill.is-out {
+	background: var(--mh-paper-2);
+	border-color: var(--mh-rule);
+	color: var(--mh-slate);
+	text-decoration: line-through;
+	text-decoration-color: var(--mh-slate-2);
+}
+
 /* Gallery box */
 .mh-pdp__gallery {
 	background: #fff;

@@ -17,12 +17,15 @@
 			"type": "string",
 			"default": "cart"
 		},
+		"textColor": {
+			"type": "string",
+			"default": "text-on-ink"
+		},
 		"style": {
 			"type": "object",
 			"default": {
-				"color": { "text": "#ecebe4" },
 				"spacing": { "padding": { "top": "0", "right": "12px", "bottom": "0", "left": "12px" } },
-				"border": { "left": { "color": "#383d41", "width": "1px", "style": "solid" } }
+				"border": { "left": { "color": "var:preset|color|divider-on-ink", "width": "1px", "style": "solid" } }
 			}
 		}
 	},

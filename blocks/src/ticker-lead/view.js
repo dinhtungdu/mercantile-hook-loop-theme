@@ -1,5 +1,5 @@
 /**
- * View-side IxAPI store for `mercantile/ticker-lead`.
+ * View-side iAPI store for `mercantile/ticker-lead`.
  *
  * Click on the LIVE button pauses the ticker: state.isPaused flips true,
  * state.label swaps to the stop string. A timer reverts both after the
@@ -7,7 +7,7 @@
  * via a CSS `:has()` rule that reads `.mh-ticker__lead.is-paused` on the
  * parent `.mh-ticker` group — no cross-block messaging needed.
  *
- * Static values (translated labels, pause duration) live in IxAPI
+ * Static values (translated labels, pause duration) live in iAPI
  * config, not state — they never change after first paint. render.php
  * runs the strings through __() before seeding, so this module is free
  * of i18n and textdomain concerns.

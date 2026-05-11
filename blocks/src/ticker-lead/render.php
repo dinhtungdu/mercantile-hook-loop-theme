@@ -27,7 +27,7 @@ $pause_ms = isset( $attributes['pauseMs'] ) ? max( 500, (int) $attributes['pause
 $size     = isset( $attributes['size'] ) ? (int) $attributes['size'] : 14;
 
 // LIVE / STOP are hardcoded but translation-ready: PHP runs them through
-// __() and hands them to the IxAPI as **config** (read-only, never
+// __() and hands them to the iAPI as **config** (read-only, never
 // changes after first paint), not state. Only `isPaused` and the derived
 // `label` are reactive state — those mutate at runtime. The label getter
 // in view.js reads the two strings out of getConfig().

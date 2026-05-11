@@ -1,5 +1,5 @@
 /**
- * View-side IxAPI store for `mercantile/wappu-drop`.
+ * View-side iAPI store for `mercantile/wappu-drop`.
  *
  * Click spawns N <div class="mh-wapuu-poof"> elements anchored just below
  * the button, each with randomized --dx/--dy/--rot CSS vars so the CSS
@@ -7,7 +7,7 @@
  * once their animation ends, so the DOM stays clean.
  *
  * The wapuu SVG URL and per-click count are static — they come from
- * IxAPI config (seeded server-side in render.php). No reactive state on
+ * iAPI config (seeded server-side in render.php). No reactive state on
  * this store.
  *
  * Respects `prefers-reduced-motion`: the keyframe is hidden via CSS, but

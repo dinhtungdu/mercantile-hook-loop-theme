@@ -31,7 +31,7 @@ $prefix = isset( $attributes['prefix'] ) && '' !== $attributes['prefix']
 	: '+';
 $count  = isset( $attributes['count'] ) ? max( 1, min( 24, (int) $attributes['count'] ) ) : 1;
 
-// SVG URL and per-click count never change at runtime → IxAPI config,
+// SVG URL and per-click count never change at runtime → iAPI config,
 // not state. view.js reads them via getConfig(); the store carries no
 // reactive state at all in this block.
 wp_interactivity_config(

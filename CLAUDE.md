@@ -83,7 +83,7 @@ or editing blocks here.
     `keywords` when `textdomain` is set, but attribute defaults pass
     through verbatim. If a default is user-facing, run it through
     `__()` at render-time when the attribute is empty.
-13. **IxAPI view.js: seed translated strings via PHP, don't `__()` in
+13. **iAPI view.js: seed translated strings via PHP, don't `__()` in
     JS.** render.php runs strings through `__()` server-side; view.js
     reads them via `getConfig()` (or `state` if reactive) and never
     touches the textdomain. Keeps the Interactivity module free of
@@ -102,7 +102,7 @@ or editing blocks here.
 
 15. **`WP_EXPERIMENTAL_MODULES=true` is required for
     `viewScriptModule`.** Without it, wp-scripts silently skips module
-    entries — you get no `view.js`, your IxAPI store never registers,
+    entries — you get no `view.js`, your iAPI store never registers,
     no error. The flag is already set in `package.json` scripts; keep
     it there.
 16. **Auto-discover blocks via `glob`, don't hardcode slugs.**
@@ -167,7 +167,7 @@ blocks/
 │       ├── style.css      # block-owned styles; wp-scripts emits this as
 │       │                  # build/<slug>/style-index.css
 │       ├── render.php     # echoes HTML (don't return)
-│       └── view.js        # ESM, IxAPI store; only when you need
+│       └── view.js        # ESM, iAPI store; only when you need
 │                          # client-side reactivity beyond SSR
 └── build/                 # gitignored; produced by `pnpm build`
 ```

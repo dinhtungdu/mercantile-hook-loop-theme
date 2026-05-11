@@ -22,11 +22,16 @@ or editing blocks here.
    `currentColor`, (b) Interactivity API directives, or (c) live data
    needs an attribute schema you can't get from core. Don't reach for
    them just to skip writing block markup.
-4. **CSS last, scoped to a className.** A `.mh-ticker`-style hook still
-   earns its keep for things blocks can't express: fixed `height`,
-   `overflow:hidden`, `::before` pseudos, descendant resets (paragraph
-   margin, link color/underline) that need to be neutralized only
-   inside one surface.
+4. **CSS last, scoped to a className.** A `.mh-ticker`-style hook
+   earns its keep only for surface chrome blocks can't express: fixed
+   `height`, `overflow:hidden`, `z-index`, `::before` pseudos. When
+   the children are real blocks, do NOT blanket UA-default resets
+   across the surface (`.mh-ticker p`, `.mh-ticker a`, `.mh-ticker > *`)
+   — that reaches across block boundaries and fights theme.json from
+   the wrong layer. Put paragraph-margin and link-color resets on each
+   child block's own class (`.mh-ticker__item`, `.mh-ticker__tab`,
+   `.mh-site-mark`) so each block owns its own typography reset and
+   nothing leaks if a future child changes its wrapper element.
 
 ## Custom blocks — the editing model is the design decision
 

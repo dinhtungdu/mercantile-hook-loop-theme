@@ -50,39 +50,17 @@ body {
      - mercantile/cart-tab        → .mh-ticker__tab (live cart count via
                                     the woocommerce IxAPI cart store; click
                                     opens the mini-cart drawer)
-   Block default margins for paragraphs / groups are reset below so the
-   flex bar stays a single 34px row regardless of which core block lands. */
-/* The bar's chrome (sticky position, ink background, slate text, mono
+   The bar's chrome (sticky position, ink background, slate text, mono
    font, letter-spacing, border) is set on the block in parts/ticker.html
    via core supports — only the bits WP block supports can't express stay
    here: a fixed 34px row, a stacking context above the page, and the
-   overflow clip the marquee track relies on. */
+   overflow clip the marquee track relies on. UA-default paragraph and
+   anchor styles are neutralized on each child block's own class below
+   instead of via blanket descendant selectors. */
 .mh-ticker {
 	height: 34px;
 	z-index: 50;
 	overflow: hidden;
-}
-
-/* Reset WP block default margins/typography inside the ticker so paragraph
-   and group children behave like the original flex spans. */
-.mh-ticker > *,
-.mh-ticker .mh-ticker__lead > * {
-	margin-block-start: 0 !important;
-	margin-block-end: 0 !important;
-	margin-top: 0 !important;
-	margin-bottom: 0 !important;
-}
-.mh-ticker p {
-	margin: 0;
-	font-size: inherit;
-	color: inherit;
-	line-height: inherit;
-	font-family: inherit;
-	letter-spacing: inherit;
-}
-.mh-ticker a {
-	color: inherit;
-	text-decoration: none;
 }
 
 .mh-ticker .mh-ticker__lead {
@@ -103,6 +81,7 @@ body {
 	display: inline-flex;
 	align-items: center;
 	color: inherit;
+	text-decoration: none;
 	line-height: 0;
 	transition: color 0.15s ease;
 }
@@ -160,6 +139,15 @@ body {
 	to { transform: translateX(-50%); }
 }
 
+/* Track items are <p>s; neutralize UA paragraph margin and inherit the
+   ticker's mono typography from the outer group. */
+.mh-ticker .mh-ticker__item {
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	letter-spacing: inherit;
+}
+
 .mh-ticker .mh-ticker__item b {
 	color: #ecebe4;
 	font-weight: 600;
@@ -178,7 +166,10 @@ body {
 	content: '✿ ';
 }
 
+/* Cart tab renders as a <p>; reset UA paragraph margin so the bar stays
+   single-row regardless of its block wrapper element. */
 .mh-ticker .mh-ticker__tab {
+	margin: 0;
 	padding: 0 12px;
 	border-left: 1px solid rgba(255, 255, 255, 0.12);
 	display: flex;
@@ -192,6 +183,8 @@ body {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
+	color: inherit;
+	text-decoration: none;
 }
 
 .mh-ticker .mh-ticker__tab strong {

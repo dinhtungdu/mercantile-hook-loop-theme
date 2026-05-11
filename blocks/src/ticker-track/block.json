@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/ticker-track",
+	"version": "2.0.0",
+	"title": "Ticker Track",
+	"category": "theme",
+	"description": "Marquee track of one-line announcements. Each item is a child paragraph block; the rail and the seamless duplicate-loop markup are emitted server-side.",
+	"icon": "controls-repeat",
+	"textdomain": "mercantile-hook-loop",
+	"editorScript": "file:./index.js",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true
+	},
+	"render": "file:./render.php"
+}

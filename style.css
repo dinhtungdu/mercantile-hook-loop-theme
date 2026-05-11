@@ -39,7 +39,17 @@ body {
 	color: #fff;
 }
 
-/* ===== Ticker ===== */
+/* ===== Ticker =====
+   Composed from native blocks in parts/ticker.html:
+     - Outer alignfull core/group  → .mh-ticker
+     - Lead core/group             → .mh-ticker__lead
+       - mercantile/site-mark      → .mh-site-mark (inline WP SVG, currentColor)
+       - empty core/group          → .mh-ticker__dot
+       - core/paragraph "LIVE"     → .mh-ticker__live
+     - mercantile/ticker-track     → .mh-ticker__rail > .mh-ticker__track > .mh-ticker__item
+     - core/paragraph cart link    → .mh-ticker__tab
+   Block default margins for paragraphs / groups are reset below so the
+   flex bar stays a single 34px row regardless of which core block lands. */
 .mh-ticker {
 	position: sticky;
 	top: 0;
@@ -56,12 +66,26 @@ body {
 	border-bottom: 1px solid var(--mh-ink);
 }
 
-/* Reset WP flow-layout child margins so flex children sit on the cross-axis center. */
-.mh-ticker > * {
+/* Reset WP block default margins/typography inside the ticker so paragraph
+   and group children behave like the original flex spans. */
+.mh-ticker > *,
+.mh-ticker .mh-ticker__lead > * {
 	margin-block-start: 0 !important;
 	margin-block-end: 0 !important;
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
+}
+.mh-ticker p {
+	margin: 0;
+	font-size: inherit;
+	color: inherit;
+	line-height: inherit;
+	font-family: inherit;
+	letter-spacing: inherit;
+}
+.mh-ticker a {
+	color: inherit;
+	text-decoration: none;
 }
 
 .mh-ticker .mh-ticker__lead {
@@ -78,15 +102,15 @@ body {
 
 /* WP logomark in the ticker doubles as the home link.
    Inside joke: click WordPress, go home. */
-.mh-ticker .mh-ticker__home {
+.mh-ticker .mh-site-mark {
 	display: inline-flex;
 	align-items: center;
 	color: inherit;
 	line-height: 0;
 	transition: color 0.15s ease;
 }
-.mh-ticker .mh-ticker__home:hover,
-.mh-ticker .mh-ticker__home:focus-visible {
+.mh-ticker .mh-site-mark:hover,
+.mh-ticker .mh-site-mark:focus-visible {
 	color: var(--mh-wp);
 	outline: none;
 }
@@ -94,6 +118,8 @@ body {
 .mh-ticker .mh-ticker__dot {
 	width: 6px;
 	height: 6px;
+	min-height: 0;
+	padding: 0;
 	border-radius: 50%;
 	background: var(--mh-ok);
 	animation: mh-pulse 2s infinite;
@@ -134,6 +160,10 @@ body {
 	font-weight: 600;
 }
 
+.mh-ticker .mh-ticker__item .mh-mono-blue {
+	color: #9ab1ff;
+}
+
 .mh-ticker .mh-ticker__item.is-wapuu {
 	color: #9fb1ff;
 	font-weight: 600;
@@ -153,7 +183,13 @@ body {
 	color: #ecebe4;
 }
 
-.mh-ticker .mh-ticker__tab .v {
+.mh-ticker .mh-ticker__tab a {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.mh-ticker .mh-ticker__tab strong {
 	color: #ecebe4;
 	font-weight: 600;
 }

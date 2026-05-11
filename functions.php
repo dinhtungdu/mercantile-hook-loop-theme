@@ -21,6 +21,26 @@ add_action(
 	}
 );
 
+/**
+ * Register theme-local blocks. Source lives in `blocks/src/<slug>/` (JSX +
+ * block.json + render.php) and is compiled by `pnpm build` into
+ * `blocks/build/<slug>/`, which is what we register from. The build
+ * directory is .gitignored — run `pnpm install && pnpm build` after a
+ * fresh checkout before activating the theme.
+ */
+add_action(
+	'init',
+	function () {
+		$blocks_dir = get_theme_file_path( 'blocks/build' );
+		foreach ( array( 'site-mark', 'ticker-track' ) as $slug ) {
+			$path = $blocks_dir . '/' . $slug;
+			if ( file_exists( $path . '/block.json' ) ) {
+				register_block_type( $path );
+			}
+		}
+	}
+);
+
 add_action(
 	'wp_enqueue_scripts',
 	function () {

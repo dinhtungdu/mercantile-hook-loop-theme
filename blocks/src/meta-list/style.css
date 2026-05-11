@@ -1,0 +1,40 @@
+/* mercantile/meta-list — two-column list of label/value rows.
+   Each row is a flex line: label on the left, bold value pushed to the
+   right, separated by a dashed bottom rule. The block owns its own
+   row styling so the theme's style.css doesn't have to reach across
+   block boundaries to dress the rows. */
+
+.mh-meta-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.mh-meta-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	border-bottom: 1px dashed var(--mh-rule);
+	padding: 2px 0;
+}
+
+.mh-meta-row:last-child {
+	border-bottom: 0;
+}
+
+.mh-meta-row b {
+	color: var(--mh-ink);
+	font-weight: 600;
+}
+
+/* Tablet/phone: rows wrap and the bold value flips to its own line,
+   aligned right. Mirrors the prototype's @960 breakpoint. */
+@media (max-width: 960px) {
+	.mh-meta-row {
+		padding: 1px 0;
+		flex-wrap: wrap;
+	}
+	.mh-meta-row b {
+		margin-left: auto;
+		text-align: right;
+	}
+}

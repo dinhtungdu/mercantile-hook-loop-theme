@@ -55,107 +55,62 @@ body {
 	overflow: hidden;
 }
 
-/* ===== Hero meta ===== */
-.mh-meta-strip {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	padding-bottom: 8px;
-	border-bottom: 1px solid var(--mh-rule);
-	flex-wrap: wrap;
-	gap: 12px;
-}
+/* ===== Hero =====
+   Surface hooks for parts/hero.html. The meta-strip, wordmark, rail
+   row, and blurb are all core blocks (group / heading / separator /
+   paragraph) plus one custom block, mercantile/meta-list, which owns
+   its own .mh-meta-row styling via blocks/src/meta-list/style.css. Wrapper
+   chrome — font-family, font-size, color, letter-spacing, padding,
+   border — is set on each block via supports + default attributes
+   in the template part. Only the bits supports can't express stay
+   here: the rail row's 2fr/1fr/1fr CSS grid, the wordmark's
+   text-wrap balance + per-character dot color, the blurb's max-width
+   + italic em color, and the responsive breakpoints. */
 
-.mh-meta-strip b {
+/* Author-style inline-bold inside meta-strip rich text inherits ink
+   rather than the slate wrapper color. Crosses a block boundary, but
+   the strong is editor-emitted inline format on paragraphs the
+   meta-strip wraps, not a sibling block. */
+.mh-meta-strip :is(strong, b) {
 	color: var(--mh-ink);
 	font-weight: 600;
 }
 
-.mh-meta-strip .mh-col {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-}
-
-.mh-meta-strip .mh-col.is-right {
-	text-align: right;
-}
-
-/* ===== Wordmark =====
-   Desktop keeps the original grand clamp. Phone-size breakpoints
-   override with tighter ranges so "Mercantile." (~5.7em wide in
-   UnifrakturCook) doesn't burst past the hero gutter — values
-   mirror the prototype's mobile pass. */
+/* Wordmark — typography is mostly delivered by core: theme.json h1
+   sets UnifrakturCook 700/line-height 1, the "wordmark" font-size
+   preset supplies the clamp, and ink color is the heading default.
+   Only what supports can't reach stays here. */
 .mh-mark {
-	font-family: 'UnifrakturCook', 'Newsreader', Georgia, serif;
-	font-weight: 700;
-	font-size: clamp(96px, 14vw, 195px);
-	line-height: 1;
 	letter-spacing: -0.005em;
-	color: var(--mh-ink);
-	margin: 12px 0 0;
 	text-wrap: balance;
 }
-@media (max-width: 700px) {
-	.mh-mark { font-size: clamp(70px, 14vw, 110px); margin: 14px 0 -4px; }
-}
-@media (max-width: 500px) {
-	.mh-mark { font-size: clamp(53px, 14vw, 72px); }
-}
-
 .mh-mark .mh-mark__dot {
 	color: var(--mh-wp);
 }
 
-/* ===== Hero rail row ===== */
+/* Rail row — only the CSS-grid template lives here; font/color/
+   line-height/padding come from the group's block supports. */
 .mh-rail-row {
 	display: grid;
 	grid-template-columns: 2fr 1fr 1fr;
 	gap: 48px;
-	padding: 20px 0 24px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	line-height: 1.7;
 }
 
-.mh-rail-row .mh-blurb {
-	font-family: 'Newsreader', Georgia, serif;
-	font-size: 17px;
-	color: var(--mh-ink);
-	line-height: 1.4;
-	font-style: italic;
+/* Blurb paragraph — max-width has no block-supports analog, and the
+   em-coloring sits inside the paragraph's own rich text. */
+.mh-blurb {
 	max-width: 38ch;
 }
-
-.mh-rail-row .mh-blurb em {
+.mh-blurb em {
 	color: var(--mh-wp);
 	font-style: italic;
 }
 
-.mh-rail-row b {
-	color: var(--mh-ink);
-	font-weight: 600;
-}
-
-.mh-rail-row .mh-kv {
-	display: flex;
-	justify-content: space-between;
-	border-bottom: 1px dashed var(--mh-rule);
-	padding: 2px 0;
-}
-
-.mh-rail-row .mh-kv:last-child {
-	border-bottom: 0;
-}
-
 /* Tablet: blurb spans full width, stats collapse to two side-by-side
-   columns. Mirrors the prototype's @960 breakpoint. */
+   columns. Padding-bottom on the meta-strip is set inline by the
+   block (`style="padding-bottom:8px"`), and font-size comes from the
+   `has-tiny-font-size` preset class — both need !important / a
+   higher-specificity push to override on mobile. */
 @media (max-width: 960px) {
 	.mh-hero {
 		padding-top: 40px !important;
@@ -163,36 +118,39 @@ body {
 		padding-right: 28px !important;
 	}
 	.mh-meta-strip {
-		flex-direction: row;
-		flex-wrap: wrap;
 		align-items: baseline;
-		gap: 2px 12px;
+		gap: 2px 12px !important;
 		font-size: 9px;
-		padding-bottom: 4px;
+		padding-bottom: 4px !important;
 	}
-	/* display: contents flattens each column so its child spans join the
-	   parent flex row — gives one continuous meta line instead of three
-	   stacked col blocks. */
+	/* display: contents flattens each column so its child paragraphs
+	   join the parent flex row — one continuous meta line instead of
+	   three stacked col blocks. With cols dissolved, the per-paragraph
+	   has-text-align-* classes would still right/center-align col 2 +
+	   col 3 lines; reset them to left so the strip reads as one row. */
 	.mh-meta-strip .mh-col { display: contents; }
-	.mh-meta-strip .mh-col.is-right { text-align: left; }
+	.mh-meta-strip [class*="has-text-align-"] { text-align: left; }
 	.mh-rail-row {
 		grid-template-columns: 1fr 1fr;
 		gap: 18px 24px;
-		padding: 18px 0 22px;
+		padding: 18px 0 22px !important;
 		font-size: 10.5px;
 	}
 	.mh-rail-row .mh-blurb { grid-column: 1 / -1; max-width: none; }
-	.mh-rail-row .mh-kv { padding: 1px 0; flex-wrap: wrap; }
-	.mh-rail-row .mh-kv b { margin-left: auto; text-align: right; }
 }
-/* Phone: tighter hero padding, smaller rail row. */
+/* Phone: tighter hero padding, smaller wordmark + rail row. */
 @media (max-width: 700px) {
 	.mh-hero {
 		padding-top: 28px !important;
 		padding-left: 20px !important;
 		padding-right: 20px !important;
 	}
-	.mh-meta-strip { font-size: 8.5px; gap: 2px 10px; }
+	.mh-meta-strip { font-size: 8.5px; gap: 2px 10px !important; }
+	.mh-mark {
+		font-size: clamp(70px, 14vw, 110px) !important;
+		margin-top: 14px !important;
+		margin-bottom: -4px !important;
+	}
 	.mh-rail-row { font-size: 9px; gap: 14px 20px; }
 }
 @media (max-width: 500px) {
@@ -201,6 +159,7 @@ body {
 		padding-left: 16px !important;
 		padding-right: 16px !important;
 	}
+	.mh-mark { font-size: clamp(53px, 14vw, 72px) !important; }
 	.mh-rail-row { font-size: 8.5px; }
 }
 

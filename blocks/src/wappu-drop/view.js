@@ -6,23 +6,24 @@
  * keyframe drifts them out and fades them. The elements remove themselves
  * once their animation ends, so the DOM stays clean.
  *
- * No fancy state: this is fire-and-forget output. We read the wapuu SVG
- * URL from state.src (seeded server-side in render.php) so the JS never
- * needs to know the theme URI.
+ * The wapuu SVG URL and per-click count are static — they come from
+ * IxAPI config (seeded server-side in render.php). No reactive state on
+ * this store.
  *
  * Respects `prefers-reduced-motion`: the keyframe is hidden via CSS, but
  * we also skip spawning the nodes to avoid clutter.
  */
-import { getElement, store } from '@wordpress/interactivity';
+import { getConfig, getElement, store } from '@wordpress/interactivity';
 
 const NATIVE_ASPECT = 66 / 60;
 
-const { state } = store( 'mercantile/wappu-drop', {
+store( 'mercantile/wappu-drop', {
 	actions: {
 		drop() {
 			if (
 				window.matchMedia &&
-				window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches
+				window.matchMedia( '(prefers-reduced-motion: reduce)' )
+					.matches
 			) {
 				return;
 			}
@@ -31,13 +32,14 @@ const { state } = store( 'mercantile/wappu-drop', {
 			if ( ! ref ) {
 				return;
 			}
+			const { src, count } = getConfig();
 			const rect = ref.getBoundingClientRect();
 			const cx = rect.left + rect.width / 2;
 			const cy = rect.bottom + 10;
-			const total = Math.max( 1, Number( state.count ) || 1 );
+			const total = Math.max( 1, Number( count ) || 1 );
 
 			for ( let i = 0; i < total; i++ ) {
-				spawn( cx, cy, state.src, i );
+				spawn( cx, cy, src, i );
 			}
 		},
 	},

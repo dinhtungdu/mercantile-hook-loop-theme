@@ -2,21 +2,23 @@
  * View-side IxAPI store for `mercantile/ticker-lead`.
  *
  * Click on the LIVE button pauses the ticker: state.isPaused flips true,
- * state.label swaps to the stop string. A timer reverts both after
- * state.pauseMs. The sibling ticker-track stops its marquee via a CSS
- * `:has()` rule that reads `.mh-ticker__lead.is-paused` on the parent
- * `.mh-ticker` group — no cross-block messaging needed.
+ * state.label swaps to the stop string. A timer reverts both after the
+ * configured pause duration. The sibling ticker-track stops its marquee
+ * via a CSS `:has()` rule that reads `.mh-ticker__lead.is-paused` on the
+ * parent `.mh-ticker` group — no cross-block messaging needed.
  *
- * The visible label strings (liveText/stopText) come from server state.
- * render.php runs them through __() before seeding, so this module never
- * needs to know about i18n or the textdomain.
+ * Static values (translated labels, pause duration) live in IxAPI
+ * config, not state — they never change after first paint. render.php
+ * runs the strings through __() before seeding, so this module is free
+ * of i18n and textdomain concerns.
  */
-import { store } from '@wordpress/interactivity';
+import { getConfig, store } from '@wordpress/interactivity';
 
 const { state } = store( 'mercantile/ticker-lead', {
 	state: {
 		get label() {
-			return state.isPaused ? state.stopText : state.liveText;
+			const { liveText, stopText } = getConfig();
+			return state.isPaused ? stopText : liveText;
 		},
 	},
 	actions: {
@@ -25,7 +27,7 @@ const { state } = store( 'mercantile/ticker-lead', {
 				return;
 			}
 			state.isPaused = true;
-			const ms = Number( state.pauseMs ) || 5000;
+			const ms = Number( getConfig().pauseMs ) || 5000;
 			setTimeout( () => {
 				state.isPaused = false;
 			}, ms );

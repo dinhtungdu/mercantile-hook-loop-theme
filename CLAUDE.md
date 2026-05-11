@@ -84,23 +84,32 @@ or editing blocks here.
     through verbatim. If a default is user-facing, run it through
     `__()` at render-time when the attribute is empty.
 13. **IxAPI view.js: seed translated strings via PHP, don't `__()` in
-    JS.** `wp_interactivity_state()` is the i18n boundary — render.php
-    runs strings through `__()` and seeds them into state; view.js
-    reads `state.foo` and never touches the textdomain. Keeps the
-    Interactivity module free of translation-loading concerns.
+    JS.** render.php runs strings through `__()` server-side; view.js
+    reads them via `getConfig()` (or `state` if reactive) and never
+    touches the textdomain. Keeps the Interactivity module free of
+    translation-loading concerns. See rule 14 for the state-vs-config
+    split.
+
+14. **`wp_interactivity_config()` for static values, state for
+    reactive.** Config is read-only and never re-renders consumers —
+    asset URLs, translated labels, timing constants, feature flags.
+    State is for things that mutate at runtime (`isPaused`, derived
+    getters that depend on mutating values). Putting static data in
+    state still works but is wasteful: every consumer subscribes for
+    changes that never come.
 
 ## Build pipeline (`@wordpress/scripts`)
 
-14. **`WP_EXPERIMENTAL_MODULES=true` is required for
+15. **`WP_EXPERIMENTAL_MODULES=true` is required for
     `viewScriptModule`.** Without it, wp-scripts silently skips module
     entries — you get no `view.js`, your IxAPI store never registers,
     no error. The flag is already set in `package.json` scripts; keep
     it there.
-15. **Auto-discover blocks via `glob`, don't hardcode slugs.**
+16. **Auto-discover blocks via `glob`, don't hardcode slugs.**
     `functions.php` already does this — `glob( get_theme_file_path(
     'blocks/build' ) . '/*/block.json' )` registers everything under
     `blocks/build/`. One less file to edit per new block.
-16. **Beware the `*/` doc-block trap in PHP comments.** Putting `*/`
+17. **Beware the `*/` doc-block trap in PHP comments.** Putting `*/`
     inside a `/** */` comment closes it early — caused a fatal error
     here from the literal string `blocks/build/*/block.json` inside a
     docblock. Avoid `*/` in docblock prose.
@@ -134,11 +143,11 @@ or editing blocks here.
 
 ## Refactoring instincts
 
-17. **Empty-block-as-styled-div is a smell.** The pulsing dot started
+18. **Empty-block-as-styled-div is a smell.** The pulsing dot started
     as an empty `core/group` — uneditable, looked like a placeholder
     in the Site Editor. Folded it into the LIVE paragraph as a
     `::before` instead — cleaner DOM, one fewer block.
-18. **Merging tightly-related blocks beats keeping them "atomic."**
+19. **Merging tightly-related blocks beats keeping them "atomic."**
     `site-mark` + dot + LIVE were three siblings; users only ever
     edited them together. One `mercantile/ticker-lead` block is more
     honest about the unit.

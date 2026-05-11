@@ -31,7 +31,10 @@ $prefix = isset( $attributes['prefix'] ) && '' !== $attributes['prefix']
 	: '+';
 $count  = isset( $attributes['count'] ) ? max( 1, min( 24, (int) $attributes['count'] ) ) : 1;
 
-wp_interactivity_state(
+// SVG URL and per-click count never change at runtime → IxAPI config,
+// not state. view.js reads them via getConfig(); the store carries no
+// reactive state at all in this block.
+wp_interactivity_config(
 	'mercantile/wappu-drop',
 	array(
 		'src'   => get_theme_file_uri( 'assets/images/wapuu.svg' ),

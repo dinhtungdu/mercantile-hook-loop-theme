@@ -27,22 +27,28 @@ $pause_ms = isset( $attributes['pauseMs'] ) ? max( 500, (int) $attributes['pause
 $size     = isset( $attributes['size'] ) ? (int) $attributes['size'] : 14;
 
 // LIVE / STOP are hardcoded but translation-ready: PHP runs them through
-// __() and seeds them into the IxAPI store, so view.js's `state.label`
-// getter reads pre-localized strings instead of needing its own i18n
-// pipeline. data-wp-text="state.label" then resolves identically on the
-// server (initial paint) and on the client (post-hydration).
+// __() and hands them to the IxAPI as **config** (read-only, never
+// changes after first paint), not state. Only `isPaused` and the derived
+// `label` are reactive state — those mutate at runtime. The label getter
+// in view.js reads the two strings out of getConfig().
 $live_text  = __( 'LIVE', 'mercantile-hook-loop' );
 $stop_text  = __( 'STOP', 'mercantile-hook-loop' );
 $pause_aria = __( 'Pause ticker', 'mercantile-hook-loop' );
+
+wp_interactivity_config(
+	'mercantile/ticker-lead',
+	array(
+		'liveText' => $live_text,
+		'stopText' => $stop_text,
+		'pauseMs'  => $pause_ms,
+	)
+);
 
 wp_interactivity_state(
 	'mercantile/ticker-lead',
 	array(
 		'isPaused' => false,
 		'label'    => $live_text,
-		'liveText' => $live_text,
-		'stopText' => $stop_text,
-		'pauseMs'  => $pause_ms,
 	)
 );
 

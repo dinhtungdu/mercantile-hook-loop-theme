@@ -30,7 +30,12 @@
 			<span class="mh-ticker__item"><span style="color:#9ab1ff">$ ssh shop@mercantile.wordpress.org</span></span>
 		</div>
 	</div>
-	<a class="mh-ticker__tab" href="/cart/"><span>cart</span><span class="v">0</span></a>
 	<!-- /wp:html -->
+
+	<!-- Cart tab — real count, live-updated by assets/js/ticker-cart-sync.js.
+	     See [mh_ticker_cart_tab] in functions.php. -->
+	<!-- wp:shortcode -->
+	[mh_ticker_cart_tab]
+	<!-- /wp:shortcode -->
 </div>
 <!-- /wp:group -->

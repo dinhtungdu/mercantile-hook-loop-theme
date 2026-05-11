@@ -180,6 +180,19 @@ add_action(
 				'strategy'  => 'defer',
 			)
 		);
+		// Keep the ticker cart-tab count in sync with the real cart
+		// after add-to-cart / remove-from-cart events. Refetches from
+		// /wp-json/wc/store/v1/cart so legacy + block-data paths agree.
+		wp_enqueue_script(
+			'mercantile-hook-loop-ticker-cart-sync',
+			get_template_directory_uri() . '/assets/js/ticker-cart-sync.js',
+			array(),
+			wp_get_theme()->get( 'Version' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 );
 
@@ -445,5 +458,34 @@ add_shortcode(
 		</select>
 		<?php
 		return ob_get_clean();
+	}
+);
+
+/**
+ * `[mh_ticker_cart_tab]` — the cart tab on the right edge of the ticker.
+ *
+ * The original markup hard-coded `<span class="v">0</span>` as the
+ * cart count, which never reflected what the user had actually added.
+ * This shortcode renders the real `WC()->cart->get_cart_contents_count()`
+ * at request time, and assets/js/ticker-cart-sync.js keeps it in sync
+ * after add-to-cart / remove-from-cart events (legacy jQuery + the
+ * @woocommerce/block-data events fired by the mini-cart block).
+ *
+ * Element is given `id="mh-ticker-cart-count"` so the JS can target it
+ * without scoping through the rest of the ticker.
+ */
+add_shortcode(
+	'mh_ticker_cart_tab',
+	function () {
+		$cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' );
+		$count    = 0;
+		if ( function_exists( 'WC' ) && WC()->cart ) {
+			$count = (int) WC()->cart->get_cart_contents_count();
+		}
+		return sprintf(
+			'<a class="mh-ticker__tab" href="%s"><span>cart</span><span class="v" id="mh-ticker-cart-count">%d</span></a>',
+			esc_url( $cart_url ),
+			$count
+		);
 	}
 );

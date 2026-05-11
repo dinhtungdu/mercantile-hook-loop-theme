@@ -1,10 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
-import {
-	useBlockProps,
-	InspectorControls,
-	RichText,
-} from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl, RangeControl } from '@wordpress/components';
 import metadata from './block.json';
 import './style.css';
@@ -31,14 +27,7 @@ const SiteMarkSvg = ( { size } ) => (
 
 registerBlockType( metadata.name, {
 	edit( { attributes, setAttributes } ) {
-		const {
-			href,
-			ariaLabel,
-			liveText,
-			stopText,
-			pauseMs = 5000,
-			size = 14,
-		} = attributes;
+		const { href, ariaLabel, pauseMs = 5000, size = 14 } = attributes;
 		const blockProps = useBlockProps( {
 			className: 'mh-ticker__lead',
 		} );
@@ -77,20 +66,6 @@ registerBlockType( metadata.name, {
 							max={ 64 }
 							onChange={ ( v ) => setAttributes( { size: v } ) }
 						/>
-						<TextControl
-							label={ __(
-								'Pause label',
-								'mercantile-hook-loop'
-							) }
-							value={ stopText || '' }
-							onChange={ ( v ) =>
-								setAttributes( { stopText: v } )
-							}
-							help={ __(
-								'Shown while the ticker is paused after a click on LIVE.',
-								'mercantile-hook-loop'
-							) }
-						/>
 						<RangeControl
 							label={ __(
 								'Pause duration (ms)',
@@ -118,14 +93,7 @@ registerBlockType( metadata.name, {
 					>
 						<SiteMarkSvg size={ size } />
 					</span>
-					<RichText
-						tagName="span"
-						className="mh-ticker__live"
-						value={ liveText }
-						onChange={ ( v ) => setAttributes( { liveText: v } ) }
-						allowedFormats={ [] }
-						placeholder={ __( 'LIVE', 'mercantile-hook-loop' ) }
-					/>
+					<span className="mh-ticker__live">LIVE</span>
 				</div>
 			</>
 		);

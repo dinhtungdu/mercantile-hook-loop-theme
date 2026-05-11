@@ -17,14 +17,6 @@
 			"type": "string",
 			"default": "Mercantile home"
 		},
-		"liveText": {
-			"type": "string",
-			"default": "LIVE"
-		},
-		"stopText": {
-			"type": "string",
-			"default": "STOP"
-		},
 		"pauseMs": {
 			"type": "number",
 			"default": 5000

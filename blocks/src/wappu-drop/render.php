@@ -19,8 +19,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$label  = isset( $attributes['label'] ) ? (string) $attributes['label'] : 'New';
-$prefix = isset( $attributes['prefix'] ) ? (string) $attributes['prefix'] : '+';
+// Defaults flow through __() at render-time because block.json's
+// attribute defaults aren't auto-translated by register_block_type.
+// An author-supplied non-empty string is used verbatim (already
+// localized by whoever typed it into the inspector).
+$label  = isset( $attributes['label'] ) && '' !== $attributes['label']
+	? (string) $attributes['label']
+	: __( 'New', 'mercantile-hook-loop' );
+$prefix = isset( $attributes['prefix'] ) && '' !== $attributes['prefix']
+	? (string) $attributes['prefix']
+	: '+';
 $count  = isset( $attributes['count'] ) ? max( 1, min( 24, (int) $attributes['count'] ) ) : 1;
 
 wp_interactivity_state(

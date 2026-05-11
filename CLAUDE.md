@@ -70,18 +70,37 @@ or editing blocks here.
     `Automattic\WooCommerce\Blocks\Utils\BlocksSharedState::load_cart_state( $consent )`
     from the block's `render.php`.
 
+## i18n — every user-facing string is translation-ready
+
+11. **All user-facing strings flow through a translation function.**
+    PHP: `__()` / `esc_html__()` / `esc_attr__()` with textdomain
+    `'mercantile-hook-loop'`. JS (editor): `__( 'foo',
+    'mercantile-hook-loop' )` from `@wordpress/i18n`. Applies even to
+    "hardcoded" labels like `LIVE` / `STOP` — hardcoded means
+    not author-editable, not English-only.
+12. **block.json attribute `default` values are NOT auto-translated.**
+    `register_block_type` translates `title` / `description` /
+    `keywords` when `textdomain` is set, but attribute defaults pass
+    through verbatim. If a default is user-facing, run it through
+    `__()` at render-time when the attribute is empty.
+13. **IxAPI view.js: seed translated strings via PHP, don't `__()` in
+    JS.** `wp_interactivity_state()` is the i18n boundary — render.php
+    runs strings through `__()` and seeds them into state; view.js
+    reads `state.foo` and never touches the textdomain. Keeps the
+    Interactivity module free of translation-loading concerns.
+
 ## Build pipeline (`@wordpress/scripts`)
 
-11. **`WP_EXPERIMENTAL_MODULES=true` is required for
+14. **`WP_EXPERIMENTAL_MODULES=true` is required for
     `viewScriptModule`.** Without it, wp-scripts silently skips module
     entries — you get no `view.js`, your IxAPI store never registers,
     no error. The flag is already set in `package.json` scripts; keep
     it there.
-12. **Auto-discover blocks via `glob`, don't hardcode slugs.**
+15. **Auto-discover blocks via `glob`, don't hardcode slugs.**
     `functions.php` already does this — `glob( get_theme_file_path(
     'blocks/build' ) . '/*/block.json' )` registers everything under
     `blocks/build/`. One less file to edit per new block.
-13. **Beware the `*/` doc-block trap in PHP comments.** Putting `*/`
+16. **Beware the `*/` doc-block trap in PHP comments.** Putting `*/`
     inside a `/** */` comment closes it early — caused a fatal error
     here from the literal string `blocks/build/*/block.json` inside a
     docblock. Avoid `*/` in docblock prose.
@@ -115,11 +134,11 @@ or editing blocks here.
 
 ## Refactoring instincts
 
-14. **Empty-block-as-styled-div is a smell.** The pulsing dot started
+17. **Empty-block-as-styled-div is a smell.** The pulsing dot started
     as an empty `core/group` — uneditable, looked like a placeholder
     in the Site Editor. Folded it into the LIVE paragraph as a
     `::before` instead — cleaner DOM, one fewer block.
-15. **Merging tightly-related blocks beats keeping them "atomic."**
+18. **Merging tightly-related blocks beats keeping them "atomic."**
     `site-mark` + dot + LIVE were three siblings; users only ever
     edited them together. One `mercantile/ticker-lead` block is more
     honest about the unit.

@@ -93,7 +93,9 @@ registerBlockType( metadata.name, {
 					>
 						<SiteMarkSvg size={ size } />
 					</span>
-					<span className="mh-ticker__live">LIVE</span>
+					<span className="mh-ticker__live">
+						{ __( 'LIVE', 'mercantile-hook-loop' ) }
+					</span>
 				</div>
 			</>
 		);

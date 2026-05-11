@@ -1,106 +1,161 @@
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import {
-	useBlockProps,
-	useInnerBlocksProps,
-	InnerBlocks,
-} from '@wordpress/block-editor';
+	PanelBody,
+	TextareaControl,
+	SelectControl,
+	Button,
+	ButtonGroup,
+} from '@wordpress/components';
 import metadata from './block.json';
 
-const ITEM = 'core/paragraph';
-const ALLOWED = [ ITEM ];
-
-// Default ticker scaffold inserted on first drop. Each item is an
-// editable paragraph in the canvas — no opaque ServerSideRender preview.
-const TEMPLATE = [
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item',
-			content: '<strong>Hooked.</strong> 12,847 actions fired today',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item is-wapuu',
-			content:
-				'the tie-dye hoodie is my favorite (don’t tell the others).',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item',
-			content:
-				'<strong>ORDER #10820</strong> · tie-dye-hoodie × 1 → Portland, OR',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item',
-			content: 'Code is poetry. Merch is proof.',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item is-wapuu',
-			content: 'don’t worry, press happy.',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item',
-			content:
-				'<span class="mh-mono-blue">[mercantile id="i-love-wp-tee"]</span> → renders in 38ms',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item is-wapuu',
-			content: 'Howdy.',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item',
-			content:
-				'Howdy is the original wp-admin greeting · since 2008',
-		},
-	],
-	[
-		ITEM,
-		{
-			className: 'mh-ticker__item',
-			content:
-				'<span class="mh-mono-blue">$ ssh shop@mercantile.wordpress.org</span>',
-		},
-	],
+const VARIANT_OPTIONS = [
+	{ label: __( 'Default', 'mercantile-hook-loop' ), value: 'default' },
+	{ label: __( 'Wapuu', 'mercantile-hook-loop' ), value: 'wapuu' },
 ];
 
+const itemClass = ( variant ) =>
+	'mh-ticker__item' + ( 'wapuu' === variant ? ' is-wapuu' : '' );
+
+const ItemEditor = ( { item, index, total, update, remove, move } ) => (
+	<div
+		style={ {
+			borderBottom: '1px solid #e0e0e0',
+			paddingBottom: 12,
+			marginBottom: 12,
+		} }
+	>
+		<TextareaControl
+			label={ `#${ index + 1 }` }
+			value={ item.text || '' }
+			onChange={ ( text ) => update( index, { text } ) }
+			help={ __(
+				'Allowed inline HTML: <strong>, <em>, <span class="mh-mono-blue">.',
+				'mercantile-hook-loop'
+			) }
+			rows={ 2 }
+		/>
+		<SelectControl
+			label={ __( 'Variant', 'mercantile-hook-loop' ) }
+			value={ item.variant || 'default' }
+			options={ VARIANT_OPTIONS }
+			onChange={ ( variant ) => update( index, { variant } ) }
+		/>
+		<div
+			style={ {
+				display: 'flex',
+				justifyContent: 'space-between',
+				marginTop: 6,
+			} }
+		>
+			<ButtonGroup>
+				<Button
+					size="small"
+					variant="secondary"
+					onClick={ () => move( index, -1 ) }
+					disabled={ index === 0 }
+					accessibleWhenDisabled
+				>
+					↑
+				</Button>
+				<Button
+					size="small"
+					variant="secondary"
+					onClick={ () => move( index, 1 ) }
+					disabled={ index === total - 1 }
+					accessibleWhenDisabled
+				>
+					↓
+				</Button>
+			</ButtonGroup>
+			<Button
+				size="small"
+				variant="secondary"
+				isDestructive
+				onClick={ () => remove( index ) }
+			>
+				{ __( 'Remove', 'mercantile-hook-loop' ) }
+			</Button>
+		</div>
+	</div>
+);
+
 registerBlockType( metadata.name, {
-	edit() {
+	edit( { attributes, setAttributes } ) {
+		const items = Array.isArray( attributes.items ) ? attributes.items : [];
+
+		const update = ( i, partial ) =>
+			setAttributes( {
+				items: items.map( ( it, idx ) =>
+					idx === i ? { ...it, ...partial } : it
+				),
+			} );
+
+		const remove = ( i ) =>
+			setAttributes( {
+				items: items.filter( ( _, idx ) => idx !== i ),
+			} );
+
+		const add = () =>
+			setAttributes( {
+				items: [ ...items, { text: '', variant: 'default' } ],
+			} );
+
+		const move = ( i, dir ) => {
+			const j = i + dir;
+			if ( j < 0 || j >= items.length ) {
+				return;
+			}
+			const next = items.slice();
+			[ next[ i ], next[ j ] ] = [ next[ j ], next[ i ] ];
+			setAttributes( { items: next } );
+		};
+
 		const blockProps = useBlockProps( {
 			className: 'mh-ticker__rail is-editor-preview',
 		} );
-		const innerProps = useInnerBlocksProps(
-			{ className: 'mh-ticker__track' },
-			{
-				allowedBlocks: ALLOWED,
-				template: TEMPLATE,
-				orientation: 'horizontal',
-				templateLock: false,
-			}
-		);
+
 		return (
-			<div { ...blockProps }>
-				<div { ...innerProps } />
-			</div>
+			<>
+				<InspectorControls>
+					<PanelBody
+						title={ __(
+							'Ticker items',
+							'mercantile-hook-loop'
+						) }
+					>
+						{ items.map( ( item, i ) => (
+							<ItemEditor
+								key={ i }
+								item={ item }
+								index={ i }
+								total={ items.length }
+								update={ update }
+								remove={ remove }
+								move={ move }
+							/>
+						) ) }
+						<Button variant="primary" onClick={ add }>
+							{ __( 'Add item', 'mercantile-hook-loop' ) }
+						</Button>
+					</PanelBody>
+				</InspectorControls>
+				<div { ...blockProps }>
+					<div className="mh-ticker__track">
+						{ items.map( ( item, i ) => (
+							<p
+								key={ i }
+								className={ itemClass( item.variant ) }
+								dangerouslySetInnerHTML={ {
+									__html: item.text || '',
+								} }
+							/>
+						) ) }
+					</div>
+				</div>
+			</>
 		);
 	},
-	save: () => <InnerBlocks.Content />,
+	save: () => null,
 } );

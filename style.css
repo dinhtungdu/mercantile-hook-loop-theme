@@ -41,29 +41,26 @@ body {
 
 /* ===== Ticker =====
    Composed from native blocks in parts/ticker.html:
-     - Outer alignfull core/group  → .mh-ticker
-     - Lead core/group             → .mh-ticker__lead
-       - mercantile/site-mark      → .mh-site-mark (inline WP SVG, currentColor)
-       - empty core/group          → .mh-ticker__dot
-       - core/paragraph "LIVE"     → .mh-ticker__live
-     - mercantile/ticker-track     → .mh-ticker__rail > .mh-ticker__track > .mh-ticker__item
-     - core/paragraph cart link    → .mh-ticker__tab
+     - Outer alignfull core/group → .mh-ticker
+     - mercantile/ticker-lead     → .mh-ticker__lead
+       - linked WP mark           → .mh-site-mark (inline SVG, currentColor)
+       - LIVE label               → .mh-ticker__live (status dot is the
+                                    ::before pseudo on this element)
+     - mercantile/ticker-track    → .mh-ticker__rail > .mh-ticker__track > .mh-ticker__item
+     - mercantile/cart-tab        → .mh-ticker__tab (live cart count via
+                                    the woocommerce IxAPI cart store; click
+                                    opens the mini-cart drawer)
    Block default margins for paragraphs / groups are reset below so the
    flex bar stays a single 34px row regardless of which core block lands. */
+/* The bar's chrome (sticky position, ink background, slate text, mono
+   font, letter-spacing, border) is set on the block in parts/ticker.html
+   via core supports — only the bits WP block supports can't express stay
+   here: a fixed 34px row, a stacking context above the page, and the
+   overflow clip the marquee track relies on. */
 .mh-ticker {
-	position: sticky;
-	top: 0;
-	z-index: 50;
-	background: var(--mh-ink);
-	color: #9a9ca3;
-	font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-	font-size: 11px;
-	letter-spacing: 0.02em;
 	height: 34px;
-	display: flex;
-	align-items: stretch;
+	z-index: 50;
 	overflow: hidden;
-	border-bottom: 1px solid var(--mh-ink);
 }
 
 /* Reset WP block default margins/typography inside the ticker so paragraph
@@ -115,11 +112,19 @@ body {
 	outline: none;
 }
 
-.mh-ticker .mh-ticker__dot {
+.mh-ticker .mh-ticker__live {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* Pulsing status dot. Lives as a ::before pseudo on .mh-ticker__live so
+   the rendered DOM stays minimal — no empty span shell needed. */
+.mh-ticker .mh-ticker__live::before {
+	content: '';
+	display: inline-block;
 	width: 6px;
 	height: 6px;
-	min-height: 0;
-	padding: 0;
 	border-radius: 50%;
 	background: var(--mh-ok);
 	animation: mh-pulse 2s infinite;
@@ -196,7 +201,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
 	.mh-ticker .mh-ticker__track { animation: none; }
-	.mh-ticker .mh-ticker__dot { animation: none; }
+	.mh-ticker .mh-ticker__live::before { animation: none; }
 }
 
 /* ===== Hero meta ===== */

@@ -113,13 +113,13 @@ or editing blocks here.
     inside a `/** */` comment closes it early — caused a fatal error
     here from the literal string `blocks/build/*/block.json` inside a
     docblock. Avoid `*/` in docblock prose.
-14. **`block.json`'s `"style"` is a runtime hint, not a build trigger.**
+18. **`block.json`'s `"style"` is a runtime hint, not a build trigger.**
     wp-scripts only bundles CSS that is `import`ed from the JS entry.
     A bare `style.css` next to `index.js` is silently ignored. Pattern:
     `import './style.css';` from `index.js`, then point `block.json`
     at the emitted file with `"style": "file:./style-index.css"` (the
     name wp-scripts uses for CSS extracted from the index entry).
-15. **Block-supports gotchas when expressing chrome as defaults.**
+19. **Block-supports gotchas when expressing chrome as defaults.**
     Setting wrapper chrome (padding, color, border, fontWeight) via
     `supports` + default `attributes.style` lets the editor tweak
     everything from the Site Editor and removes the corresponding CSS.
@@ -143,11 +143,11 @@ or editing blocks here.
 
 ## Refactoring instincts
 
-18. **Empty-block-as-styled-div is a smell.** The pulsing dot started
+20. **Empty-block-as-styled-div is a smell.** The pulsing dot started
     as an empty `core/group` — uneditable, looked like a placeholder
     in the Site Editor. Folded it into the LIVE paragraph as a
     `::before` instead — cleaner DOM, one fewer block.
-19. **Merging tightly-related blocks beats keeping them "atomic."**
+21. **Merging tightly-related blocks beats keeping them "atomic."**
     `site-mark` + dot + LIVE were three siblings; users only ever
     edited them together. One `mercantile/ticker-lead` block is more
     honest about the unit.

@@ -62,4 +62,31 @@
 
 	// Block-data flavour fired by assets/js/cart-ajax-submit.js.
 	document.addEventListener( 'wc-blocks_added_to_cart', schedule );
+
+	/* ----------------------------------------------------------------
+	 * Click the ticker tab → open the mini-cart drawer.
+	 *
+	 * The WooCommerce mini-cart block (rendered in the section-head)
+	 * is what owns the drawer UI. Clicking the ticker tab should
+	 * delegate to that block's own button. If we can't find it (e.g.
+	 * on a page that doesn't render the mini-cart, like /cart/), let
+	 * the <a href="/cart/"> default-navigate as a graceful fallback.
+	 * ---------------------------------------------------------------- */
+	function openMiniCart( event ) {
+		const tab = event.target.closest( '.mh-ticker__tab' );
+		if ( ! tab ) return;
+		// Modifier keys → new tab / window etc., respect the link.
+		if ( event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) return;
+
+		// The mini-cart block exposes a button. Selector covers the
+		// current WC blocks markup; falls back to a broader match.
+		const trigger =
+			document.querySelector( '.wc-block-mini-cart__button' ) ||
+			document.querySelector( '.wc-block-mini-cart button' );
+		if ( ! trigger ) return; // no mini-cart present → keep default link nav
+
+		event.preventDefault();
+		trigger.click();
+	}
+	document.addEventListener( 'click', openMiniCart );
 } )();

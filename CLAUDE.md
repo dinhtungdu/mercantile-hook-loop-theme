@@ -22,16 +22,19 @@ or editing blocks here.
    `currentColor`, (b) Interactivity API directives, or (c) live data
    needs an attribute schema you can't get from core. Don't reach for
    them just to skip writing block markup.
-4. **CSS last, scoped to a className.** A `.mh-ticker`-style hook
-   earns its keep only for surface chrome blocks can't express: fixed
-   `height`, `overflow:hidden`, `z-index`, `::before` pseudos. When
-   the children are real blocks, do NOT blanket UA-default resets
-   across the surface (`.mh-ticker p`, `.mh-ticker a`, `.mh-ticker > *`)
-   — that reaches across block boundaries and fights theme.json from
-   the wrong layer. Put paragraph-margin and link-color resets on each
-   child block's own class (`.mh-ticker__item`, `.mh-ticker__tab`,
-   `.mh-site-mark`) so each block owns its own typography reset and
-   nothing leaks if a future child changes its wrapper element.
+4. **CSS last, scoped to the block that owns it.** A surface-level
+   className hook (e.g. `.mh-ticker` on the outer group) earns its
+   keep only for chrome blocks can't express: fixed `height`,
+   `overflow:hidden`, `z-index`, `::before` pseudos. Everything else
+   — wrapper chrome (padding/background/border), UA-default resets
+   (paragraph margin, link color/underline), keyframes, content
+   variant styles — belongs in the owning block's own
+   `blocks/src/<slug>/style.css`, declared via `"style":
+   "file:./style-index.css"` in `block.json`. WordPress then enqueues
+   each block's CSS only on pages that render it. Do NOT blanket
+   resets across the surface (`.mh-ticker p`, `.mh-ticker > *`) — that
+   reaches across block boundaries and fights theme.json from the
+   wrong layer.
 
 ## Custom blocks — the editing model is the design decision
 
@@ -82,6 +85,12 @@ or editing blocks here.
     inside a `/** */` comment closes it early — caused a fatal error
     here from the literal string `blocks/build/*/block.json` inside a
     docblock. Avoid `*/` in docblock prose.
+14. **`block.json`'s `"style"` is a runtime hint, not a build trigger.**
+    wp-scripts only bundles CSS that is `import`ed from the JS entry.
+    A bare `style.css` next to `index.js` is silently ignored. Pattern:
+    `import './style.css';` from `index.js`, then point `block.json`
+    at the emitted file with `"style": "file:./style-index.css"` (the
+    name wp-scripts uses for CSS extracted from the index entry).
 
 ## Refactoring instincts
 
@@ -101,10 +110,13 @@ blocks/
 ├── src/
 │   └── <slug>/
 │       ├── block.json     # apiVersion 3, editorScript: file:./index.js,
-│       │                  # render: file:./render.php, optional
-│       │                  # viewScriptModule: file:./view.js
-│       ├── index.js       # JSX edit/save (no JSX, no build needed only
-│       │                  # if you really want; default here is JSX)
+│       │                  # style: file:./style-index.css (when shipping
+│       │                  # block-owned CSS), render: file:./render.php,
+│       │                  # optional viewScriptModule: file:./view.js
+│       ├── index.js       # JSX edit/save; must `import './style.css'`
+│       │                  # for wp-scripts to bundle the stylesheet
+│       ├── style.css      # block-owned styles; wp-scripts emits this as
+│       │                  # build/<slug>/style-index.css
 │       ├── render.php     # echoes HTML (don't return)
 │       └── view.js        # ESM, IxAPI store; only when you need
 │                          # client-side reactivity beyond SSR

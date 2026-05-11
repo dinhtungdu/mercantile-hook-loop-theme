@@ -1,16 +1,16 @@
 /* mercantile/cart-tab — live cart link for the ticker bar.
    Wrapper is rendered as a <p>; reset UA paragraph margin so the bar
-   stays single-row. */
+   stays single-row.
+
+   Wrapper chrome (padding, color, border-left) lives on block.json as
+   default attributes via the color, spacing, and border supports. */
 
 .mh-ticker__tab {
 	margin: 0;
-	padding: 0 12px;
-	border-left: 1px solid rgba(255, 255, 255, 0.12);
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	flex-shrink: 0;
-	color: #ecebe4;
 }
 
 .mh-ticker__tab a {

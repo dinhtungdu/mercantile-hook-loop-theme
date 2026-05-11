@@ -91,6 +91,27 @@ or editing blocks here.
     `import './style.css';` from `index.js`, then point `block.json`
     at the emitted file with `"style": "file:./style-index.css"` (the
     name wp-scripts uses for CSS extracted from the index entry).
+15. **Block-supports gotchas when expressing chrome as defaults.**
+    Setting wrapper chrome (padding, color, border, fontWeight) via
+    `supports` + default `attributes.style` lets the editor tweak
+    everything from the Site Editor and removes the corresponding CSS.
+    Three sharp edges that cost time:
+    - **Some support keys are still `__experimental*` even on modern
+      WP.** `border` works only as `__experimentalBorder`; the
+      typography subkey for `fontWeight` is `__experimentalFontWeight`
+      (and `fontStyle`, `letterSpacing`, `textDecoration`,
+      `textTransform`, `writingMode`, `fontFamily` are also still
+      `__experimental*`). The matching style attribute path drops the
+      prefix (`style.typography.fontWeight` etc.).
+    - **`safecss_filter_attr` blocks `rgba()` in inline styles.** Its
+      function-stripping regex only allows `var/calc/min/max/clamp/
+      repeat`; `rgb`/`rgba` fall through, then the `(` fails the
+      safety check and the property is dropped silently. Use a hex
+      color or a CSS custom property (`var(--…)`) instead.
+    - **Self-closing block markup (`<!-- wp:foo /-->`) does honor
+      block.json default attributes.** Render-time supports apply to
+      defaults the same way they apply to user-set values, so you do
+      not have to repeat the chrome inline in the template part.
 
 ## Refactoring instincts
 

@@ -371,6 +371,17 @@ body {
 	transition: background-color 0.12s;
 }
 
+/* Cell + stamp both flip to card (white) on hover. Color presets
+   referenced via the theme.json-emitted CSS variable — no hardcoded
+   hex. Transitions are the only thing supports can't reach. */
+.mh-cell.wp-block-group {
+	transition: background-color 0.12s;
+}
+
+.mh-cell.wp-block-group:hover {
+	background-color: var(--wp--preset--color--card);
+}
+
 .mh-cell:hover .mh-cell__stamp {
 	background-color: var(--wp--preset--color--card);
 }

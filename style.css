@@ -57,15 +57,13 @@ body {
 
 /* ===== Hero =====
    Surface hooks for parts/hero.html. The meta-strip, wordmark, rail
-   row, and blurb are all core blocks (group / heading / separator /
-   paragraph) plus one custom block, mercantile/meta-list, which owns
-   its own .mh-meta-row styling via blocks/src/meta-list/style.css. Wrapper
-   chrome — font-family, font-size, color, letter-spacing, padding,
-   border — is set on each block via supports + default attributes
-   in the template part. Only the bits supports can't express stay
-   here: the rail row's 2fr/1fr/1fr CSS grid, the wordmark's
-   text-wrap balance + per-character dot color, the blurb's max-width
-   + italic em color, and the responsive breakpoints. */
+   row, blurb, and spec lists are all core blocks (group / heading /
+   separator / paragraph). Wrapper chrome — font-family, font-size,
+   color, letter-spacing, padding, border — is set on each block via
+   supports + default attributes in the template part. Only the bits
+   supports can't express stay here: the rail row's 2fr/1fr/1fr CSS
+   grid, the wordmark's text-wrap balance, the blurb's max-width,
+   and the responsive breakpoints. */
 
 /* Wordmark — typography is mostly delivered by core: theme.json h1
    sets UnifrakturCook 700/line-height 1, the "wordmark" font-size

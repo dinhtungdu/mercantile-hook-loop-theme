@@ -390,9 +390,9 @@ body.post-type-archive-product .mh-filters .mh-filter {
 
 /* ===== Band =====
    Surface is a wp:group; lines and caption are core/paragraph blocks
-   with chrome set inline via supports. The only thing blocks can't
-   express is the inline <code> style used for the mono-inline ranges
-   (core/code inline format). */
+   with chrome set inline via supports. What stays here is what blocks
+   can't express: the inline <code> style used for the mono-inline
+   ranges (core/code inline format) and the caption measure cap. */
 
 /* Tighter horizontal padding on phones for the product grid wrapper. */
 @media (max-width: 700px) {
@@ -414,6 +414,8 @@ body.post-type-archive-product .mh-filters .mh-filter {
 	background: none;
 	padding: 0;
 }
+
+.mh-band__caption { max-width: 42em; }
 
 /* ===== Footer =====
    Surface hooks for parts/footer.html. Brand wordmark, tagline, and

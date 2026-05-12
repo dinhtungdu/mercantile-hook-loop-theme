@@ -81,34 +81,14 @@ body {
 	max-width: 38ch;
 }
 
-/* Tablet padding tweak. */
-@media (max-width: 960px) {
-	.mh-hero {
-		padding-top: 40px !important;
-		padding-left: 28px !important;
-		padding-right: 28px !important;
-	}
-}
-/* Phone: tighter hero padding, smaller wordmark. */
-@media (max-width: 700px) {
-	.mh-hero {
-		padding-top: 28px !important;
-		padding-left: 20px !important;
-		padding-right: 20px !important;
-	}
-	.mh-mark {
-		font-size: clamp(70px, 14vw, 110px) !important;
-		margin-top: 14px !important;
-		margin-bottom: -4px !important;
-	}
-}
-@media (max-width: 500px) {
-	.mh-hero {
-		padding-top: 24px !important;
-		padding-left: 16px !important;
-		padding-right: 16px !important;
-	}
-	.mh-mark { font-size: clamp(53px, 14vw, 72px) !important; }
+/* Hero padding: fluid via clamp, sized to track the prototype's
+   step values (16/20/28/40 l-r and 24/28/40/48 top). Horizontal
+   clamp tops out at the gutter preset, which still stretches on
+   ultra-wide viewports. */
+.mh-hero {
+	padding-top: clamp(24px, 4vw, 48px) !important;
+	padding-left: clamp(16px, 3vw, var(--wp--preset--spacing--gutter)) !important;
+	padding-right: clamp(16px, 3vw, var(--wp--preset--spacing--gutter)) !important;
 }
 
 /* ===== Section head ===== */

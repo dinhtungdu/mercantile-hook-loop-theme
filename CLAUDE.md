@@ -256,6 +256,101 @@ or editing blocks here.
     fontSize/lineHeight/fontWeight — clean. The hero wordmark is
     `<h1>` because it actually IS the page's primary heading.
 
+## WP / WC quirks the supports-first hierarchy collides with
+
+31. **WP preset color classes ship with `!important`.** The
+    `.has-<slug>-background-color` and `.has-<slug>-color` rules WP
+    generates from `theme.json` palette entries are emitted with
+    `!important` baked in. A theme `:hover` rule will lose to them
+    even at higher specificity, because `!important` defeats normal
+    specificity. Two options when you need a `:hover` background
+    change on a block that uses `backgroundColor: "..."`: (a) match
+    with `!important` on the `:hover` rule (which is what `.mh-cell`
+    does for its paper → card hover transition), or (b) drop the
+    block attr and own both default + hover via theme CSS so neither
+    side has `!important`. Same trap applies to text color presets.
+
+32. **Always read a WooCommerce block's `block.json` before assuming
+    supports.** Across `wc:product-collection`, `wc:product-image`,
+    `wc:product-price`, `wc:product-stock-indicator`, every block has
+    a different (and often narrower) supports surface than core blocks,
+    plus behavior quirks no docs mention. Some concrete ones that
+    bit us:
+    - `wc:product-stock-indicator` is *hidden* when the product is in
+      stock (per its own description) — bad fit for a catalog grid that
+      wants a permanent badge. Use a custom block reading
+      `wc_get_product()->get_stock_status()` if you need always-on
+      state. Justified under note 3(c).
+    - `wc:product-collection` exposes only `align` and `layout` —
+      no color/border/spacing/typography. Wrap it in a `core/group` if
+      you need to attach chrome at that level.
+    - `wc:product-image` declares `__experimentalBorder: { radius: true
+      }` — *only* radius, not color/style/width. Border color/width
+      and background still need theme CSS.
+    - `wc:product-price` uses `__experimentalSelector:
+      ".wp-block-woocommerce-product-price .wc-block-components-product-price"`
+      so typography supports target the *inner* div. The cascade then
+      reaches both the editor's `.__value` span and the frontend's
+      `.woocommerce-Price-amount` span — same supports, two different
+      DOM shapes. Don't write descendant CSS to "fix" the price; set
+      typography on the block itself.
+
+33. **Editor canvas and frontend can resolve CSS Grid + aspect-ratio
+    differently.** Same template, same enqueued CSS, but the editor
+    iframe's Chromium does not propagate `aspect-ratio` into auto-row
+    height calculations when the grid uses `minmax(0, 1fr)` columns.
+    Result: the same image-wrap is 591×591 on the frontend but
+    591×304 in the editor canvas (rectangular). Workaround that
+    survived: put `container-type: inline-size` on the cell and use
+    `min-height: 100cqw` on the aspect-ratio'd descendant. The cqw is
+    relative to the cell's container-query width, which equals the
+    column width minus padding, so the wrap is anchored to a square
+    by both `aspect-ratio` (frontend native path) and `min-height`
+    (works in both contexts). Visually verify in both surfaces; the
+    frontend "working correctly" tells you nothing about the editor.
+
+34. **Verify block validation in the editor whenever you hand-edit a
+    serialized block in a template.** Static-`save` blocks (anything
+    without a `render.php`) require the inner HTML in the template to
+    match the JS `save()` output *exactly* — including attributes the
+    block adds by default. `core/spacer` was a sharp edge: with
+    `selfStretch: "fixed", flexSize: "10px"` the saved HTML must be
+    `<div style="height:100px;width:0px" aria-hidden="true"
+    class="wp-block-spacer"></div>`. Omitting the `style="height:100px"`
+    triggers a `.has-warning` per loop iteration (so 17 warnings if it's
+    inside a 17-product query). Quick editor check from the canvas
+    iframe: `iframe.contentDocument.querySelectorAll('.has-warning').length`
+    should be 0. Dynamic blocks (server render) are immune since
+    there's no save() to mismatch — but everything else needs checking.
+
+35. **Useful block features that look like they'd need CSS but
+    don't.** Reach for these before reaching for `style.css`:
+    - **`core/post-terms` has `prefix` + `separator`.** Set
+      `prefix: "#", separator: " #"` and the rendered terms become
+      `#tag1 #tag2 #tag3` with no `::before` pseudo or CSS list
+      manipulation.
+    - **`selfStretch: "fill"` on a flex child absorbs the leftover
+      cross-axis space.** With `layout.flex.justifyContent: "right"`
+      on the parent and `style.layout.selfStretch: "fill"` on one
+      child, that child eats remaining width and pins later siblings
+      to the end — no `core/spacer` needed. The cell's
+      `mh-cell__head` uses this so the price stays right regardless
+      of SKU length.
+    - **`core/read-more` is the right block for a "view post" link
+      inside a query loop.** It renders a real `<a href={permalink}>`
+      with a `screen-reader-text` span for the post title, so the
+      affordance is meaningful for AT users and gets the correct
+      hover/focus chrome from `style.elements.link` instead of a
+      decorative `<p>` masquerading as a link.
+    - **`:has()` removes the temptation to add a className just for
+      positioning context.** Instead of giving a wrapper group a
+      `mh-cell__media` class purely so CSS can target it with
+      `position: relative`, write
+      `.mh-cell .wp-block-group:has(> .mh-cell__stamp) { position:
+      relative }`. The parent's positioning context is set by the
+      child it actually contains. Browser support is universal on
+      the target audience for a WP theme as of 2026.
+
 ## Project layout for theme-local blocks
 
 ```

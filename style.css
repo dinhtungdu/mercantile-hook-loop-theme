@@ -56,14 +56,14 @@ body {
 }
 
 /* ===== Hero =====
-   Surface hooks for parts/hero.html. Meta strip and rail row are
-   core/columns; wordmark is core/heading; separator is core/separator;
-   spec rows are stacked core/group flex rows. Wrapper chrome —
-   font-family, font-size, color, letter-spacing, padding, border —
-   is set on each block via supports + default attributes in the
-   template part. Only the bits supports can't express stay here:
-   the wordmark's text-wrap balance and the responsive padding/
-   wordmark size overrides. */
+   Surface hooks for parts/hero.html. The meta-strip, wordmark, rail
+   row, blurb, and spec lists are all core blocks (group / heading /
+   separator / paragraph). Wrapper chrome — font-family, font-size,
+   color, letter-spacing, padding, border — is set on each block via
+   supports + default attributes in the template part. Only the bits
+   supports can't express stay here: the rail row's 2fr/1fr/1fr CSS
+   grid, the wordmark's text-wrap balance, the blurb's max-width,
+   and the responsive breakpoints. */
 
 /* Wordmark — typography is mostly delivered by core: theme.json h1
    sets UnifrakturCook 700/line-height 1, the "wordmark" font-size
@@ -74,15 +74,36 @@ body {
 	text-wrap: balance;
 }
 
-/* Tablet padding tweak. */
+/* Rail row — only the CSS-grid template lives here; font/color/
+   line-height/padding come from the group's block supports. */
+.mh-rail-row {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	gap: 48px;
+}
+
+/* Blurb paragraph — max-width has no block-supports analog. */
+.mh-blurb {
+	max-width: 38ch;
+}
+
+/* Tablet: blurb spans full width, stats collapse to two side-by-side
+   columns. */
 @media (max-width: 960px) {
 	.mh-hero {
 		padding-top: 40px !important;
 		padding-left: 28px !important;
 		padding-right: 28px !important;
 	}
+	.mh-rail-row {
+		grid-template-columns: 1fr 1fr;
+		gap: 18px 24px;
+		padding: 18px 0 22px !important;
+		font-size: 10.5px;
+	}
+	.mh-rail-row .mh-blurb { grid-column: 1 / -1; max-width: none; }
 }
-/* Phone: tighter hero padding, smaller wordmark. */
+/* Phone: tighter hero padding, smaller wordmark + rail row. */
 @media (max-width: 700px) {
 	.mh-hero {
 		padding-top: 28px !important;
@@ -94,6 +115,7 @@ body {
 		margin-top: 14px !important;
 		margin-bottom: -4px !important;
 	}
+	.mh-rail-row { font-size: 9px; gap: 14px 20px; }
 }
 @media (max-width: 500px) {
 	.mh-hero {
@@ -102,6 +124,7 @@ body {
 		padding-right: 16px !important;
 	}
 	.mh-mark { font-size: clamp(53px, 14vw, 72px) !important; }
+	.mh-rail-row { font-size: 8.5px; }
 }
 
 /* ===== Section head ===== */

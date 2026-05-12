@@ -1,60 +1,28 @@
-/* mercantile/product-stamp — decorative stock stamp inside .mh-cell.
-   The wrapper has height: 0 so the stamp visually floats up to overlap
-   the product image above; the stamp itself is pulled -22px relative
-   to its in-flow position. The variant icon/label cycle is driven by
-   :nth-child on the surrounding wc-block-product-template li, so the
-   selectors reach across the block boundary on purpose — the stamp
-   can't know its own index in the product loop. */
-
-.mh-cell__stamp-row {
-	margin-top: -2px;
-	text-align: right;
-	position: relative;
-	height: 0;
-	z-index: 2;
-}
-
-.mh-cell__stamp {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--mh-slate);
-	padding: 2px 8px;
-	border: 1px solid var(--mh-rule);
-	border-radius: 2px;
-	background: var(--mh-paper-2);
-	font-weight: 500;
-	position: relative;
-	top: -22px;
-}
+/* mercantile/product-stamp — icon ::before keyed off the per-state
+   modifier class added by render.php (is-instock / is-outofstock /
+   is-onbackorder). The text label and the badge's own chrome
+   (background, padding, border, typography, color) all come from
+   block supports on the template attrs. */
 
 .mh-cell__stamp::before {
-	content: '▲';
-	color: var(--mh-wp);
+	margin-right: 5px;
 	font-size: 1.1em;
 	line-height: 1;
+	display: inline-block;
 	transform: translateY(-1px);
 }
 
-/* Per-cell variants — driven by :nth-child on the surrounding
-   product-template li. The label swap uses font-size: 0 to hide the
-   default text plus ::after to render the variant copy. */
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp { color: var(--mh-ink); font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp::before { content: '⬢'; color: #ff7aa8; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp::after { content: 'low stock'; font-size: 10px; }
+.mh-cell__stamp.is-instock::before {
+	content: '▲';
+	color: var(--mh-wp);
+}
 
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp { font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp::before { content: '✦'; color: #f5b800; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp::after { content: 'seasonal'; font-size: 10px; }
+.mh-cell__stamp.is-outofstock::before {
+	content: '▪';
+	color: var(--mh-accent);
+}
 
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp { font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp::before { content: '◆'; color: var(--mh-slate-2); }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp::after { content: 'heritage'; font-size: 10px; }
-
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp { font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp::before { content: '▪'; color: var(--mh-accent); }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp::after { content: 'out'; font-size: 10px; }
+.mh-cell__stamp.is-onbackorder::before {
+	content: '⬢';
+	color: #f5b800;
+}

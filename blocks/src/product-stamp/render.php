@@ -2,11 +2,10 @@
 /**
  * Server render for `mercantile/product-stamp`.
  *
- * Decorative stock-status stamp pinned to the bottom-right of a
- * product image inside `mh-cell`. The variant icon and label cycle
- * per cell index via :nth-child rules on the surrounding
- * wc-block-product-template — the block itself just emits the static
- * markup.
+ * Always-visible stock status badge. Reads the current product's stock
+ * status from WooCommerce (`instock`, `outofstock`, `onbackorder`) and
+ * renders the corresponding label, with a state-specific icon supplied
+ * via CSS ::before in the block's style.css.
  *
  * @var array    $attributes
  * @var string   $content
@@ -17,14 +16,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$text = ! empty( $attributes['text'] )
-	? (string) $attributes['text']
-	: __( 'in stock', 'mercantile-hook-loop' );
+$post_id = isset( $block->context['postId'] ) ? (int) $block->context['postId'] : 0;
+if ( ! $post_id || ! function_exists( 'wc_get_product' ) ) {
+	return;
+}
 
-$wrapper_attrs = get_block_wrapper_attributes( array( 'class' => 'mh-cell__stamp-row' ) );
+$product = wc_get_product( $post_id );
+if ( ! $product ) {
+	return;
+}
 
-printf(
-	'<div %1$s><span class="mh-cell__stamp">%2$s</span></div>',
-	$wrapper_attrs,
-	esc_html( $text )
+$status = $product->get_stock_status();
+$labels = array(
+	'instock'     => __( 'In stock', 'mercantile-hook-loop' ),
+	'outofstock'  => __( 'Out of stock', 'mercantile-hook-loop' ),
+	'onbackorder' => __( 'On backorder', 'mercantile-hook-loop' ),
 );
+$label  = isset( $labels[ $status ] ) ? $labels[ $status ] : $labels['instock'];
+
+$wrapper_attrs = get_block_wrapper_attributes(
+	array( 'class' => 'mh-cell__stamp is-' . sanitize_html_class( $status ) )
+);
+
+printf( '<span %1$s>%2$s</span>', $wrapper_attrs, esc_html( $label ) );

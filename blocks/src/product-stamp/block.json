@@ -5,19 +5,36 @@
 	"version": "1.0.0",
 	"title": "Product Stamp",
 	"category": "theme",
-	"description": "Decorative stock-status stamp anchored to the bottom-right of a product image. Variant icon and label cycle per cell index via :nth-child rules on the surrounding product template.",
+	"description": "Always-visible stock status badge for a product. Renders an icon + label based on the product's real stock status (in stock, out of stock, on backorder) — unlike wc:product-stock-indicator which hides itself when in stock.",
 	"icon": "tag",
 	"textdomain": "mercantile-hook-loop",
-	"attributes": {
-		"text": {
-			"type": "string",
-			"default": "in stock"
-		}
-	},
+	"usesContext": [ "postId", "query", "queryId" ],
+	"ancestor": [ "woocommerce/all-products", "woocommerce/product-template", "core/post-template" ],
 	"supports": {
 		"html": false,
-		"className": false,
-		"customClassName": false
+		"color": {
+			"text": true,
+			"background": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalTextTransform": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"style": true,
+			"width": true,
+			"radius": true,
+			"__experimentalDefaultControls": { "color": true, "width": true }
+		}
 	},
 	"editorScript": "file:./index.js",
 	"style": "file:./style-index.css",

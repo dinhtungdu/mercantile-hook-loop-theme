@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/product-stamp",
+	"version": "1.0.0",
+	"title": "Product Stamp",
+	"category": "theme",
+	"description": "Decorative stock-status stamp anchored to the bottom-right of a product image. Variant icon and label cycle per cell index via :nth-child rules on the surrounding product template.",
+	"icon": "tag",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"text": {
+			"type": "string",
+			"default": "in stock"
+		}
+	},
+	"supports": {
+		"html": false,
+		"className": false,
+		"customClassName": false
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

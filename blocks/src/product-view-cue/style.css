@@ -1,0 +1,24 @@
+/* mercantile/product-view-cue — decorative hover affordance inside
+   .mh-cell. Hidden until the cell is hovered; the cell-spanning title
+   link handles actual navigation. */
+
+.mh-cell__view {
+	position: absolute;
+	bottom: 12px;
+	right: 12px;
+	margin: 0;
+	padding: 0;
+	opacity: 0;
+	transition: opacity 0.1s;
+	z-index: 0;
+	pointer-events: none;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.02em;
+	color: var(--mh-wp);
+}
+
+.mh-cell:hover .mh-cell__view {
+	opacity: 1;
+}

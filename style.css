@@ -373,17 +373,19 @@ body {
 
 /* Cell + stamp both flip to card (white) on hover. Color presets
    referenced via the theme.json-emitted CSS variable — no hardcoded
-   hex. Transitions are the only thing supports can't reach. */
+   hex. !important is required because WP generates the default
+   .has-X-background-color preset class with !important, so a plain
+   :hover rule (even at higher specificity) loses to it. */
 .mh-cell.wp-block-group {
 	transition: background-color 0.12s;
 }
 
 .mh-cell.wp-block-group:hover {
-	background-color: var(--wp--preset--color--card);
+	background-color: var(--wp--preset--color--card) !important;
 }
 
 .mh-cell:hover .mh-cell__stamp {
-	background-color: var(--wp--preset--color--card);
+	background-color: var(--wp--preset--color--card) !important;
 }
 
 /* ===== Single product (admin-editor framing) ===== */

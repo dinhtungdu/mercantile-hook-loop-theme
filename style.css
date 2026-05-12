@@ -75,6 +75,12 @@ body {
 	text-wrap: balance;
 }
 
+/* Blurb paragraph — caps measure at 38ch like the prototype. No
+   block-supports analog for max-width on a paragraph. */
+.mh-blurb {
+	max-width: 38ch;
+}
+
 /* Tablet padding tweak. */
 @media (max-width: 960px) {
 	.mh-hero {

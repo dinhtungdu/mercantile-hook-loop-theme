@@ -26,7 +26,7 @@ Tags: full-site-editing, block-theme, editorial, shop, monospace
 	--mh-ok: #1f8f3a;
 	--mh-pink: #ffd4e1;
 	--mh-blue-tint: #e2e8ff;
-	--mh-gutter: max(40px, calc(50vw - 800px));
+	--mh-gutter: max(clamp(20px, 5vw, 40px), calc(50vw - 800px));
 }
 
 body {
@@ -240,21 +240,10 @@ body {
 	text-transform: lowercase;
 }
 
-/* Phone: compress the section-head row so the in-block filter dropdown
-   (mercantile/section-filters) sits flush with the cart on a single
-   row. The block owns its own internal mobile behavior (label/chips
-   hide, select takes over) — what stays here is surface-level layout
-   + the WC mini-cart mobile sizing. */
+/* Phone: bump mini-cart touch-target so the cart pill sits at the same
+   height as the filter dropdown. The filters block owns its own
+   internal mobile behavior (label/chips hide, select takes over). */
 @media (max-width: 700px) {
-	.mh-section-head {
-		flex-wrap: nowrap;
-		align-items: center;
-		gap: 10px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-	}
-	.mh-section-head .mh-right { flex: 0 0 auto; }
-	/* Match cart button height to the filter dropdown so the row aligns. */
 	.mh-section-head .wc-block-mini-cart__button,
 	.mh-section-head .wp-block-woocommerce-mini-cart .wc-block-mini-cart__button {
 		padding: 10px 14px !important;
@@ -262,97 +251,6 @@ body {
 	}
 	.mh-section-head .wc-block-mini-cart__button::before {
 		font-size: 13px;
-	}
-}
-
-/* ===== Section search =====
-   Skins the `core/search` block (WC product-search variation, namespace
-   `woocommerce/product-search`) when it sits in the section-head via
-   `className: mh-section-search`. With `buttonPosition: no-button` and
-   `showLabel: false` the block renders just the <form> wrapper, a
-   screen-reader-only <label>, the search <input>, and the hidden
-   post_type=product input. We add a `↵` overlay that appears on focus
-   or when the field has content.
-
-   iAPI directives are injected at render-time in functions.php
-   (data-wp-interactive + data-wp-on--submit on the form, enterkeyhint
-   + value pre-fill on the input). The block stays standard and
-   discoverable in the inserter; the chrome is theme-owned via this
-   class hook. */
-.mh-section-head form.mh-section-search.wp-block-search {
-	position: relative;
-	margin: 0;
-	display: flex;
-	align-items: center;
-	flex: 0 1 auto;
-	min-width: 0;
-}
-
-.mh-section-head .mh-section-search .wp-block-search__inside-wrapper {
-	display: flex;
-	align-items: center;
-	position: relative;
-	width: 100%;
-}
-
-.mh-section-head .mh-section-search .wp-block-search__input {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	line-height: 1.4;
-	padding: 6px 26px 6px 10px;
-	border: 1px solid var(--mh-rule);
-	background: var(--mh-paper-2);
-	border-radius: 0;
-	width: 220px;
-	min-width: 0;
-	color: var(--mh-ink);
-	box-sizing: border-box;
-	-webkit-appearance: none;
-	appearance: none;
-}
-
-.mh-section-head .mh-section-search .wp-block-search__input::placeholder {
-	color: var(--mh-slate-2);
-}
-
-.mh-section-head .mh-section-search .wp-block-search__input:focus {
-	outline: none;
-	border-color: var(--mh-wp);
-}
-
-/* Strip WebKit's search-field clear "X" — keeps the visual alignment
-   consistent with the prototype's plain mono input. */
-.mh-section-head .mh-section-search .wp-block-search__input::-webkit-search-cancel-button,
-.mh-section-head .mh-section-search .wp-block-search__input::-webkit-search-decoration {
-	-webkit-appearance: none;
-	appearance: none;
-}
-
-/* `↵` hint inside the field, right-aligned. Visible on focus or when
-   the input has content. Pseudo-element on the wrapper avoids needing
-   our own markup — the core/search block's HTML is unchanged. */
-.mh-section-head .mh-section-search::after {
-	content: '↵';
-	position: absolute;
-	right: 10px;
-	top: 50%;
-	transform: translateY(-50%);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	color: var(--mh-slate-2);
-	pointer-events: none;
-	opacity: 0;
-	transition: opacity 0.1s ease;
-}
-
-.mh-section-head .mh-section-search:focus-within::after,
-.mh-section-head .mh-section-search:has(.wp-block-search__input:not(:placeholder-shown))::after {
-	opacity: 1;
-}
-
-@media (max-width: 700px) {
-	.mh-section-head .mh-section-search {
-		display: none;
 	}
 }
 

@@ -83,7 +83,7 @@
 				{ "slug": "50", "size": "48px", "name": "5" },
 				{ "slug": "60", "size": "64px", "name": "6" },
 				{ "slug": "70", "size": "96px", "name": "7" },
-				{ "slug": "gutter", "size": "max(40px, calc(50vw - 800px))", "name": "Gutter" }
+				{ "slug": "gutter", "size": "max(clamp(20px, 5vw, 40px), calc(50vw - 800px))", "name": "Gutter" }
 			]
 		},
 		"useRootPaddingAwareAlignments": true

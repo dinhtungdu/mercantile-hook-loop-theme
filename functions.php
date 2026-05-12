@@ -89,9 +89,8 @@ add_action(
 
 /**
  * Tag the catalog grid wrapper as an Interactivity API router region so
- * chip clicks (mercantile/section-filters) and search submits
- * (woocommerce/product-search) can swap the grid in place instead of
- * full-page reloading.
+ * chip clicks (mercantile/section-filters) can swap the grid in place
+ * instead of full-page reloading.
  *
  * `core/group`'s save() only emits class/style/id, so adding `data-wp-*`
  * inline in the template HTML triggers a block-validation error. The
@@ -115,56 +114,6 @@ add_filter(
 		if ( $p->next_tag( 'div' ) ) {
 			$p->set_attribute( 'data-wp-interactive', 'mercantile/catalog' );
 			$p->set_attribute( 'data-wp-router-region', 'mercantile/catalog-grid' );
-		}
-		return $p->get_updated_html();
-	},
-	10,
-	2
-);
-
-/**
- * Wire the section-head's `core/search` block (a WC-registered variation
- * with namespace `woocommerce/product-search`, identified by the
- * `mh-section-search` className) into the shared `mercantile/catalog`
- * iAPI store. The block already renders a real <form action=…
- * method="get"> with the right post_type=product hidden input, so the
- * no-JS fallback works on its own; with JS, the submit handler routes
- * via the iAPI router and swaps the catalog grid region in place.
- *
- * Also adds `enterkeyhint="search"` on the input so mobile keyboards
- * surface a "Search" return key, and pre-fills the input from `?s=…`.
- *
- * (Replaces the older `woocommerce/product-search` block, which WC
- * deprecated in favor of this variation; the legacy block now shows an
- * "Upgrade to continue using" notice in the Site Editor.)
- */
-add_filter(
-	'render_block_core/search',
-	function ( $block_content, $block ) {
-		if ( ! is_string( $block_content ) ) {
-			return $block_content;
-		}
-		$class = $block['attrs']['className'] ?? '';
-		if ( false === strpos( $class, 'mh-section-search' ) ) {
-			return $block_content;
-		}
-		$p = new WP_HTML_Tag_Processor( $block_content );
-		// core/search renders the <form> as the outer element (no
-		// wrapping div), so both iAPI directives go on the form itself.
-		if ( $p->next_tag( 'form' ) ) {
-			$p->set_attribute( 'data-wp-interactive', 'mercantile/catalog' );
-			$p->set_attribute( 'data-wp-on--submit', 'actions.search' );
-		}
-		if ( $p->next_tag( array( 'tag_name' => 'input', 'class_name' => 'wp-block-search__input' ) ) ) {
-			$p->set_attribute( 'enterkeyhint', 'search' );
-			$p->set_attribute( 'aria-keyshortcuts', 'Enter' );
-			// Pre-fill from the current ?s=… so the input reflects the
-			// active query when the user lands on a search results page.
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$current = isset( $_GET['s'] ) ? wp_unslash( $_GET['s'] ) : '';
-			if ( '' !== $current ) {
-				$p->set_attribute( 'value', (string) $current );
-			}
 		}
 		return $p->get_updated_html();
 	},

@@ -1,0 +1,28 @@
+/* mercantile/product-stamp — icon ::before keyed off the per-state
+   modifier class added by render.php (is-instock / is-outofstock /
+   is-onbackorder). The text label and the badge's own chrome
+   (background, padding, border, typography, color) all come from
+   block supports on the template attrs. */
+
+.mh-cell__stamp::before {
+	margin-right: 5px;
+	font-size: 1.1em;
+	line-height: 1;
+	display: inline-block;
+	transform: translateY(-1px);
+}
+
+.mh-cell__stamp.is-instock::before {
+	content: '▲';
+	color: var(--mh-wp);
+}
+
+.mh-cell__stamp.is-outofstock::before {
+	content: '▪';
+	color: var(--mh-accent);
+}
+
+.mh-cell__stamp.is-onbackorder::before {
+	content: '⬢';
+	color: #f5b800;
+}

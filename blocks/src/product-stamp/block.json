@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/product-stamp",
+	"version": "1.0.0",
+	"title": "Product Stamp",
+	"category": "theme",
+	"description": "Always-visible stock status badge for a product. Renders an icon + label based on the product's real stock status (in stock, out of stock, on backorder) — unlike wc:product-stock-indicator which hides itself when in stock.",
+	"icon": "tag",
+	"textdomain": "mercantile-hook-loop",
+	"usesContext": [ "postId", "query", "queryId" ],
+	"ancestor": [ "woocommerce/all-products", "woocommerce/product-template", "core/post-template" ],
+	"supports": {
+		"html": false,
+		"color": {
+			"text": true,
+			"background": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalTextTransform": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"style": true,
+			"width": true,
+			"radius": true,
+			"__experimentalDefaultControls": { "color": true, "width": true }
+		}
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

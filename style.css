@@ -254,53 +254,8 @@ body {
 	}
 }
 
-/* ===== Product grid =====
-   Border-left is owned by the inner .wc-block-product-template (further down)
-   to avoid stacking two 1px rules at the same gutter. */
-.mh-grid {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-}
-
-@media (max-width: 1100px) { .mh-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 800px)  { .mh-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 500px)  { .mh-grid { grid-template-columns: 1fr; } }
-
-/* Gentle fade-up stagger when the grid renders (i.e. on every page load,
-   which is what filter clicks are in this theme). Mirrors the animation
-   from the prototype (explore/03-hook-loop) — 380ms cubic-bezier rise
-   with a 25ms stagger per cell. */
-@keyframes mh-grid-fade-up {
-	from { opacity: 0; transform: translateY(6px); }
-	to   { opacity: 1; transform: translateY(0); }
-}
-.mh-grid .mh-cell {
-	animation: mh-grid-fade-up 380ms cubic-bezier(.2, .7, .3, 1) both;
-}
-/* Per-cell stagger via :nth-child for the first 16 cells (perPage=16).
-   Cells beyond the first row of pagination just animate without delay. */
-.mh-grid .mh-cell:nth-child(1)  { animation-delay:   0ms; }
-.mh-grid .mh-cell:nth-child(2)  { animation-delay:  25ms; }
-.mh-grid .mh-cell:nth-child(3)  { animation-delay:  50ms; }
-.mh-grid .mh-cell:nth-child(4)  { animation-delay:  75ms; }
-.mh-grid .mh-cell:nth-child(5)  { animation-delay: 100ms; }
-.mh-grid .mh-cell:nth-child(6)  { animation-delay: 125ms; }
-.mh-grid .mh-cell:nth-child(7)  { animation-delay: 150ms; }
-.mh-grid .mh-cell:nth-child(8)  { animation-delay: 175ms; }
-.mh-grid .mh-cell:nth-child(9)  { animation-delay: 200ms; }
-.mh-grid .mh-cell:nth-child(10) { animation-delay: 225ms; }
-.mh-grid .mh-cell:nth-child(11) { animation-delay: 250ms; }
-.mh-grid .mh-cell:nth-child(12) { animation-delay: 275ms; }
-.mh-grid .mh-cell:nth-child(13) { animation-delay: 300ms; }
-.mh-grid .mh-cell:nth-child(14) { animation-delay: 325ms; }
-.mh-grid .mh-cell:nth-child(15) { animation-delay: 350ms; }
-.mh-grid .mh-cell:nth-child(16) { animation-delay: 375ms; }
-@media (prefers-reduced-motion: reduce) {
-	.mh-grid .mh-cell { animation: none; }
-}
-
-/* (Cell rules live further down with higher-specificity selectors that
-   account for WooCommerce block wrappers — see .mh-cell.wp-block-group.) */
+/* ===== Product grid + cell CSS temporarily removed — see git history.
+       Block supports + theme.json defaults handle the cell entirely. ===== */
 
 /* ===== Interstitial ===== */
 .mh-interstitial {
@@ -330,14 +285,6 @@ body {
    with chrome set inline via supports. What stays here is what blocks
    can't express: the inline <code> style used for the mono-inline
    ranges (core/code inline format) and the caption measure cap. */
-
-/* Tighter horizontal padding on phones for the product grid wrapper. */
-@media (max-width: 700px) {
-	.mh-grid-wrap { padding-left: 20px !important; padding-right: 20px !important; }
-}
-@media (max-width: 500px) {
-	.mh-grid-wrap { padding-left: 16px !important; padding-right: 16px !important; }
-}
 
 /* Mono-inline ranges: core/code inline format (`<code>foo</code>`)
    scoped to the band line. Strips the UA <code> background and tunes
@@ -389,311 +336,57 @@ body {
 	background: var(--mh-paper);
 }
 
-/* ===== WooCommerce Product Collection grid =====
-   Force the collection wrapper back to flow so the inner product-template
-   can own the grid — otherwise displayLayout makes both grids and nests. */
-.mh-grid-wrap .wp-block-woocommerce-product-collection.mh-grid {
-	display: block !important;
-	grid-template-columns: none !important;
-	gap: 0 !important;
-	margin-bottom: 0;
-	width: 100%;
+/* ===== WC product collection grid + cell CSS temporarily removed — see
+       git history. Block supports + theme.json defaults handle the
+       cell entirely while we audit what's actually required. ===== */
+
+/* The only thing supports can't reach on the wc:product-template ul:
+   - gap: 0 so cell borders form the grid rule
+   - border-left to close the leftmost column (cell borders only cover
+     right + bottom)
+   - cells inside each <li> need height: 100% so all cells in a row
+     match the tallest one (otherwise a 1-line title cell ends shorter
+     than a 3-line title sibling). */
+.mh-grid-wrap .wc-block-product-template {
+	gap: 0;
+	border-left: 1px solid var(--wp--preset--color--rule);
 }
 
-.mh-grid-wrap .mh-grid .wc-block-product-template {
-	display: grid !important;
-	grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-	gap: 0 !important;
-	border-left: 1px solid var(--mh-rule);
-	padding: 0;
-	margin: 0;
-	list-style: none;
-	max-width: none !important;
-	width: 100%;
-}
-
-@media (max-width: 1100px) {
-	.mh-grid-wrap .mh-grid .wc-block-product-template { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
-}
-
-@media (max-width: 800px) {
-	.mh-grid-wrap .mh-grid .wc-block-product-template { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-}
-
-@media (max-width: 500px) {
-	.mh-grid-wrap .mh-grid .wc-block-product-template { grid-template-columns: 1fr !important; }
-}
-
-.mh-grid-wrap .mh-grid .wc-block-product-template > li,
-.mh-grid-wrap .mh-grid .wc-block-product-template > .wc-block-product {
-	margin: 0 !important;
-	padding: 0;
-	list-style: none;
-	width: auto !important;
-	max-width: none !important;
-	display: flex;
-}
-
-/* Cell counter — provides "001 / WP—001" idx label via ::before. */
-.mh-grid-wrap .mh-grid .wc-block-product-template { counter-reset: mh-cell; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li,
-.mh-grid-wrap .mh-grid .wc-block-product-template > .wc-block-product { counter-increment: mh-cell; }
-
-.mh-cell.wp-block-group {
-	border-right: 1px solid var(--mh-rule);
-	border-bottom: 1px solid var(--mh-rule);
-	background: var(--mh-paper);
-	padding: 14px 14px 12px;
-	min-height: 340px;
-	gap: 8px;
-	transition: background 0.12s;
-	width: 100%;
+.mh-grid-wrap .wc-block-product-template > li > .mh-cell {
 	height: 100%;
-	display: flex;
-	flex-direction: column;
+}
+
+/* Stock indicator stamp — absolutely positioned to the bottom-left of
+   its parent (the bordered image+stamp group). The parent's position
+   context is set via :has() so we don't have to add a className just
+   for positioning. */
+.mh-cell .wp-block-group:has(> .mh-cell__stamp) {
 	position: relative;
-	cursor: pointer;
-}
-
-.mh-cell.wp-block-group::before {
-	content: '0' counter(mh-cell, decimal-leading-zero) ' / WP—0' counter(mh-cell, decimal-leading-zero);
-	position: absolute;
-	top: 8px;
-	left: 10px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	color: var(--mh-slate-2);
-	letter-spacing: 0.05em;
-	z-index: 2;
-	pointer-events: none;
-}
-
-.mh-cell.wp-block-group:hover { background: var(--mh-card); }
-.mh-cell.wp-block-group:hover .mh-cell__title a { color: var(--mh-wp); }
-
-/* Price tag — absolute top-right */
-.mh-cell .mh-cell__price-tag {
-	position: absolute;
-	top: 8px;
-	right: 10px;
-	margin: 0 !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	font-weight: 600;
-	color: var(--mh-ink);
-	z-index: 2;
-}
-.mh-cell .mh-cell__price-tag .wc-block-components-product-price__value,
-.mh-cell .mh-cell__price-tag .wp-block-woocommerce-product-price__value {
-	color: var(--mh-ink);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-weight: 600;
-	font-size: 11px;
-}
-
-/* Image — square, paper-2 inset */
-.mh-cell .mh-cell__img-wrap,
-.mh-cell .wc-block-components-product-image,
-.mh-cell .wp-block-woocommerce-product-image {
-	background: var(--mh-paper-2);
-	border: 1px solid var(--mh-rule);
-	aspect-ratio: 1;
-	margin: 16px 0 0;
-	overflow: hidden;
-}
-
-.mh-cell .wc-block-components-product-image img,
-.mh-cell .wp-block-woocommerce-product-image img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
-}
-
-.mh-cell .wc-block-components-product-image .wc-block-components-product-image__no-image,
-.mh-cell .wp-block-woocommerce-product-image .wp-block-woocommerce-product-image__no-image-placeholder {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: var(--mh-wp);
-	font-family: 'UnifrakturCook', serif;
-	font-size: 56px;
-	background: var(--mh-paper-2);
-}
-
-/* Stamp row — sits at the image bottom-right, overlapping by -22px */
-.mh-cell .mh-cell__stamp-row {
-	margin-top: -2px;
-	text-align: right;
-	position: relative;
-	height: 0;
-	z-index: 2;
 }
 
 .mh-cell .mh-cell__stamp {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--mh-slate);
-	padding: 2px 8px;
-	border: 1px solid var(--mh-rule);
-	border-radius: 2px;
-	background: var(--mh-paper-2);
-	font-weight: 500;
-	position: relative;
-	top: -22px;
-}
-
-.mh-cell .mh-cell__stamp::before {
-	content: '▲';
-	color: var(--mh-wp);
-	font-size: 1.1em;
-	line-height: 1;
-	transform: translateY(-1px);
-}
-
-/* Rotate stamp variants per cell for visual variety */
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp::before { content: '⬢'; color: #ff7aa8; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp { color: var(--mh-ink); }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp::before { content: '✦'; color: #f5b800; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp::before { content: '◆'; color: var(--mh-slate-2); }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp::before { content: '▪'; color: var(--mh-accent); }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp { content: 'low stock'; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp { font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+2) .mh-cell__stamp::after { content: 'low stock'; font-size: 10px; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp { font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+3) .mh-cell__stamp::after { content: 'seasonal'; font-size: 10px; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp { font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(7n+5) .mh-cell__stamp::after { content: 'heritage'; font-size: 10px; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp { font-size: 0; }
-.mh-grid-wrap .mh-grid .wc-block-product-template > li:nth-child(11n+8) .mh-cell__stamp::after { content: 'out'; font-size: 10px; }
-
-/* Meta row — category + first tag, mono uppercase */
-.mh-cell .mh-cell__meta-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: baseline;
-	gap: 10px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	color: var(--mh-slate);
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-}
-
-.mh-cell .mh-cell__meta-row .wp-block-post-terms {
-	margin: 0;
-	font-family: inherit;
-	font-size: inherit;
-	color: inherit;
-	letter-spacing: inherit;
-	text-transform: inherit;
-}
-
-.mh-cell .wp-block-post-terms a {
-	color: inherit;
-	text-decoration: none;
-}
-
-/* First tag — only show first <a>, hide separator + later anchors */
-.mh-cell .mh-cell__tag-first .wp-block-post-terms__separator,
-.mh-cell .mh-cell__tag-first a ~ a { display: none; }
-
-.mh-cell .mh-cell__cat { text-align: left; }
-.mh-cell .mh-cell__tag-first { text-align: right; }
-
-/* Title — newsreader, balance, hover blue */
-.mh-cell .mh-cell__title {
-	margin: 0;
-	font-family: 'Newsreader', Georgia, serif;
-	font-size: 17px;
-	font-weight: 500;
-	line-height: 1.15;
-	letter-spacing: -0.005em;
-	color: var(--mh-ink);
-	text-wrap: balance;
-	transition: color 0.12s;
-}
-
-.mh-cell .mh-cell__title a {
-	color: inherit;
-	text-decoration: none;
-	transition: color 0.12s;
-}
-
-/* Title link expands to whole cell so any click opens the product */
-.mh-cell .mh-cell__title a::after {
-	content: '';
 	position: absolute;
-	inset: 0;
-	z-index: 1;
+	bottom: -5px;
+	right: -1px;
+	transition: background-color 0.12s;
 }
 
-/* Hashtag tag list at the bottom — push to bottom via margin-top:auto */
-.mh-cell .mh-cell__tags-list {
-	margin: auto 0 0;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	color: var(--mh-slate);
-	letter-spacing: 0;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 4px 6px;
+/* Cell + stamp both flip to card (white) on hover. Color presets
+   referenced via the theme.json-emitted CSS variable — no hardcoded
+   hex. !important is required because WP generates the default
+   .has-X-background-color preset class with !important, so a plain
+   :hover rule (even at higher specificity) loses to it. */
+.mh-cell.wp-block-group {
+	transition: background-color 0.12s;
 }
 
-.mh-cell .mh-cell__tags-list a {
-	color: var(--mh-slate);
-	text-decoration: none;
-	position: relative;
-	z-index: 2;
+.mh-cell.wp-block-group:hover {
+	background-color: var(--wp--preset--color--card) !important;
 }
 
-.mh-cell .mh-cell__tags-list a::before {
-	content: '#';
-	color: var(--mh-slate-2);
+.mh-cell:hover .mh-cell__stamp {
+	background-color: var(--wp--preset--color--card) !important;
 }
-
-.mh-cell .mh-cell__tags-list .wp-block-post-terms__separator { display: none; }
-
-/* Default product price — used elsewhere; keep mono. */
-.mh-cell .wc-block-components-product-price,
-.mh-cell .wp-block-woocommerce-product-price {
-	margin: 0;
-}
-
-.mh-cell .wc-block-components-product-price__value,
-.mh-cell .wp-block-woocommerce-product-price__value {
-	color: var(--mh-ink);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-weight: 600;
-	font-size: 12px;
-}
-
-/* View → hover affordance: decorative span; cell-spanning title link handles navigation */
-.mh-cell .mh-cell__view {
-	position: absolute;
-	bottom: 12px;
-	right: 12px;
-	margin: 0;
-	padding: 0;
-	opacity: 0;
-	transition: opacity 0.1s;
-	z-index: 0;
-	pointer-events: none;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	font-weight: 500;
-	letter-spacing: 0.02em;
-	color: var(--mh-wp);
-}
-
-.mh-cell:hover .mh-cell__view { opacity: 1; }
 
 /* ===== Single product (admin-editor framing) ===== */
 .mh-breadcrumbs.wc-block-components-breadcrumbs { display: none; } /* prefer custom crumb header */

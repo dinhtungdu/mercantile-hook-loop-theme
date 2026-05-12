@@ -368,6 +368,11 @@ body {
 	position: absolute;
 	bottom: -5px;
 	right: -1px;
+	transition: background-color 0.12s;
+}
+
+.mh-cell:hover .mh-cell__stamp {
+	background-color: var(--wp--preset--color--card);
 }
 
 /* ===== Single product (admin-editor framing) ===== */

@@ -61,10 +61,11 @@ body {
    the two spec lists side-by-side at every viewport). Wordmark is
    core/heading; separator is core/separator; spec rows are core/group
    flex rows. Wrapper chrome — font-family, font-size, color,
-   letter-spacing, padding, border — is set on each block via
-   supports + default attributes in the template part. Only the bits
-   supports can't express stay here: the wordmark's text-wrap balance
-   and the responsive padding / wordmark size overrides. */
+   letter-spacing, padding (fluid clamp()s set on the block), border
+   — is set on each block via supports + default attributes in the
+   template part. Only two bits supports can't express stay here:
+   the wordmark's letter-spacing/text-wrap and the blurb's
+   max-width. */
 
 /* Wordmark — typography is mostly delivered by core: theme.json h1
    sets UnifrakturCook 700/line-height 1, the "wordmark" font-size
@@ -81,15 +82,6 @@ body {
 	max-width: 38ch;
 }
 
-/* Hero padding: fluid via clamp, sized to track the prototype's
-   step values (16/20/28/40 l-r and 24/28/40/48 top). Horizontal
-   clamp tops out at the gutter preset, which still stretches on
-   ultra-wide viewports. */
-.mh-hero {
-	padding-top: clamp(24px, 4vw, 48px) !important;
-	padding-left: clamp(16px, 3vw, var(--wp--preset--spacing--gutter)) !important;
-	padding-right: clamp(16px, 3vw, var(--wp--preset--spacing--gutter)) !important;
-}
 
 /* ===== Section head ===== */
 .mh-section-head {

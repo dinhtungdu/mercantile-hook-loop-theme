@@ -2138,58 +2138,66 @@ body {
 
 /* ============================================================
    PDP MODAL — Interactivity API client-side overlay.
-   Loading overlay shown while the browser navigates to a product page.
-   The JS store flips state.isLoading; the overlay stays visible until
-   the browser unloads the current page and the product page takes over.
+
+   Shown while the browser navigates to a product page. The scrim
+   uses the exact same colour as .mh-pdp-wrap (the product page's
+   own backdrop), and the loading card has the same chrome and
+   top position as .mh-pdp — so when navigation completes and the
+   product page replaces the current document, the user perceives
+   only the card contents changing in place. The catalog behind
+   the scrim is fully occluded, so the page swap is invisible.
    ============================================================ */
 .mh-pdp-modal {
 	position: fixed;
 	inset: 0;
 	z-index: 200;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	padding: 40px var(--wp--preset--spacing--gutter, 24px) 64px;
+	overflow-y: auto;
+	box-sizing: border-box;
 }
 .mh-pdp-modal[hidden] { display: none; }
-.mh-pdp-modal.is-loading { display: flex; }
-.mh-pdp-modal.is-loading[hidden] { display: flex; }
+.mh-pdp-modal.is-loading[hidden] { display: block; }
 
 .mh-pdp-modal__scrim {
-	position: absolute;
+	position: fixed;
 	inset: 0;
-	background: rgba(240, 240, 241, 0.4);
-	-webkit-backdrop-filter: blur(10px) saturate(120%);
-	backdrop-filter: blur(10px) saturate(120%);
-	animation: mh-pdp-modal-fade-in 0.28s cubic-bezier(.2,.7,.3,1) both;
-}
-
-@keyframes mh-pdp-modal-fade-in {
-	from { opacity: 0; -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0); }
-	to   { opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-	.mh-pdp-modal__scrim { animation: none; }
+	/* Same colour the product page paints on its .mh-pdp-wrap "scrim" —
+	   which is actually the body's --mh-paper showing through (the
+	   wrap's own var(--mh-rule-soft) is undefined, falling back to
+	   transparent). Using --mh-paper here keeps the two surfaces in
+	   lockstep, so the swap is invisible. */
+	background: var(--mh-paper);
 }
 
 .mh-pdp-modal__loading {
 	position: relative;
+	max-width: 1040px;
+	margin: 0 auto;
+	background: var(--mh-paper);
+	border: 1px solid var(--mh-rule);
+	border-radius: 6px;
+	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
+	min-height: 420px;
+	padding: 64px 20px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	gap: 32px;
-	padding: 64px 20px;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 13px;
 	color: var(--mh-slate);
 	letter-spacing: 0.02em;
 	pointer-events: none;
 	white-space: nowrap;
+	overflow: hidden;
 }
 @media (max-width: 600px) {
 	.mh-pdp-modal__loading {
 		gap: 20px;
 		padding: 40px 12px;
 		font-size: 12px;
+		min-height: 320px;
 	}
 }
 .mh-pdp-modal__loading-line::after {

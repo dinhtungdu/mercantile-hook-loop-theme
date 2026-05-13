@@ -2,14 +2,17 @@
  * Mercantile Hook Loop — PDP loading overlay via the WordPress Interactivity API.
  *
  * When the user clicks a product link inside a wc:product-collection (catalog
- * grids, related-products sidebar), this module shows a full-screen loading
- * overlay with an ASCII Wapuu reveal animation, then navigates to the product
- * page. The product page renders without header/footer — a card-on-scrim
- * layout that all WC interactive elements hydrate natively.
+ * grids, related-products sidebar), this module shows a card-on-scrim loading
+ * overlay with an ASCII Wapuu reveal animation, then hands off to the
+ * Interactivity Router to swap the page client-side. The router preloads
+ * the destination's stylesheets and script modules, then swaps the
+ * `mercantile/page` region — no real navigation, the modal stays mounted
+ * across the swap. The loading card sits at the same top position as `.mh-pdp`
+ * on the destination, so the moment of swap is invisible.
  *
  * The close button on the product page (wired via the [mh_pdp_breadcrumb]
- * shortcode) calls actions.close(), which navigates back via history.back()
- * with a homepage fallback when there's no same-origin referrer.
+ * shortcode) calls actions.close(), which goes back via history.back() with
+ * a homepage fallback when there's no same-origin referrer.
  */
 
 import { store, getConfig } from '@wordpress/interactivity';
@@ -138,14 +141,21 @@ const { state, actions } = store( NAMESPACE, {
 		loadingText: 'compiling…',
 	},
 	actions: {
-		open( url ) {
+		*open( url ) {
 			state.isLoading = true;
 			state.loadingText = pickLoadingLabel();
 			document.body.style.overflow = 'hidden';
-			setTimeout( startWapuuReveal, 0 );
-			window.location.href = url;
+			startWapuuReveal();
+			const { actions: router } = yield import(
+				'@wordpress/interactivity-router'
+			);
+			yield router.navigate( url );
+			state.isLoading = false;
+			stopWapuuReveal();
+			document.body.style.overflow = '';
 		},
-		close() {
+		*close() {
+			let target = '/';
 			try {
 				const ref = document.referrer;
 				if ( ref && new URL( ref ).origin === window.location.origin ) {
@@ -153,7 +163,10 @@ const { state, actions } = store( NAMESPACE, {
 					return;
 				}
 			} catch ( e ) { /* invalid referrer — fall through */ }
-			window.location.href = '/';
+			const { actions: router } = yield import(
+				'@wordpress/interactivity-router'
+			);
+			yield router.navigate( target );
 		},
 	},
 	callbacks: {

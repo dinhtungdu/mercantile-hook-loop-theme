@@ -87,7 +87,7 @@ add_action(
 		wp_enqueue_script_module(
 			'mercantile-hook-loop/pdp-modal',
 			get_template_directory_uri() . '/assets/js/pdp-modal.js',
-			array( '@wordpress/interactivity' ),
+			array( '@wordpress/interactivity', '@wordpress/interactivity-router' ),
 			wp_get_theme()->get( 'Version' )
 		);
 		if ( function_exists( 'wp_interactivity_config' ) ) {
@@ -112,12 +112,50 @@ add_action(
 );
 
 /**
- * Loading overlay shown while the browser navigates to a product page.
+ * Wrap every page's body content in a router region so the Interactivity
+ * Router can swap pages without a real navigation. The open tag goes in
+ * `wp_body_open` (right after admin bar) and the close tag rides early on
+ * `wp_footer` so the modal scaffold below ends up OUTSIDE the region —
+ * the modal must stay mounted across navigations.
  *
- * Clicking a product link in a wc:product-collection triggers the iAPI
- * store which flips state.isLoading, revealing this overlay with a Wapuu
- * ASCII reveal animation. The overlay stays visible until the browser
- * unloads the current page and the product page takes over.
+ * Same id on every template, so navigating catalog → product (or
+ * product → product) finds a matching region in the response and swaps
+ * its content. Templates with no header/footer (single-product.html)
+ * naturally render an empty header/footer area inside the region; the
+ * router does a one-shot DOM swap and the new content takes over.
+ */
+add_action(
+	'wp_body_open',
+	function () {
+		if ( is_admin() ) {
+			return;
+		}
+		echo '<div data-wp-router-region="mercantile/page">';
+	}
+);
+add_action(
+	'wp_footer',
+	function () {
+		if ( is_admin() ) {
+			return;
+		}
+		echo '</div>';
+	},
+	0
+);
+
+/**
+ * Loading overlay shown while the router fetches the destination page.
+ *
+ * Clicking a product link triggers actions.open(), which (1) flips
+ * state.isLoading to true, revealing this overlay with a Wapuu ASCII
+ * reveal animation, (2) calls the router's `navigate` action, then (3)
+ * clears state.isLoading once the swap completes. The scrim is opaque
+ * and the loading card sits at the same top position as `.mh-pdp`, so
+ * the moment of swap is invisible — only the card contents change.
+ *
+ * The scaffold lives OUTSIDE the router region (the region closes at
+ * priority 0 above) so this element survives every navigation.
  */
 add_action(
 	'wp_footer',
@@ -276,31 +314,9 @@ add_shortcode(
 	}
 );
 
-/**
- * Enhance WooCommerce variation <select> dropdowns with mono-font button
- * rows so the prototype's "pick a size" UI matches the design instead of
- * a native select. The script keeps the underlying <select> in the DOM
- * and forwards clicks via native `change` events, so WC's own variation
- * logic (price / image / availability / cart submission) is unchanged.
- *
- * Loaded site-wide because the PDP modal can open variable products from
- * any page (catalog cells, related rows, mini-cart line items). Script
- * is gated by DOM presence — does nothing if no `.variations_form` is on
- * the page.
- */
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_script(
-			'mercantile-hook-loop-variation-buttons',
-			get_template_directory_uri() . '/assets/js/variation-buttons.js',
-			array(),
-			wp_get_theme()->get( 'Version' ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
 		// "copy →" link on the dark [mercantile id="…"] PDP codeblock —
 		// never actually copies; cycles snark messages for 3.2s.
 		wp_enqueue_script(

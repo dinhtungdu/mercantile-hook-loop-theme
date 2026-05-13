@@ -222,7 +222,15 @@ const { state, actions } = store( NAMESPACE, {
 				state.html = card.outerHTML;
 				try {
 					const entry = { mhPdpModal: true, url };
-					if ( wasOpen ) {
+					const current = window.history.state;
+					if ( current && current.mhPdpModal && current.url === url ) {
+						// Already at this entry — popstate forward (browser
+						// restored a modal URL). Don't push or replace; the
+						// history is already in the right place.
+					} else if ( wasOpen ) {
+						// In-modal swap (related-product click) — collapse the
+						// session to a single history entry so one back press
+						// always exits.
 						window.history.replaceState( entry, '', url );
 					} else {
 						window.history.pushState( entry, '', url );
@@ -293,15 +301,22 @@ const { state, actions } = store( NAMESPACE, {
 			actions.open( link.href );
 		},
 		// Window-level popstate handler, registered via
-		// data-wp-on-window--popstate on the modal root. Closes the modal
-		// when the user hits the browser back button (the back itself
-		// advances history, so we just clear modal state here).
+		// data-wp-on-window--popstate on the modal root. Two cases:
+		// 1. Back away from a modal entry — close the modal.
+		// 2. Forward to a modal entry (event.state.mhPdpModal) — reopen
+		//    the modal at that URL. `actions.open` detects the URL is
+		//    already the current location and skips the history push.
 		onPopstate( event ) {
-			if ( state.isOpen && ( ! event.state || ! event.state.mhPdpModal ) ) {
+			const isModalEntry = event.state && event.state.mhPdpModal;
+			if ( state.isOpen && ! isModalEntry ) {
 				state.isOpen = false;
 				state.html = '';
 				stopWapuuReveal();
 				document.body.style.overflow = '';
+				return;
+			}
+			if ( ! state.isOpen && isModalEntry && event.state.url ) {
+				actions.open( event.state.url );
 			}
 		},
 	},

@@ -65,25 +65,102 @@ add_action(
 
 /**
  * Register and enqueue the PDP modal script as an Interactivity API
- * client-side module. Triggered globally so a click on any product link
- * (catalog cell, related-products row, mini-cart line) opens the
- * product in a modal instead of full-page navigation.
+ * client-side module, plus seed translatable loading labels into the iAPI
+ * config. Triggered globally so a click on any product link (catalog cell,
+ * related-products row) opens the product in a modal instead of full-page
+ * navigation.
+ *
+ * Loading labels flow through `wp_interactivity_config()` rather than the JS
+ * `__()` runtime (CLAUDE.md note 19/20: static values use config, reactive
+ * values use state). The JS picks one at random per open via `getConfig()`.
  *
  * Direct loads of /product/<slug> still render the page normally; the
- * modal scaffold sits dormant (via the `hidden` attribute on the root)
- * unless the IxAPI store flips `state.isOpen` to true.
+ * modal scaffold (injected on wp_footer below) sits dormant via the
+ * `hidden` attribute on its root until the iAPI store flips `state.isOpen`.
  */
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		if ( function_exists( 'wp_enqueue_script_module' ) ) {
-			wp_enqueue_script_module(
-				'mercantile-hook-loop/pdp-modal',
-				get_template_directory_uri() . '/assets/js/pdp-modal.js',
-				array( '@wordpress/interactivity' ),
-				wp_get_theme()->get( 'Version' )
+		if ( ! function_exists( 'wp_enqueue_script_module' ) ) {
+			return;
+		}
+		wp_enqueue_script_module(
+			'mercantile-hook-loop/pdp-modal',
+			get_template_directory_uri() . '/assets/js/pdp-modal.js',
+			array( '@wordpress/interactivity' ),
+			wp_get_theme()->get( 'Version' )
+		);
+		if ( function_exists( 'wp_interactivity_config' ) ) {
+			wp_interactivity_config(
+				'mercantile/pdp-modal',
+				array(
+					'loadingLabels' => array(
+						__( 'compiling…', 'mercantile-hook-loop' ),
+						__( 'unwrapping it…', 'mercantile-hook-loop' ),
+						__( 'running the_content()…', 'mercantile-hook-loop' ),
+						__( 'pulling from wp-content/merch…', 'mercantile-hook-loop' ),
+						__( 'polishing the kerning…', 'mercantile-hook-loop' ),
+						__( 'committing markup…', 'mercantile-hook-loop' ),
+						__( 'wapuu woke up…', 'mercantile-hook-loop' ),
+						__( "did_action( 'preview' )…", 'mercantile-hook-loop' ),
+						__( 'fetching, gently…', 'mercantile-hook-loop' ),
+					),
+				)
 			);
 		}
+	}
+);
+
+/**
+ * Inject the PDP modal scaffold into the page footer on every front-end
+ * render. Replaces the `parts/pdp-modal.html` template-part approach: the
+ * modal is invariant chrome with no editorial content, no per-page
+ * variation, and no attribute schema — it only carries iAPI directives the
+ * runtime reads. A single `echo` keeps the canonical home of the scaffold
+ * here and removes the `wp:html` template-part from the Site Editor's
+ * surface (where it would only invite accidental edits).
+ *
+ * User-facing strings (aria-label) flow through `__()`.
+ */
+add_action(
+	'wp_footer',
+	function () {
+		if ( is_admin() ) {
+			return;
+		}
+		?>
+		<div
+			class="mh-pdp-modal"
+			data-wp-interactive="mercantile/pdp-modal"
+			data-wp-class--is-open="state.isOpen"
+			data-wp-class--is-loading="state.isLoading"
+			data-wp-bind--aria-hidden="!state.isOpen"
+			data-wp-on-window--keydown="callbacks.onKeydown"
+			data-wp-on-window--popstate="callbacks.onPopstate"
+			role="dialog"
+			aria-modal="true"
+			aria-label="<?php esc_attr_e( 'Product details', 'mercantile-hook-loop' ); ?>"
+			hidden
+		>
+			<div class="mh-pdp-modal__scrim" data-wp-on--click="actions.close"></div>
+			<div class="mh-pdp-modal__card" data-wp-on--click="actions.stopPropagation">
+				<button
+					class="mh-pdp-modal__close"
+					type="button"
+					aria-label="<?php esc_attr_e( 'Close product', 'mercantile-hook-loop' ); ?>"
+					data-wp-on--click="actions.close"
+				>&times;</button>
+				<div
+					class="mh-pdp-modal__content"
+					data-wp-watch="callbacks.onContentChange"
+				></div>
+				<div class="mh-pdp-modal__loading" data-wp-bind--hidden="!state.isLoading">
+					<pre class="mh-wapuu-ascii" aria-hidden="true"></pre>
+					<span class="mh-pdp-modal__loading-line" data-wp-text="state.loadingText"></span>
+				</div>
+			</div>
+		</div>
+		<?php
 	}
 );
 
@@ -119,6 +196,41 @@ add_filter(
 	},
 	10,
 	2
+);
+
+/**
+ * Wire every product link inside a wc:product-collection to the PDP modal
+ * store. Covers catalog grids (home / archive / search) and the related-
+ * products sidebar on the single-product template — the modal swaps content
+ * in place when a related row is clicked.
+ *
+ * The fully-qualified namespace form (`mercantile/pdp-modal::callbacks.…`)
+ * lets the iAPI runtime resolve the store without `data-wp-interactive` on
+ * an ancestor. WooCommerce's own `actions.viewProduct` directive on the
+ * product-image anchor is replaced — viewProduct is just a navigation
+ * wrapper, and the modal callback supersedes it. Modifier-clicks
+ * (cmd/ctrl/shift/alt) and `target="_blank"` fall through to native
+ * navigation because the JS callback bails before `preventDefault()`.
+ *
+ * Scoping to product-collection (rather than a global document delegate)
+ * means hand-coded `<a href="/product/…">` links in paragraphs, the footer,
+ * or menus navigate normally — only collection rows open the modal.
+ */
+add_filter(
+	'render_block_woocommerce/product-collection',
+	function ( $block_content ) {
+		if ( ! is_string( $block_content ) ) {
+			return $block_content;
+		}
+		$p = new WP_HTML_Tag_Processor( $block_content );
+		while ( $p->next_tag( 'a' ) ) {
+			$href = $p->get_attribute( 'href' );
+			if ( is_string( $href ) && false !== strpos( $href, '/product/' ) ) {
+				$p->set_attribute( 'data-wp-on--click', 'mercantile/pdp-modal::callbacks.openFromLink' );
+			}
+		}
+		return $p->get_updated_html();
+	}
 );
 
 /**
@@ -285,6 +397,37 @@ add_action(
 				'i18n_reset_alert_text'            => esc_attr__( 'Product selection reset.', 'woocommerce' ),
 			)
 		);
+	},
+	20
+);
+
+/**
+ * Force-enqueue WooCommerce's product-gallery assets site-wide.
+ *
+ * WC only enqueues the gallery's frontend stylesheet (carousel layout —
+ * `display: flex`, `overflow: hidden`, 100%-wide slides) and its iAPI
+ * script modules when a `wc:product-gallery` block actually renders on
+ * the page. The PDP modal injects gallery markup from the product page
+ * into any catalog/archive/search response — pages where no gallery block
+ * is rendered — so without this force-enqueue the modal-injected gallery
+ * would lay out as a stacked vertical list (no carousel CSS) and lack
+ * the iAPI store that drives slide navigation.
+ *
+ * Skipped on `is_product()` since WC already handles its own enqueue there.
+ * Cost: ~12 KB inline CSS + 2 deferred ESM module loads on every
+ * non-product page.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( ! function_exists( 'WC' ) || is_product() ) {
+			return;
+		}
+		wp_enqueue_style( 'woocommerce-product-gallery-style' );
+		if ( function_exists( 'wp_enqueue_script_module' ) ) {
+			wp_enqueue_script_module( 'woocommerce/product-gallery' );
+			wp_enqueue_script_module( 'woocommerce/product-gallery-large-image' );
+		}
 	},
 	20
 );

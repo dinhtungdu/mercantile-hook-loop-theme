@@ -1,11 +1,11 @@
 /**
  * Mercantile Hook Loop — PDP modal via the WordPress Interactivity API.
  *
- * When the user clicks a product link from the catalog (e.g. a product card
- * in the home grid), this module intercepts the navigation, fetches the
- * product page, extracts the `.mh-pdp` card, and renders it inside a
- * fixed-position modal overlay with a frosted-glass scrim. The user can
- * close via the × button, by clicking the scrim, or with the Escape key.
+ * When the user clicks a product link inside a wc:product-collection (catalog
+ * grids, related-products sidebar), this module intercepts the navigation,
+ * fetches the product page, extracts the `.mh-pdp` card, and renders it
+ * inside a fixed-position modal overlay with a frosted-glass scrim. The user
+ * can close via the × button, by clicking the scrim, or with the Escape key.
  *
  * Falls back to native navigation when:
  * - The user holds a modifier key (cmd/ctrl/shift/alt) — opens in new tab
@@ -16,39 +16,39 @@
  * Direct loads of /product/<slug> still render the full page (no modal),
  * so external / shared links still work.
  *
- * Architecture: a single global interactive store named
- * `mercantile/pdp-modal`. All event listeners (click, keydown, popstate) are
- * registered through IxAPI directives on the modal scaffold rather than via
- * vanilla `addEventListener`, so the lifecycle is owned by the IxAPI runtime
- * and the registration is declarative in `parts/pdp-modal.html`. The click
- * delegate uses `data-wp-on-document--click` so it catches any
- * `<a href="/product/...">` in any block (catalog cells, related products,
- * mini-cart line items) without per-template directive plumbing.
+ * Architecture: a single interactive store named `mercantile/pdp-modal`.
+ * Window-scoped listeners (keydown, popstate) are registered through iAPI
+ * directives on the modal scaffold echoed at wp_footer by functions.php.
+ * Per-link `data-wp-on--click` directives are injected server-side by a
+ * `render_block_woocommerce/product-collection` filter — scoping the modal
+ * trigger to product-collection rows so hand-coded `<a href="/product/…">`
+ * links elsewhere on the page navigate normally.
+ *
+ * In-modal swaps (clicking a related product while the modal is already
+ * open) use `history.replaceState` instead of pushState so a single back
+ * press exits the modal regardless of how many products were swapped
+ * through.
+ *
+ * WC product-gallery assets (carousel CSS + iAPI script modules) are
+ * force-enqueued site-wide from functions.php so the modal-injected
+ * gallery lays out and navigates correctly on non-product pages.
  */
 
-import { store, getContext, getElement } from '@wordpress/interactivity';
+import { store, getConfig, getElement } from '@wordpress/interactivity';
 
 const NAMESPACE = 'mercantile/pdp-modal';
 
-// Pool of in-character loading messages shown briefly while we fetch
-// the product page. Picked at random per open, never repeating the
-// previous one.
-const LOADING_LABELS = [
-	'compiling…',
-	'unwrapping it…',
-	'running the_content()…',
-	'pulling from wp-content/merch…',
-	'polishing the kerning…',
-	'committing markup…',
-	'wapuu woke up…',
-	"did_action( 'preview' )…",
-	'fetching, gently…',
-];
-
+// Pool of in-character loading messages, seeded server-side via
+// wp_interactivity_config() in functions.php so each label flows through
+// __() for translation. Picked at random per open, never repeating the
+// previous one. Falls back to a single literal if config is missing.
 let lastLoadingLabel = null;
 function pickLoadingLabel() {
-	const options = LOADING_LABELS.filter( ( l ) => l !== lastLoadingLabel );
-	const next = options[ Math.floor( Math.random() * options.length ) ];
+	const labels = getConfig( NAMESPACE ).loadingLabels || [];
+	if ( ! labels.length ) return 'compiling…';
+	const options = labels.filter( ( l ) => l !== lastLoadingLabel );
+	const pool = options.length ? options : labels;
+	const next = pool[ Math.floor( Math.random() * pool.length ) ];
 	lastLoadingLabel = next;
 	return next;
 }
@@ -182,6 +182,10 @@ const { state, actions } = store( NAMESPACE, {
 	},
 	actions: {
 		*open( url ) {
+			// Track whether the modal was already open so in-modal swaps
+			// (related-product clicks) use replaceState instead of pushState.
+			// One history entry per modal session = one back press exits.
+			const wasOpen = state.isOpen;
 			state.isOpen = true;
 			state.isLoading = true;
 			state.loadingText = pickLoadingLabel();
@@ -216,9 +220,13 @@ const { state, actions } = store( NAMESPACE, {
 					innerClose.remove();
 				}
 				state.html = card.outerHTML;
-				// Update the URL bar so the back button works.
 				try {
-					window.history.pushState( { mhPdpModal: true, url }, '', url );
+					const entry = { mhPdpModal: true, url };
+					if ( wasOpen ) {
+						window.history.replaceState( entry, '', url );
+					} else {
+						window.history.pushState( entry, '', url );
+					}
 				} catch ( e ) { /* ignore history failures */ }
 			} catch ( e ) {
 				// Bail to native navigation on any fetch / parse error.
@@ -268,28 +276,26 @@ const { state, actions } = store( NAMESPACE, {
 				ref.innerHTML = state.html || '';
 			}
 		},
-		// Document-level click delegate, registered via
-		// data-wp-on-document--click on the modal root. Catches any
-		// <a href="/product/..."> in any block (catalog cells, related
-		// products, mini-cart line items, etc.) without per-template
-		// directive plumbing.
-		onDocumentClick( event ) {
+		// Per-link click handler bound by the
+		// `render_block_woocommerce/product-collection` filter in
+		// functions.php — every <a> inside a product collection carries
+		// data-wp-on--click="mercantile/pdp-modal::callbacks.openFromLink".
+		// Modifier-clicks and target="_blank" fall through to native
+		// navigation by returning before preventDefault.
+		openFromLink( event ) {
 			if ( event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) {
 				return;
 			}
-			const link = event.target.closest( 'a[href*="/product/"]' );
-			if ( ! link || ! isProductLink( link ) ) return;
+			const link = event.currentTarget;
+			if ( ! link || ! link.href ) return;
 			if ( link.target === '_blank' ) return;
-			// Don't intercept if we're already inside the modal — let the
-			// user navigate away if they explicitly want to leave.
-			if ( link.closest( '.mh-pdp-modal' ) ) return;
 			event.preventDefault();
 			actions.open( link.href );
 		},
 		// Window-level popstate handler, registered via
-		// data-wp-on-window--popstate. Closes the modal when the user
-		// hits the browser back button (the back itself advances history,
-		// so we just clear modal state here).
+		// data-wp-on-window--popstate on the modal root. Closes the modal
+		// when the user hits the browser back button (the back itself
+		// advances history, so we just clear modal state here).
 		onPopstate( event ) {
 			if ( state.isOpen && ( ! event.state || ! event.state.mhPdpModal ) ) {
 				state.isOpen = false;
@@ -300,14 +306,3 @@ const { state, actions } = store( NAMESPACE, {
 		},
 	},
 } );
-
-function isProductLink( link ) {
-	if ( ! link || ! link.href ) return false;
-	let pathname;
-	try {
-		pathname = new URL( link.href, window.location.origin ).pathname;
-	} catch ( e ) {
-		return false;
-	}
-	return pathname.startsWith( '/product/' );
-}

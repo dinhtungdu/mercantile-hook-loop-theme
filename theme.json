@@ -3,6 +3,7 @@
 	"version": 3,
 	"settings": {
 		"appearanceTools": true,
+		"position": { "sticky": true },
 		"layout": {
 			"contentSize": "780px",
 			"wideSize": "1600px"

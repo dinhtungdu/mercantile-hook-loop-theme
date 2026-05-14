@@ -15,6 +15,7 @@ registerBlockType( metadata.name, {
 		const blockProps = useBlockProps( { className: 'mh-pdp__details' } );
 
 		const rows = [
+			{ key: __( 'SKU', 'mercantile-hook-loop' ), value: 'WP-COD-IS-POE-TEE' },
 			{ key: __( 'price', 'mercantile-hook-loop' ), value: '$48.00' },
 			{ key: __( 'category', 'mercantile-hook-loop' ), value: 'Apparel' },
 			{ key: __( 'tags', 'mercantile-hook-loop' ), value: '#new #wapuu' },

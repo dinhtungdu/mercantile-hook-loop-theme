@@ -373,7 +373,23 @@ body {
 	overflow: hidden;
 }
 
+/* Title "input field" caret — the only PDP title chrome with no
+   block-support analog; the rest lives on the post-title block. */
+.mh-pdp .mh-pdp__title::after {
+	content: '';
+	display: inline-block;
+	width: 0.06em;
+	height: 0.9em;
+	background: var(--mh-wp);
+	margin-left: 0.2em;
+	vertical-align: -0.08em;
+	animation: mh-caret 1.1s steps(2, start) infinite;
+}
+
 @keyframes mh-caret { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+	.mh-pdp .mh-pdp__title::after { animation: none; opacity: 0.9; }
+}
 
 .mh-side-label {
 	font-family: 'JetBrains Mono', ui-monospace, monospace;

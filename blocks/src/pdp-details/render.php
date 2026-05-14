@@ -42,6 +42,11 @@ $render_row = static function ( $label, $value, $value_class = '' ) {
 
 $rows = array();
 
+$sku = $product->get_sku();
+if ( $sku ) {
+	$rows[] = $render_row( __( 'SKU', 'mercantile-hook-loop' ), esc_html( $sku ) );
+}
+
 $price_html = $product->get_price_html();
 if ( $price_html ) {
 	$rows[] = $render_row( __( 'price', 'mercantile-hook-loop' ), $price_html, 'mh-pdp__spec-price' );

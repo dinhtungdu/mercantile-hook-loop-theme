@@ -1,0 +1,36 @@
+/**
+ * mercantile/pdp-flags — the product-state pill row below the blurb.
+ * CSS variables resolve against the theme's :root (style.css).
+ */
+
+.mh-flags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 14px 0;
+}
+
+.mh-flags .mh-pill {
+	display: inline-block;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	padding: 2px 8px;
+	border: 1px solid var(--mh-rule);
+	border-radius: 2px;
+	background: var(--mh-paper-2);
+}
+
+.mh-flags .mh-pill.is-blue {
+	background: var(--mh-blue-tint);
+	border-color: #c5d0ff;
+	color: var(--mh-ink);
+}
+
+.mh-flags .mh-pill.is-pink {
+	background: #fff3b0;
+	border-color: #ffe478;
+	color: var(--mh-ink);
+}

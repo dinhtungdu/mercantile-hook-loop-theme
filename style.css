@@ -396,6 +396,7 @@ body {
    prototype. The card itself is capped narrower than alignwide. */
 .mh-pdp-wrap {
 	background: var(--mh-rule-soft);
+	min-height: 100dvh;
 	padding-top: 40px;
 	padding-bottom: 64px;
 }
@@ -2136,123 +2137,133 @@ body {
 
 
 /* ============================================================
-   PDP MODAL — Interactivity API client-side overlay.
-   The scaffold lives in parts/pdp-modal.html; the JS store is
-   in assets/js/pdp-modal.js. When closed, the entire root is
-   display:none via the [hidden] attribute (set by the template
-   server-render, removed when state.isOpen flips true).
-   ============================================================ */
-.mh-pdp-modal {
-	position: fixed;
-	inset: 0;
-	z-index: 200;
-}
-.mh-pdp-modal[hidden] { display: none; }
-/* When the IxAPI flips state.isOpen, the [hidden] attr stays on the
-   element initially (server-rendered). The is-open class wins via
-   stronger specificity, but we also explicitly clear hidden when
-   the wrapper has the .is-open class for older bindings. */
-.mh-pdp-modal.is-open { display: block; }
-.mh-pdp-modal.is-open[hidden] { display: block; }
+   PDP MODAL — native <dialog> + <iframe>.
 
-.mh-pdp-modal__scrim {
-	position: absolute;
-	inset: 0;
+   The product page loads for real inside the iframe (fully
+   hydrated, every WC asset, isolated context). The <dialog>,
+   shown via showModal(), sits in the top layer with the real
+   catalog still mounted underneath — `::backdrop` dims it. No
+   fake scrim, no screenshot: the actual loop, dimmed.
+
+   The dialog, iframe, and (in the embedded product page) the
+   .mh-pdp-wrap are all transparent, so `::backdrop` shows
+   through everywhere except the .mh-pdp card itself.
+   ============================================================ */
+.mh-pdp-dialog {
+	width: 100vw;
+	height: 100dvh;
+	max-width: 100vw;
+	max-height: 100dvh;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	overflow: hidden;
+	/* Open = fade only. The dialog appears while the iframe is still
+	   loading the wapuu, so the slide-up belongs to the content reveal
+	   (on the frame, below), not here. Close = fade + settle downward,
+	   mirroring the prototype's mb-modal-out curve. `overlay`/`display`
+	   ride `allow-discrete` so the dialog stays in the top layer through
+	   the close transition. */
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	transform-origin: 50% 30%;
+	transition:
+		opacity 0.25s ease,
+		transform 0.32s cubic-bezier(.4, .1, .7, 1),
+		overlay 0.32s allow-discrete,
+		display 0.32s allow-discrete;
+}
+.mh-pdp-dialog:not([open]) {
+	opacity: 0;
+	transform: translateY(18px) scale(0.985);
+}
+@starting-style {
+	.mh-pdp-dialog[open] {
+		opacity: 0;
+	}
+}
+
+.mh-pdp-dialog::backdrop {
+	/* Light frosted-glass scrim, matching the prototype's .modal-back:
+	   a paper-grey wash over a heavy blur, so the real catalog reads as
+	   a soft texture behind the card rather than a dark dimming. */
 	background: rgba(240, 240, 241, 0.4);
 	-webkit-backdrop-filter: blur(10px) saturate(120%);
 	backdrop-filter: blur(10px) saturate(120%);
-	animation: mh-pdp-modal-fade-in 0.28s cubic-bezier(.2,.7,.3,1) both;
+	opacity: 1;
+	transition:
+		opacity 0.28s cubic-bezier(.2, .7, .3, 1),
+		overlay 0.28s allow-discrete,
+		display 0.28s allow-discrete;
+}
+.mh-pdp-dialog:not([open])::backdrop {
+	opacity: 0;
+}
+@starting-style {
+	.mh-pdp-dialog[open]::backdrop {
+		opacity: 0;
+	}
 }
 
-.mh-pdp-modal__card {
-	position: relative;
-	width: calc(100% - 40px);
-	max-width: 1040px;
-	min-height: 120px;                 /* visible even during loading */
-	max-height: calc(100vh - 80px);
-	margin: 40px auto;
-	overflow-y: auto;
-	-webkit-overflow-scrolling: touch;
-	background: var(--mh-paper);
-	border: 1px solid var(--mh-rule);
-	border-radius: 6px;
-	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
-	animation: mh-pdp-modal-rise 0.42s cubic-bezier(.22,.9,.28,1.06) both;
-}
-
-@keyframes mh-pdp-modal-fade-in {
-	from { opacity: 0; -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0); }
-	to   { opacity: 1; }
-}
-@keyframes mh-pdp-modal-rise {
-	0%   { opacity: 0; transform: translateY(18px) scale(0.985); }
-	60%  { opacity: 1; }
-	100% { opacity: 1; transform: translateY(0) scale(1); }
-}
 @media (prefers-reduced-motion: reduce) {
-	.mh-pdp-modal__scrim,
-	.mh-pdp-modal__card { animation: none; }
+	.mh-pdp-dialog,
+	.mh-pdp-dialog::backdrop,
+	.mh-pdp-dialog__frame {
+		transition: none;
+	}
 }
 
-.mh-pdp-modal__close {
-	position: absolute;
-	top: 14px;
-	right: 14px;
-	z-index: 2;
-	width: 32px;
-	height: 32px;
-	background: var(--mh-paper);
-	border: 1px solid var(--mh-rule);
-	border-radius: 4px;
-	font-size: 20px;
-	line-height: 1;
-	color: var(--mh-ink);
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0;
-}
-.mh-pdp-modal__close:hover {
-	background: var(--mh-accent);
-	color: #fff;
-	border-color: var(--mh-accent);
-}
-
-/* The injected .mh-pdp inside the modal sits at full card width
-   (no double max-width cap, no extra margin). */
-.mh-pdp-modal__card .mh-pdp {
-	max-width: none;
-	margin: 0;
+.mh-pdp-dialog__frame {
+	display: block;
+	width: 100%;
+	height: 100%;
 	border: 0;
-	border-radius: 0;
-	box-shadow: none;
+	background: transparent;
+	/* Content reveal: when the iframe finishes loading and `.is-loading`
+	   is dropped, the product slides up 18px + settles from scale(0.985)
+	   with a slight overshoot, fading in — the prototype's mb-modal curve.
+	   Entering the loading state snaps (transition: none), so this only
+	   ever plays on the way *out* of loading, never as a reverse. */
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	transform-origin: 50% 30%;
+	transition:
+		opacity 0.25s ease,
+		transform 0.42s cubic-bezier(.22, .9, .28, 1.06);
+}
+.mh-pdp-dialog.is-loading .mh-pdp-dialog__frame {
+	opacity: 0;
+	transform: translateY(18px) scale(0.985);
+	transition: none;
 }
 
-.mh-pdp-modal__loading {
-	display: flex;
+/* Loading overlay — the wapuu reveal, centred over the dimmed catalog. */
+.mh-pdp-dialog__loading {
+	position: absolute;
+	inset: 0;
+	display: none;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	gap: 32px;
-	padding: 64px 20px;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 13px;
-	color: var(--mh-slate);
+	color: var(--mh-rule);
 	letter-spacing: 0.02em;
 	pointer-events: none;
 	white-space: nowrap;
 }
+.mh-pdp-dialog.is-loading .mh-pdp-dialog__loading {
+	display: flex;
+}
 @media (max-width: 600px) {
-	.mh-pdp-modal__loading {
+	.mh-pdp-dialog__loading {
 		gap: 20px;
-		padding: 40px 12px;
 		font-size: 12px;
 	}
 }
-.mh-pdp-modal__loading[hidden] { display: none; }
-/* Blinking caret cursor after the loading message — matches the title's
-   caret animation, so loading reads as 'something is being typed'. */
-.mh-pdp-modal__loading-line::after {
+.mh-pdp-dialog__loading-line::after {
 	content: '\2588';
 	display: inline-block;
 	width: 0.55em;
@@ -2261,24 +2272,29 @@ body {
 	color: var(--mh-wp);
 	animation: mh-caret 1.1s steps(2, start) infinite;
 }
-/* ASCII Wapuu — ~100×51 of U+2588 blocks, populated character-by-character
-   by pdp-modal.js while the product fetch is in flight. font-size kept
-   small so the whole figure fits inside the modal card without scrolling
-   on common viewports. */
 .mh-wapuu-ascii {
 	margin: 0;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	/* Scales smoothly with viewport so the ~100-char-wide figure fits
-	   inside the modal card on phones. Caps at 6px on desktop. */
 	font-size: clamp(3.2px, 1.4vw, 6px);
 	line-height: 1.05;
-	/* Same soft periwinkle the ticker uses for ✿ wapuu items — keeps
-	   the mascot one consistent colour across the theme. */
 	color: #9fb1ff;
 	white-space: pre;
 	letter-spacing: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-	.mh-pdp-modal__loading-line::after { animation: none; opacity: 0.9; }
+	.mh-pdp-dialog__loading-line::after { animation: none; opacity: 0.9; }
+}
+
+/* Parent (catalog) scroll-lock while the dialog is open. */
+body.mh-pdp-open {
+	overflow: hidden;
+}
+
+/* Embedded product page (iframe src carries ?mh-embed=1): drop the
+   opaque surfaces so the dialog's `::backdrop` — the real, dimmed
+   catalog — shows through, leaving just the .mh-pdp card floating. */
+body.mh-pdp-embed,
+body.mh-pdp-embed .mh-pdp-wrap {
+	background: transparent;
 }
 

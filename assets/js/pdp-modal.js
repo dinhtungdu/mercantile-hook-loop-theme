@@ -1,62 +1,75 @@
 /**
- * Mercantile Hook Loop — PDP modal via the WordPress Interactivity API.
+ * Mercantile Hook Loop — PDP modal via a native <dialog> + <iframe>.
  *
- * When the user clicks a product link from the catalog (e.g. a product card
- * in the home grid), this module intercepts the navigation, fetches the
- * product page, extracts the `.mh-pdp` card, and renders it inside a
- * fixed-position modal overlay with a frosted-glass scrim. The user can
- * close via the × button, by clicking the scrim, or with the Escape key.
+ * This module runs in two contexts and branches on `isEmbedded`:
  *
- * Falls back to native navigation when:
- * - The user holds a modifier key (cmd/ctrl/shift/alt) — opens in new tab
- * - The link has target="_blank"
- * - The fetch errors
- * - JavaScript / the Interactivity API are unavailable
+ * 1. Parent (a catalog/archive/search page). It owns the `.mh-pdp-dialog`
+ *    injected on wp_footer. Clicking a product link calls `actions.open()`,
+ *    which `showModal()`s the dialog — putting the dialog in the top layer
+ *    with the *real* catalog still mounted underneath, dimmed by the
+ *    `::backdrop` — and points the `<iframe>` at `/product/<slug>?mh-embed=1`.
+ *    A real page load, fully hydrated, every WooCommerce asset, isolated.
+ *    The URL is kept in sync with `history.pushState`/`replaceState`.
  *
- * Direct loads of /product/<slug> still render the full page (no modal),
- * so external / shared links still work.
+ * 2. Embedded (the product page loaded inside that iframe). The close
+ *    button and any related-product links resolve to the same store here.
+ *    `actions.close()` posts a message up to the parent; `actions.open()`
+ *    navigates the iframe in place (`location.replace`, so the iframe's own
+ *    history stays flat) and tells the parent to show the loading overlay.
  *
- * Architecture: a single global interactive store named
- * `mercantile/pdp-modal`. All event listeners (click, keydown, popstate) are
- * registered through IxAPI directives on the modal scaffold rather than via
- * vanilla `addEventListener`, so the lifecycle is owned by the IxAPI runtime
- * and the registration is declarative in `parts/pdp-modal.html`. The click
- * delegate uses `data-wp-on-document--click` so it catches any
- * `<a href="/product/...">` in any block (catalog cells, related products,
- * mini-cart line items) without per-template directive plumbing.
+ * A direct visit to /product/<slug> (no iframe) is the standalone product
+ * page: `isEmbedded` is false and there is no dialog, so `actions.close()`
+ * falls back to a normal navigation home.
  */
 
-import { store, getContext, getElement } from '@wordpress/interactivity';
+import { store, getConfig } from '@wordpress/interactivity';
 
 const NAMESPACE = 'mercantile/pdp-modal';
+const EMBED_PARAM = 'mh-embed';
 
-// Pool of in-character loading messages shown briefly while we fetch
-// the product page. Picked at random per open, never repeating the
-// previous one.
-const LOADING_LABELS = [
-	'compiling…',
-	'unwrapping it…',
-	'running the_content()…',
-	'pulling from wp-content/merch…',
-	'polishing the kerning…',
-	'committing markup…',
-	'wapuu woke up…',
-	"did_action( 'preview' )…",
-	'fetching, gently…',
-];
+// Consent string for WooCommerce's locked `woocommerce` iAPI store —
+// must match the one wc-blocks and mercantile/cart-tab use verbatim.
+const WC_LOCK =
+	'I acknowledge that using a private store means my plugin will inevitably break on the next store release.';
+
+// `window.parent === window` on a top-level document; they differ when this
+// document is the product page running inside the modal's <iframe>.
+const isEmbedded = window.parent !== window;
+
+function getDialog() {
+	return document.querySelector( '.mh-pdp-dialog' );
+}
+function getFrame() {
+	return document.querySelector( '.mh-pdp-dialog__frame' );
+}
+
+// Build the iframe URL for a product: same path, plus the ?mh-embed=1 flag
+// that tells functions.php to add the `mh-pdp-embed` body class.
+function toEmbedUrl( url ) {
+	const u = new URL( url, window.location.origin );
+	u.searchParams.set( EMBED_PARAM, '1' );
+	return u.toString();
+}
+
+// The clean (shareable) path the address bar should show for a product —
+// the embed flag stripped back off.
+function toCleanPath( url ) {
+	const u = new URL( url, window.location.origin );
+	u.searchParams.delete( EMBED_PARAM );
+	return u.pathname + u.search;
+}
 
 let lastLoadingLabel = null;
 function pickLoadingLabel() {
-	const options = LOADING_LABELS.filter( ( l ) => l !== lastLoadingLabel );
-	const next = options[ Math.floor( Math.random() * options.length ) ];
+	const labels = getConfig( NAMESPACE ).loadingLabels || [];
+	if ( ! labels.length ) return 'compiling…';
+	const options = labels.filter( ( l ) => l !== lastLoadingLabel );
+	const pool = options.length ? options : labels;
+	const next = pool[ Math.floor( Math.random() * pool.length ) ];
 	lastLoadingLabel = next;
 	return next;
 }
 
-// ASCII Wapuu — original art, drawn by Jill, ~100×51 of U+2588 blocks.
-// Rendered character-by-character while the product page is fetching
-// (see startWapuuReveal). Each open shuffles a fresh reveal order so
-// the wapuu materialises differently every time.
 const WAPUU_ART = `                                            ████████████████
                                        █████████████████████████
                                    ████████████████    ████████████
@@ -109,8 +122,6 @@ const WAPUU_ART = `                                            █████�
                           ████████████████████████
                                ██████████████`;
 
-// Pre-compute the indices of every block character so reveal can
-// shuffle them once and step through. Newlines and spaces stay put.
 const WAPUU_BLOCK_INDICES = ( () => {
 	const out = [];
 	for ( let i = 0; i < WAPUU_ART.length; i++ ) {
@@ -119,27 +130,19 @@ const WAPUU_BLOCK_INDICES = ( () => {
 	return out;
 } )();
 
-// Total reveal duration, in ms. Tuned to feel like the wapuu is
-// 'rendering in' rather than appearing instantly — but short enough
-// that fast networks still show most of him.
 const WAPUU_REVEAL_MS = 900;
 
 let wapuuTimer = null;
 
 function startWapuuReveal() {
 	stopWapuuReveal();
-	const el = document.querySelector( '.mh-pdp-modal__loading .mh-wapuu-ascii' );
+	const el = document.querySelector( '.mh-pdp-dialog__loading .mh-wapuu-ascii' );
 	if ( ! el ) return;
 
-	// Start with a blank canvas the same shape as the final art —
-	// every block becomes a space, every newline stays. This locks
-	// in the height of the loading area so it doesn't reflow as the
-	// wapuu fills in.
 	const blank = WAPUU_ART.replace( /█/g, ' ' );
 	const buf = blank.split( '' );
 	el.textContent = blank;
 
-	// Fisher-Yates shuffle of the block indices.
 	const order = WAPUU_BLOCK_INDICES.slice();
 	for ( let i = order.length - 1; i > 0; i-- ) {
 		const j = Math.floor( Math.random() * ( i + 1 ) );
@@ -172,142 +175,206 @@ function stopWapuuReveal() {
 	}
 }
 
+function showLoading() {
+	state.isLoading = true;
+	state.loadingText = pickLoadingLabel();
+	startWapuuReveal();
+}
+function hideLoading() {
+	state.isLoading = false;
+	stopWapuuReveal();
+}
+
+// Point the iframe at a product. Always `location.replace()` rather than
+// assigning `iframe.src`: assigning `src` pushes a joint session-history
+// entry and makes the browser re-navigate the iframe on back/forward —
+// `replace()` keeps the iframe out of session history entirely, so the
+// parent's pushState/replaceState entries are the *only* thing back/forward
+// traverses. Falls back to `src` only if the contentWindow isn't reachable.
+function loadFrame( frame, url ) {
+	const embedUrl = toEmbedUrl( url );
+	try {
+		frame.contentWindow.location.replace( embedUrl );
+	} catch ( e ) {
+		frame.src = embedUrl;
+	}
+}
+
 const { state, actions } = store( NAMESPACE, {
 	state: {
-		isOpen: false,
 		isLoading: false,
-		html: '',
-		currentUrl: '',
 		loadingText: 'compiling…',
 	},
 	actions: {
-		*open( url ) {
-			state.isOpen = true;
-			state.isLoading = true;
-			state.loadingText = pickLoadingLabel();
-			state.currentUrl = url;
-			document.body.style.overflow = 'hidden';
-			// Kick off the wapuu reveal on the next tick so the
-			// loading element has rendered in the DOM.
-			setTimeout( startWapuuReveal, 0 );
-
-			try {
-				// Always fetch fresh — the browser otherwise serves a stale
-				// cached HTML, which means template / inline-style changes
-				// (e.g. tweaks to padding on .mh-pdp__side) only show up
-				// after a hard refresh of the product URL itself.
-				const response = yield fetch( url, {
-					credentials: 'same-origin',
-					cache: 'no-store',
-				} );
-				if ( ! response.ok ) {
-					throw new Error( 'Fetch failed: ' + response.status );
-				}
-				const text = yield response.text();
-				const doc = new DOMParser().parseFromString( text, 'text/html' );
-				const card = doc.querySelector( '.mh-pdp' );
-				if ( ! card ) {
-					throw new Error( 'No .mh-pdp in response' );
-				}
-				// Strip the breadcrumb header's close button — the modal has
-				// its own × that's wired to the IxAPI close action.
-				const innerClose = card.querySelector( '.mh-pdp__close' );
-				if ( innerClose ) {
-					innerClose.remove();
-				}
-				state.html = card.outerHTML;
-				// Update the URL bar so the back button works.
-				try {
-					window.history.pushState( { mhPdpModal: true, url }, '', url );
-				} catch ( e ) { /* ignore history failures */ }
-			} catch ( e ) {
-				// Bail to native navigation on any fetch / parse error.
-				state.isOpen = false;
-				state.isLoading = false;
-				stopWapuuReveal();
-				document.body.style.overflow = '';
-				window.location.href = url;
+		open( url ) {
+			// Inside the iframe: a related-product click. Tell the parent
+			// the new path (so it can replaceState) and navigate the iframe
+			// in place. The parent never reads the iframe's location — the
+			// embedded page reports it explicitly.
+			if ( isEmbedded ) {
+				window.parent.postMessage(
+					{ type: 'mh-pdp:navigate', path: toCleanPath( url ) },
+					window.location.origin
+				);
+				window.location.replace( toEmbedUrl( url ) );
 				return;
 			}
-
-			state.isLoading = false;
-			stopWapuuReveal();
+			const dialog = getDialog();
+			const frame = getFrame();
+			if ( ! dialog || ! frame ) return;
+			showLoading();
+			loadFrame( frame, url );
+			if ( ! dialog.open ) {
+				dialog.showModal();
+				document.body.classList.add( 'mh-pdp-open' );
+			}
+			const path = toCleanPath( url );
+			history.pushState( { mhPdp: path }, '', path );
 		},
 		close() {
-			if ( ! state.isOpen ) return;
-			state.isOpen = false;
-			state.html = '';
-			stopWapuuReveal();
-			document.body.style.overflow = '';
-			// If we opened via pushState, restore the URL on close.
-			if ( window.history.state && window.history.state.mhPdpModal ) {
-				try {
-					window.history.back();
-				} catch ( e ) { /* ignore */ }
+			// Inside the iframe: the [mh_pdp_breadcrumb] close button.
+			// The parent owns the dialog, so hand the close up to it.
+			if ( isEmbedded ) {
+				window.parent.postMessage(
+					{ type: 'mh-pdp:close' },
+					window.location.origin
+				);
+				return;
 			}
-		},
-		stopPropagation( event ) {
-			event.stopPropagation();
+			const dialog = getDialog();
+			if ( dialog && dialog.open ) {
+				// The dialog's `close` event handler syncs history.
+				dialog.close();
+				return;
+			}
+			// Standalone product page (direct visit, no dialog): plain nav.
+			window.location.href = '/';
 		},
 	},
 	callbacks: {
-		onKeydown( event ) {
-			if ( event.key === 'Escape' && state.isOpen ) {
-				actions.close();
-			}
-		},
-		// Imperatively syncs state.html into the element's innerHTML when
-		// state.html changes. There's no native data-wp-html directive in
-		// the Interactivity API (only data-wp-text for textContent), so we
-		// use data-wp-watch on the content element which fires this callback
-		// any time the watched state changes.
-		onContentChange() {
-			const { ref } = getElement();
-			if ( ! ref ) return;
-			if ( ref.innerHTML !== state.html ) {
-				ref.innerHTML = state.html || '';
-			}
-		},
-		// Document-level click delegate, registered via
-		// data-wp-on-document--click on the modal root. Catches any
-		// <a href="/product/..."> in any block (catalog cells, related
-		// products, mini-cart line items, etc.) without per-template
-		// directive plumbing.
-		onDocumentClick( event ) {
+		openFromLink( event ) {
 			if ( event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) {
 				return;
 			}
-			const link = event.target.closest( 'a[href*="/product/"]' );
-			if ( ! link || ! isProductLink( link ) ) return;
+			const link = event.currentTarget;
+			if ( ! link || ! link.href ) return;
 			if ( link.target === '_blank' ) return;
-			// Don't intercept if we're already inside the modal — let the
-			// user navigate away if they explicitly want to leave.
-			if ( link.closest( '.mh-pdp-modal' ) ) return;
 			event.preventDefault();
 			actions.open( link.href );
-		},
-		// Window-level popstate handler, registered via
-		// data-wp-on-window--popstate. Closes the modal when the user
-		// hits the browser back button (the back itself advances history,
-		// so we just clear modal state here).
-		onPopstate( event ) {
-			if ( state.isOpen && ( ! event.state || ! event.state.mhPdpModal ) ) {
-				state.isOpen = false;
-				state.html = '';
-				stopWapuuReveal();
-				document.body.style.overflow = '';
-			}
 		},
 	},
 } );
 
-function isProductLink( link ) {
-	if ( ! link || ! link.href ) return false;
-	let pathname;
-	try {
-		pathname = new URL( link.href, window.location.origin ).pathname;
-	} catch ( e ) {
-		return false;
+// ---------------------------------------------------------------------------
+// Parent-only wiring. The embedded product page never owns the dialog, the
+// history, or the iframe — it only posts messages up (see actions above).
+//
+// History model: the parent's pushState/replaceState entries are the single
+// source of truth. The iframe is decoupled from session history (loadFrame
+// uses location.replace), so `back`/`forward` only ever traverse the parent's
+// entries. The iframe's `load` event therefore does nothing but drop the
+// loading overlay — it never touches history.
+// ---------------------------------------------------------------------------
+if ( ! isEmbedded ) {
+	const dialog = getDialog();
+	const frame = getFrame();
+
+	// Re-sync the parent's WooCommerce cart store after a change made
+	// inside the iframe. The iframe and parent each hold their own
+	// `woocommerce` iAPI store instance against the same server cart;
+	// refreshCartItems() re-fetches /wc/store/v1/cart so the parent's
+	// cart-tab counter reflects what was added in the modal.
+	function refreshParentCart() {
+		try {
+			const wc = store( 'woocommerce', {}, { lock: WC_LOCK } );
+			wc?.actions?.refreshCartItems?.();
+		} catch ( e ) { /* WC store not on this page — nothing to sync */ }
 	}
-	return pathname.startsWith( '/product/' );
+
+	if ( dialog && frame ) {
+		frame.addEventListener( 'load', () => {
+			hideLoading();
+		} );
+
+		// Messages from the product page running inside the iframe.
+		window.addEventListener( 'message', ( event ) => {
+			if ( event.origin !== window.location.origin ) return;
+			const data = event.data || {};
+			if ( data.type === 'mh-pdp:close' ) {
+				if ( dialog.open ) dialog.close();
+			} else if ( data.type === 'mh-pdp:navigate' && data.path ) {
+				// A related-product click inside the iframe. The iframe is
+				// already navigating itself; just show the overlay and keep
+				// the address bar in sync (replace, not push — intra-modal
+				// steps shouldn't stack history entries).
+				showLoading();
+				history.replaceState( { mhPdp: data.path }, '', data.path );
+			} else if ( data.type === 'mh-pdp:cart-updated' ) {
+				refreshParentCart();
+			}
+		} );
+
+		// Closing the dialog (Escape, or dialog.close()) is the single place
+		// history is rewound — the close button, Escape, and a programmatic
+		// close all converge here and only `back()` once. Also a catch-all
+		// cart re-sync, in case anything was added/removed in the modal.
+		dialog.addEventListener( 'close', () => {
+			hideLoading();
+			document.body.classList.remove( 'mh-pdp-open' );
+			refreshParentCart();
+			if ( history.state?.mhPdp ) history.back();
+		} );
+
+		// Back/forward across the parent's product entries.
+		window.addEventListener( 'popstate', ( event ) => {
+			const path = event.state?.mhPdp;
+			if ( path ) {
+				// Forward into (or back to) a product entry.
+				let current;
+				try {
+					current = toCleanPath( frame.contentWindow.location.href );
+				} catch ( e ) { /* unreachable — reload below */ }
+				if ( current !== path ) {
+					showLoading();
+					loadFrame( frame, path );
+				}
+				if ( ! dialog.open ) {
+					dialog.showModal();
+					document.body.classList.add( 'mh-pdp-open' );
+				}
+			} else if ( dialog.open ) {
+				// Stepped back out to the catalog.
+				dialog.close();
+			}
+		} );
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Embedded-only wiring (the product page running inside the modal's iframe).
+// ---------------------------------------------------------------------------
+if ( isEmbedded ) {
+	// Click anywhere outside the .mh-pdp card — the transparent
+	// .mh-pdp-wrap area, which is the dimmed catalog showing through —
+	// closes the modal, the way clicking a dialog's backdrop would. The
+	// iframe covers the whole dialog, so the parent never sees these
+	// clicks; the embedded page has to report them.
+	document.addEventListener( 'click', ( event ) => {
+		if ( ! event.target?.closest?.( '.mh-pdp' ) ) {
+			window.parent.postMessage(
+				{ type: 'mh-pdp:close' },
+				window.location.origin
+			);
+		}
+	} );
+
+	// WooCommerce fires `wc-blocks_added_to_cart` on document.body when an
+	// item is added via blocks. Relay it up so the parent re-syncs its own
+	// cart store — the two documents hold separate `woocommerce` stores.
+	document.body.addEventListener( 'wc-blocks_added_to_cart', () => {
+		window.parent.postMessage(
+			{ type: 'mh-pdp:cart-updated' },
+			window.location.origin
+		);
+	} );
 }

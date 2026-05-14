@@ -65,25 +65,108 @@ add_action(
 
 /**
  * Register and enqueue the PDP modal script as an Interactivity API
- * client-side module. Triggered globally so a click on any product link
- * (catalog cell, related-products row, mini-cart line) opens the
- * product in a modal instead of full-page navigation.
+ * client-side module, plus seed translatable loading labels into the iAPI
+ * config. Triggered globally so a click on any product link (catalog cell,
+ * related-products row) opens the product in a `<dialog>` instead of a
+ * full-page navigation.
  *
- * Direct loads of /product/<slug> still render the page normally; the
- * modal scaffold sits dormant (via the `hidden` attribute on the root)
- * unless the IxAPI store flips `state.isOpen` to true.
+ * Loading labels flow through `wp_interactivity_config()` rather than the JS
+ * `__()` runtime (CLAUDE.md note 19/20: static values use config, reactive
+ * values use state). The JS picks one at random per open via `getConfig()`.
+ *
+ * Direct loads of /product/<slug> render the standalone product page. The
+ * same module runs there too: its close button posts a message to the
+ * parent when embedded in the modal's <iframe>, or navigates home on a
+ * direct visit.
  */
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		if ( function_exists( 'wp_enqueue_script_module' ) ) {
-			wp_enqueue_script_module(
-				'mercantile-hook-loop/pdp-modal',
-				get_template_directory_uri() . '/assets/js/pdp-modal.js',
-				array( '@wordpress/interactivity' ),
-				wp_get_theme()->get( 'Version' )
+		if ( ! function_exists( 'wp_enqueue_script_module' ) ) {
+			return;
+		}
+		wp_enqueue_script_module(
+			'mercantile-hook-loop/pdp-modal',
+			get_template_directory_uri() . '/assets/js/pdp-modal.js',
+			array( '@wordpress/interactivity' ),
+			wp_get_theme()->get( 'Version' )
+		);
+		if ( function_exists( 'wp_interactivity_config' ) ) {
+			wp_interactivity_config(
+				'mercantile/pdp-modal',
+				array(
+					'loadingLabels' => array(
+						__( 'compiling…', 'mercantile-hook-loop' ),
+						__( 'unwrapping it…', 'mercantile-hook-loop' ),
+						__( 'running the_content()…', 'mercantile-hook-loop' ),
+						__( 'pulling from wp-content/merch…', 'mercantile-hook-loop' ),
+						__( 'polishing the kerning…', 'mercantile-hook-loop' ),
+						__( 'committing markup…', 'mercantile-hook-loop' ),
+						__( 'wapuu woke up…', 'mercantile-hook-loop' ),
+						__( "did_action( 'preview' )…", 'mercantile-hook-loop' ),
+						__( 'fetching, gently…', 'mercantile-hook-loop' ),
+					),
+				)
 			);
 		}
+	}
+);
+
+/**
+ * Inject the PDP `<dialog>` scaffold on catalog-type pages (anything that
+ * is not itself a single product). Clicking a product link calls
+ * actions.open(), which `showModal()`s this dialog and points the
+ * `<iframe>` at the product URL — a real page load, fully hydrated, with
+ * every WooCommerce asset, in an isolated browsing context.
+ *
+ * The native `<dialog>` earns its keep: top-layer rendering (no z-index
+ * fights), a `::backdrop` pseudo-element that dims the *real* catalog
+ * still mounted underneath (no fake scrim, no screenshot), focus
+ * trapping, and Escape-to-close — all from the platform.
+ *
+ * Skipped on `is_product()` because the product page IS the thing the
+ * iframe loads; it must never nest its own dialog. The wapuu overlay
+ * shows while the iframe's `load` event is pending.
+ */
+add_action(
+	'wp_footer',
+	function () {
+		if ( is_admin() || ( function_exists( 'is_product' ) && is_product() ) ) {
+			return;
+		}
+		?>
+		<dialog
+			class="mh-pdp-dialog"
+			data-wp-interactive="mercantile/pdp-modal"
+			data-wp-class--is-loading="state.isLoading"
+		>
+			<iframe
+				class="mh-pdp-dialog__frame"
+				title="<?php esc_attr_e( 'Product details', 'mercantile-hook-loop' ); ?>"
+			></iframe>
+			<div class="mh-pdp-dialog__loading" aria-hidden="true">
+				<pre class="mh-wapuu-ascii"></pre>
+				<span class="mh-pdp-dialog__loading-line" data-wp-text="state.loadingText"></span>
+			</div>
+		</dialog>
+		<?php
+	}
+);
+
+/**
+ * Tag the document body with `mh-pdp-embed` when the product page is
+ * being requested inside the modal's `<iframe>` (the iframe src carries
+ * `?mh-embed=1`). The class lets the stylesheet drop `.mh-pdp-wrap`'s
+ * own background so the dialog's translucent `::backdrop` — and the real
+ * catalog behind it — shows through, instead of an opaque grey panel.
+ */
+add_filter(
+	'body_class',
+	function ( $classes ) {
+		if ( isset( $_GET['mh-embed'] ) ) {
+			$classes[] = 'mh-pdp-embed';
+		}
+		return $classes;
 	}
 );
 
@@ -119,6 +202,34 @@ add_filter(
 	},
 	10,
 	2
+);
+
+/**
+ * Wire every product link inside a wc:product-collection to show the
+ * loading overlay and navigate to the product page. Covers catalog grids
+ * (home / archive / search) and the related-products sidebar on the
+ * single-product template.
+ *
+ * The fully-qualified namespace form (`mercantile/pdp-modal::callbacks.…`)
+ * lets the iAPI runtime resolve the store without `data-wp-interactive` on
+ * an ancestor. Modifier-clicks (cmd/ctrl/shift/alt) and `target="_blank"`
+ * fall through to native navigation.
+ */
+add_filter(
+	'render_block_woocommerce/product-collection',
+	function ( $block_content ) {
+		if ( ! is_string( $block_content ) ) {
+			return $block_content;
+		}
+		$p = new WP_HTML_Tag_Processor( $block_content );
+		while ( $p->next_tag( 'a' ) ) {
+			$href = $p->get_attribute( 'href' );
+			if ( is_string( $href ) && false !== strpos( $href, '/product/' ) ) {
+				$p->set_attribute( 'data-wp-on--click', 'mercantile/pdp-modal::callbacks.openFromLink' );
+			}
+		}
+		return $p->get_updated_html();
+	}
 );
 
 /**
@@ -192,49 +303,11 @@ add_shortcode(
 	}
 );
 
-/**
- * Enhance WooCommerce variation <select> dropdowns with mono-font button
- * rows so the prototype's "pick a size" UI matches the design instead of
- * a native select. The script keeps the underlying <select> in the DOM
- * and forwards clicks via native `change` events, so WC's own variation
- * logic (price / image / availability / cart submission) is unchanged.
- *
- * Loaded site-wide because the PDP modal can open variable products from
- * any page (catalog cells, related rows, mini-cart line items). Script
- * is gated by DOM presence — does nothing if no `.variations_form` is on
- * the page.
- */
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_script(
-			'mercantile-hook-loop-variation-buttons',
-			get_template_directory_uri() . '/assets/js/variation-buttons.js',
-			array(),
-			wp_get_theme()->get( 'Version' ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
-		// AJAX-submit add-to-cart from inside the PDP modal so the form
-		// doesn't reload to /product/<slug>/?add-to-cart=… and leave the
-		// modal floating over a duplicate PDP. Loaded site-wide so the
-		// modal's submit-handler is registered before any modal opens.
-		wp_enqueue_script(
-			'mercantile-hook-loop-cart-ajax-submit',
-			get_template_directory_uri() . '/assets/js/cart-ajax-submit.js',
-			array(),
-			wp_get_theme()->get( 'Version' ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
 		// "copy →" link on the dark [mercantile id="…"] PDP codeblock —
 		// never actually copies; cycles snark messages for 3.2s.
-		// Loaded site-wide so it also fires when the codeblock is
-		// injected by the IxAPI modal.
 		wp_enqueue_script(
 			'mercantile-hook-loop-copy-easter-egg',
 			get_template_directory_uri() . '/assets/js/copy-easter-egg.js',
@@ -246,47 +319,6 @@ add_action(
 			)
 		);
 	}
-);
-
-/**
- * Force-enqueue WooCommerce's variation script (and its localized params)
- * site-wide.
- *
- * WC normally only enqueues `wc-add-to-cart-variation` on `is_product()`
- * pages. The PDP modal can open a variable product from anywhere in the
- * site (catalog cell, related-products row, mini-cart line item), and
- * the modal-injected variations form needs jQuery + WC's VariationForm
- * class to function. Without this, picking a size on a modal-opened
- * product fails silently — variation_id stays at the markup default and
- * Add to Cart's first click does nothing.
- *
- * Nothing extra to do for the inline `<script type="text/template">`
- * tags that WC outputs adjacent to the variations form: those travel
- * with the form HTML when the modal extracts and re-injects `.mh-pdp`.
- */
-add_action(
-	'wp_enqueue_scripts',
-	function () {
-		if ( ! function_exists( 'WC' ) ) {
-			return;
-		}
-		if ( is_product() ) {
-			return; // WC already handles its own enqueue here.
-		}
-		wp_enqueue_script( 'wc-add-to-cart-variation' );
-		wp_localize_script(
-			'wc-add-to-cart-variation',
-			'wc_add_to_cart_variation_params',
-			array(
-				'wc_ajax_url'                      => WC_AJAX::get_endpoint( '%%endpoint%%' ),
-				'i18n_no_matching_variations_text' => esc_attr__( 'Sorry, no products matched your selection. Please choose a different combination.', 'woocommerce' ),
-				'i18n_make_a_selection_text'       => esc_attr__( 'Please select some product options before adding this product to your cart.', 'woocommerce' ),
-				'i18n_unavailable_text'            => esc_attr__( 'Sorry, this product is unavailable. Please choose a different combination.', 'woocommerce' ),
-				'i18n_reset_alert_text'            => esc_attr__( 'Product selection reset.', 'woocommerce' ),
-			)
-		);
-	},
-	20
 );
 
 /* -----------------------------------------------------------------------
@@ -309,8 +341,10 @@ add_action(
  * PDP header. "mercantile" links to home, "shop" links to the shop
  * page, the category links to the category archive, and the product
  * title is rendered as bold non-link text (we're already on its page).
- * The close × button (back to shop) is rendered as a sibling so the
- * existing `.mh-pdp__header` flex layout still works.
+ * The close × button uses the iAPI `mercantile/pdp-modal::actions.close`
+ * action (fully-qualified form so no `data-wp-interactive` ancestor is
+ * needed). JS navigates back via `history.back()` with a homepage
+ * fallback; the no-JS fallback is the shop page href.
  */
 add_shortcode(
 	'mh_pdp_breadcrumb',
@@ -331,12 +365,12 @@ add_shortcode(
 			);
 		}
 		return sprintf(
-			'<header class="mh-pdp__header"><div class="mh-pdp__crumb"><a href="%s">mercantile</a><span class="sl">/</span><a href="%s">shop</a><span class="sl">/</span>%s<b>%s</b></div><a class="mh-pdp__close" href="%s" aria-label="Back to shop">&times;</a></header>',
+			'<header class="mh-pdp__header" data-wp-interactive="mercantile/pdp-modal"><div class="mh-pdp__crumb"><a href="%s">mercantile</a><span class="sl">/</span><a href="%s">shop</a><span class="sl">/</span>%s<b>%s</b></div><button class="mh-pdp__close" type="button" aria-label="%s" data-wp-on--click="actions.close">&times;</button></header>',
 			esc_url( home_url( '/' ) ),
 			esc_url( $shop_url ),
 			$cat_html,
 			esc_html( strtolower( $product->get_name() ) ),
-			esc_url( $shop_url )
+			esc_attr__( 'Go back', 'mercantile-hook-loop' )
 		);
 	}
 );

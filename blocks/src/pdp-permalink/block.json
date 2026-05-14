@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/pdp-permalink",
+	"version": "1.0.0",
+	"title": "PDP Permalink",
+	"category": "theme",
+	"description": "Editor-style permalink row for the single-product template — permalink: <site>/product/<slug> · modified <date> — with the slug highlighted and the real last-modified time. Renders real product data.",
+	"icon": "admin-links",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true,
+		"multiple": false,
+		"reusable": false
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

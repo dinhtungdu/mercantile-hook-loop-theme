@@ -1,0 +1,30 @@
+/**
+ * mercantile/pdp-publish-meta — the status / visibility / stock rows of
+ * the Publish meta-box mimic. The panel wrapper chrome (`.mh-pdp__panel`,
+ * its `<h3>`) is shared with the Details / Related panels and lives in
+ * the theme's style.css; only the status rows are block-owned here.
+ * CSS variables resolve against the theme's :root.
+ */
+
+.mh-status-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	padding: 3px 0;
+	border-bottom: 1px dashed var(--mh-rule);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.mh-status-row:last-of-type {
+	border-bottom: 0;
+}
+.mh-status-row .v {
+	color: var(--mh-slate);
+}
+.mh-status-row .v.g {
+	color: var(--mh-ok);
+}
+.mh-status-row .v b {
+	color: var(--mh-ink);
+	font-weight: 600;
+}

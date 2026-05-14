@@ -232,7 +232,7 @@ const { state, actions } = store( NAMESPACE, {
 			history.pushState( { mhPdp: path }, '', path );
 		},
 		close() {
-			// Inside the iframe: the [mh_pdp_breadcrumb] close button.
+			// Inside the iframe: the mercantile/pdp-breadcrumb close button.
 			// The parent owns the dialog, so hand the close up to it.
 			if ( isEmbedded ) {
 				window.parent.postMessage(

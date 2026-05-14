@@ -1,25 +1,28 @@
 /**
- * Mercantile Hook Loop — copy-easter-egg.
+ * mercantile/pdp-codeblock — copy-shortcode easter egg.
  *
- * The dark `[mercantile id="…"]` codeblock that sits below the PDP
- * gallery has a "copy →" link. It looks like it ought to copy the
- * shortcode to the clipboard. It doesn't, and it never has — clicking
- * it cycles a random snark message for 3.2s before reverting to
- * "copy →". Ported from the original prototype at
+ * The dark `[mercantile id="…"]` codeblock below the PDP gallery has a
+ * "copy shortcode ⟶" link. It looks like it ought to copy the shortcode
+ * to the clipboard. It doesn't, and it never has — clicking it cycles a
+ * random snark message for 3.2s before reverting. Ported from the
+ * original prototype at
  * j111q.github.io/mercantile-prototype/explore/03-hook-loop/.
  *
- * Delegated on document.body via capture so it catches `.mh-shortcode
- * .copy` whether the codeblock was server-rendered (direct PDP) or
- * injected by the IxAPI PDP modal (catalog → modal → product).
+ * Enqueued as the block's viewScript, so it loads only on pages that
+ * render the codeblock — the standalone PDP and the PDP modal's iframe
+ * (which loads the real product page). Delegated on document so it
+ * catches `.mh-shortcode .copy` regardless of how the block got there.
  *
- * Each click picks a snark at random from the pool, avoiding repeats
- * with the *previous* one only — that way a single PDP visit can cycle
- * through most messages without ever showing two in a row.
+ * Each click picks a snark at random, avoiding repeats with the
+ * *previous* one only — so a single PDP visit can cycle through most
+ * messages without ever showing two in a row.
  */
+
+/* global HTMLElement */
 
 ( function () {
 	const DEFAULT_TEXT = 'copy shortcode ⟶';
-	const REVERT_MS    = 3200;
+	const REVERT_MS = 3200;
 
 	const SNARKS = [
 		'why are you trying to copy this, you weirdo? →',
@@ -59,7 +62,9 @@
 	}
 
 	function isCopy( target ) {
-		if ( ! ( target instanceof HTMLElement ) ) return null;
+		if ( ! ( target instanceof HTMLElement ) ) {
+			return null;
+		}
 		return target.closest( '.mh-shortcode .copy' );
 	}
 
@@ -67,7 +72,9 @@
 		'click',
 		( event ) => {
 			const el = isCopy( event.target );
-			if ( ! el ) return;
+			if ( ! el ) {
+				return;
+			}
 			event.preventDefault();
 			snark( el );
 		},
@@ -76,9 +83,13 @@
 
 	// Keyboard: Enter / Space on the `role="button"` copy link.
 	document.addEventListener( 'keydown', ( event ) => {
-		if ( event.key !== 'Enter' && event.key !== ' ' ) return;
+		if ( event.key !== 'Enter' && event.key !== ' ' ) {
+			return;
+		}
 		const el = isCopy( event.target );
-		if ( ! el ) return;
+		if ( ! el ) {
+			return;
+		}
 		event.preventDefault();
 		snark( el );
 	} );

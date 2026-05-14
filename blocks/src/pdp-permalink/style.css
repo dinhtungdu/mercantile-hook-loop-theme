@@ -1,0 +1,29 @@
+/**
+ * mercantile/pdp-permalink — the editor-style permalink row above the
+ * product title. CSS variables resolve against the theme's :root.
+ */
+
+.mh-pdp__permalink {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	padding-bottom: 10px;
+	border-bottom: 1px dashed var(--mh-rule);
+	word-break: break-all;
+	margin: 0 0 14px;
+}
+
+.mh-pdp__permalink .k {
+	color: var(--mh-wp);
+}
+.mh-pdp__permalink b {
+	color: var(--mh-ink);
+	background: var(--mh-blue-tint);
+	padding: 0 5px;
+	border-radius: 2px;
+	font-weight: 500;
+}
+.mh-pdp__permalink-meta {
+	margin-left: 10px;
+	color: var(--mh-slate-2);
+}

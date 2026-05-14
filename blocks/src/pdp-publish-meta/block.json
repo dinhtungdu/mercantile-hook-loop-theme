@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/pdp-publish-meta",
+	"version": "1.0.0",
+	"title": "PDP Publish Meta",
+	"category": "theme",
+	"description": "The wp-admin Publish meta-box mimic in the single-product sidebar — status / visibility / stock rows rendered from real WooCommerce product state.",
+	"icon": "yes-alt",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true,
+		"multiple": false,
+		"reusable": false
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

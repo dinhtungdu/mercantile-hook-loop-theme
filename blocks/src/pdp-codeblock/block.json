@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/pdp-codeblock",
+	"version": "1.0.0",
+	"title": "PDP Codeblock",
+	"category": "theme",
+	"description": "The dark [mercantile id=\"…\"] shortcode strip below the PDP gallery, rendered with the real product slug. The \"copy shortcode\" link is a deliberate non-functional easter egg — clicking it cycles snark.",
+	"icon": "editor-code",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true,
+		"multiple": false,
+		"reusable": false
+	},
+	"editorScript": "file:./index.js",
+	"viewScript": "file:./view.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

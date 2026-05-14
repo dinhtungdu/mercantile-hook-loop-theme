@@ -294,6 +294,25 @@ or editing blocks here.
       `.woocommerce-Price-amount` span — same supports, two different
       DOM shapes. Don't write descendant CSS to "fix" the price; set
       typography on the block itself.
+    - `wc:product-collection` with a flex `displayLayout` adds an
+      `.is-flex-container` class, and WC hardcodes
+      `.wc-block-product-template.is-flex-container { gap: 1.25em }` in
+      its own stylesheet — a real class selector (specificity 0,2,0).
+      `style.spacing.blockGap` is emitted as a `:where()` rule (0
+      specificity) and can never beat it; killing the row gap needs a
+      theme CSS override.
+    - `wc:product-summary` ignores `style.color.text` set to a
+      `var:preset|color|…` ref — the colour silently doesn't apply. Use
+      the top-level `textColor` attribute (`"textColor":"ink-2"`).
+      Typography supports on the same block take a preset fine; the
+      mismatch is colour-specific (core blocks like `core/heading`
+      accept `style.color.text` with a preset — this is a WC quirk).
+    - `wc:breadcrumbs` isn't a flex/grid container and ships almost no
+      CSS — the trail is `woocommerce_breadcrumb()` output: inline
+      `<a>`s joined by a `&nbsp;/&nbsp;` *text* delimiter. No `gap` to
+      set, no styleable separator span, no styleable current-item. It
+      can't reproduce a custom-styled crumb trail; the only lever is
+      the `woocommerce_breadcrumb` args filter (PHP).
 
 33. **Editor canvas and frontend can resolve CSS Grid + aspect-ratio
     differently.** Same template, same enqueued CSS, but the editor
@@ -350,6 +369,47 @@ or editing blocks here.
       relative }`. The parent's positioning context is set by the
       child it actually contains. Browser support is universal on
       the target audience for a WP theme as of 2026.
+
+36. **`blockGap` on a layout container zeroes its direct children's own
+    margins.** WP emits `.wp-container-<id> > * { margin-block: 0 }`
+    plus `> * + * { margin-block-start: <gap> }`. That `.class > *`
+    selector (specificity 0,1,0) matches a block's own className rule
+    but is emitted later, so it wins. A `margin` a block sets on itself
+    — in its `style.css` or via supports — is *dead* when the block is
+    a direct child of a `core/column` / `core/group` carrying
+    `blockGap`; the container's gap is the only spacing that survives.
+    Symptom: `pdp-permalink`'s `margin: 0 0 14px` computed to `0`. If a
+    block's own margin must matter, don't make it a direct child of a
+    blockGap'd container — or let the container own the rhythm.
+
+37. **A block's `fontFamily` attribute must be a theme.json preset
+    slug, not a raw font stack.** `"fontFamily":"jetbrains-mono"` emits
+    `has-jetbrains-mono-font-family` and works.
+    `"fontFamily":"'JetBrains Mono', ui-monospace, monospace"` does NOT
+    serialize — it silently falls back to the inherited family. For a
+    genuinely non-preset family use `style.typography.fontFamily`
+    instead. This bug hides indefinitely behind any `!important` rule
+    that forces the family anyway; it only surfaces when that CSS is
+    removed (the supports-first cleanup exposed it on the related-list
+    title).
+
+38. **Moving a property onto block-support inline styles breaks any
+    selector-based override of it.** Inline `style="…"` beats a plain
+    selector rule. When chrome migrates from `.mh-foo { background: … }`
+    to the block's `style` supports, a *separate* rule that used to
+    override it — e.g. `body.mh-pdp-embed .mh-pdp-wrap { background:
+    transparent }` — silently stops winning and now needs `!important`.
+    The supports-first push has this cost: before moving a property to
+    supports, grep for any selector elsewhere that overrides it.
+
+39. **Verify computed styles in a real browser — static source
+    comparison lies.** Diffing template HTML + `.css` files misses
+    everything WP/WC generate at render: `:where(.wp-container-*)`
+    layout rules, `has-*` preset classes (with `!important`), per-block
+    and WC stylesheets. A static pass this session produced false
+    positives — claimed `min-width: 0` was missing and a column `gap`
+    was present, both fine once computed. For the supports-first stack,
+    check `getComputedStyle` on the rendered page, not the source.
 
 ## Project layout for theme-local blocks
 

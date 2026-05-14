@@ -15,7 +15,6 @@ registerBlockType( metadata.name, {
 
 		return (
 			<section { ...blockProps }>
-				<h3>Publish</h3>
 				<div className="mh-status-row">
 					<span>status</span>
 					<span className="v g">&bull; published</span>

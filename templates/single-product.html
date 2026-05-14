@@ -4,10 +4,6 @@
 	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"},"className":"mh-pdp"} -->
 	<div class="wp-block-group alignwide mh-pdp">
 
-		<!-- Breadcrumb header — mercantile / shop / <category> / <title> —
-		     rendered server-side from real product data. The close × is
-		     wired to the PDP modal's close action. See
-		     blocks/src/pdp-breadcrumb/. -->
 		<!-- wp:mercantile/pdp-breadcrumb /-->
 
 		<!-- wp:group {"style":{"spacing":{"blockGap":"0"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top","justifyContent":"left"},"className":"mh-pdp__body"} -->
@@ -16,13 +12,13 @@
 			<!-- wp:group {"style":{"spacing":{"blockGap":"14px","padding":{"top":"24px","bottom":"24px","left":"28px","right":"28px"}}},"layout":{"type":"default"},"className":"mh-pdp__editor"} -->
 			<div class="wp-block-group mh-pdp__editor" style="padding-top:24px;padding-right:28px;padding-bottom:24px;padding-left:28px">
 
-				<!-- Permalink row with real URL and last-modified time.
-				     See blocks/src/pdp-permalink/. -->
 				<!-- wp:mercantile/pdp-permalink /-->
 
 				<!-- wp:post-title {"level":1,"className":"mh-pdp__title"} /-->
 
-				<!-- wp:woocommerce/product-summary {"className":"mh-pdp__blurb"} /-->
+				<!-- wp:woocommerce/product-summary {"className":"mh-pdp__blurb"} -->
+				<div class="is-loading"></div>
+				<!-- /wp:woocommerce/product-summary -->
 
 				<!-- wp:html -->
 				<div class="mh-marginalia">
@@ -36,10 +32,12 @@
 				<!-- wp:group {"className":"mh-pdp__gallery","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
 				<div class="wp-block-group mh-pdp__gallery">
 					<!-- wp:woocommerce/product-gallery {"hoverZoom":false,"fullScreenOnClick":false} -->
-					<div class="wp-block-woocommerce-product-gallery">
+					<div class="wp-block-woocommerce-product-gallery wc-block-product-gallery">
 						<!-- wp:woocommerce/product-gallery-large-image -->
-						<div class="wp-block-woocommerce-product-gallery-large-image">
-							<!-- wp:woocommerce/product-image {"showSaleBadge":false,"imageSizing":"single"} /-->
+						<div class="wp-block-woocommerce-product-gallery-large-image wc-block-product-gallery-large-image__inner-blocks">
+							<!-- wp:woocommerce/product-image {"showSaleBadge":false,"imageSizing":"single"} -->
+							<div class="is-loading"></div>
+							<!-- /wp:woocommerce/product-image -->
 						</div>
 						<!-- /wp:woocommerce/product-gallery-large-image -->
 					</div>
@@ -47,20 +45,14 @@
 				</div>
 				<!-- /wp:group -->
 
-				<!-- Dark `[mercantile id="…"]` codeblock strip. The "copy →" link
-				     is intentionally non-functional — clicking it triggers a
-				     snark cycle. The slug itself is real. See
-				     blocks/src/pdp-codeblock/. -->
 				<!-- wp:mercantile/pdp-codeblock /-->
 
 			</div>
 			<!-- /wp:group -->
 
-			<!-- wp:group {"style":{"spacing":{"blockGap":"0","padding":{"top":"14px","bottom":"22px","left":"20px","right":"18px"}}},"layout":{"type":"default"},"className":"mh-pdp__side"} -->
+			<!-- wp:group {"tagName":"aside","style":{"spacing":{"blockGap":"0","padding":{"top":"14px","bottom":"22px","left":"20px","right":"18px"}}},"layout":{"type":"default"},"className":"mh-pdp__side"} -->
 			<aside class="wp-block-group mh-pdp__side" style="padding-top:14px;padding-right:18px;padding-bottom:22px;padding-left:20px">
 
-				<!-- Publish meta-box mimic with real status / visibility / stock
-				     pulled from WC product state. See blocks/src/pdp-publish-meta/. -->
 				<!-- wp:mercantile/pdp-publish-meta /-->
 
 				<!-- wp:woocommerce/add-to-cart-with-options {"className":"mh-pdp__cta"} /-->
@@ -76,7 +68,9 @@
 						<!-- wp:paragraph {"style":{"typography":{"fontFamily":"'JetBrains Mono', ui-monospace, monospace","fontSize":"10px","letterSpacing":"0.08em","textTransform":"uppercase"}},"textColor":"slate","className":"mh-pdp__spec-key"} -->
 						<p class="has-slate-color has-text-color mh-pdp__spec-key" style="font-family:'JetBrains Mono', ui-monospace, monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase">price</p>
 						<!-- /wp:paragraph -->
-						<!-- wp:woocommerce/product-price {"className":"mh-pdp__spec-price"} /-->
+						<!-- wp:woocommerce/product-price {"className":"mh-pdp__spec-price"} -->
+						<div class="is-loading"></div>
+						<!-- /wp:woocommerce/product-price -->
 					</div>
 					<!-- /wp:group -->
 
@@ -98,12 +92,6 @@
 					</div>
 					<!-- /wp:group -->
 
-					<!-- Per-product specs (material, care, weight, dimensions…) via
-					     the core WooCommerce Product Specifications block. Renders
-					     nothing when a product has no weight/dimensions/attributes
-					     set, so it degrades gracefully. Variation-driving attributes
-					     (size, color…) are hidden via CSS — already shown by the
-					     add-to-cart variation picker. -->
 					<!-- wp:woocommerce/product-specifications /-->
 				</div>
 				<!-- /wp:group -->

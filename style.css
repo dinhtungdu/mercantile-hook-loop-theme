@@ -421,20 +421,12 @@ body {
 
 /* Permalink line — see blocks/src/pdp-permalink/style.css */
 
-/* Title rendered as an "input field" */
+/* Title rendered as an "input field" — the chrome (mono font, ink-on-
+   paper-2, 1px rule border + radius, padding, zeroed margin) lives on
+   the core/post-title block's own supports; see single-product.html.
+   Only text-wrap stays here — no block-support analog. */
 .mh-pdp .mh-pdp__title,
 .mh-pdp .wp-block-post-title.mh-pdp__title {
-	font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace !important;
-	font-weight: 600 !important;
-	font-size: clamp(20px, 2.6vw, 28px) !important;
-	line-height: 1.2 !important;
-	letter-spacing: -0.01em !important;
-	background: var(--mh-paper-2) !important;
-	border: 1px solid var(--mh-rule) !important;
-	border-radius: 4px !important;
-	padding: 12px 14px !important;
-	color: var(--mh-ink) !important;
-	margin: 0 !important;
 	text-wrap: balance;
 }
 

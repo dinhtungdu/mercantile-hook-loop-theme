@@ -303,20 +303,6 @@ body {
 	max-width: 50ch;
 }
 
-/* ===== Tag pill (decorative typography pop) ===== */
-.mh-pill {
-	display: inline-block;
-	background: var(--mh-blue-tint);
-	color: var(--mh-ink);
-	padding: 0 6px;
-	border-radius: 2px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-}
-
-.mh-pill.is-pink { background: var(--mh-pink); }
-.mh-pill.is-paper { background: var(--mh-paper-2); border: 1px solid var(--mh-rule); }
-
 /* ===== Editor parity tweaks ===== */
 .editor-styles-wrapper {
 	background: var(--mh-paper);
@@ -377,66 +363,21 @@ body {
 /* ===== Single product (admin-editor framing) ===== */
 .mh-breadcrumbs.wc-block-components-breadcrumbs { display: none; } /* prefer custom crumb header */
 
-/* PDP wrapper acts as a backdrop "scrim" so the card sits on a different
-   plane than the rest of the page chrome — same modal-card feel as the
-   prototype. The card itself is capped narrower than alignwide. */
-.mh-pdp-wrap {
-	background: var(--mh-rule-soft);
-	min-height: 100dvh;
-	padding-top: 40px;
-	padding-bottom: 64px;
-}
+/* PDP wrapper — a backdrop "scrim" so the card sits on a different plane
+   than the page chrome. Its scrim background, min-height and padding now
+   live on the <main> group's block supports (see single-product.html). */
 
 .mh-pdp {
 	max-width: 1040px;
 	margin-left: auto;
 	margin-right: auto;
-	background: var(--mh-paper);
-	border: 1px solid var(--mh-rule);
-	border-radius: 6px;
+	/* background / border / radius are on the card group's block supports.
+	   box-shadow stays here — safecss_filter_attr strips rgba() (note 25). */
 	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
 	overflow: hidden;
 }
 
-/* Header crumb bar */
-.mh-pdp__header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 14px 20px;
-	background: var(--mh-paper-2);
-	border-bottom: 1px solid var(--mh-rule);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	min-height: 56px;
-	box-sizing: border-box;
-}
-
-.mh-pdp__crumb { letter-spacing: 0.02em; }
-.mh-pdp__crumb .sl { color: var(--mh-rule); margin: 0 6px; }
-.mh-pdp__crumb b { color: var(--mh-ink); font-weight: 600; }
-.mh-pdp__crumb-action { margin-left: 14px; color: var(--mh-slate-2); }
-
-.mh-pdp__close {
-	width: 28px;
-	height: 28px;
-	border: 1px solid var(--mh-rule);
-	background: var(--mh-paper);
-	color: var(--mh-slate);
-	font-size: 16px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	text-decoration: none;
-	line-height: 1;
-}
-
-.mh-pdp__close:hover {
-	background: var(--mh-accent);
-	color: #fff;
-	border-color: var(--mh-accent);
-}
+/* Header crumb bar — see blocks/src/pdp-breadcrumb/style.css */
 
 /* Body grid */
 .mh-pdp__body {
@@ -458,48 +399,27 @@ body {
 }
 
 .mh-pdp__editor {
-	border-right: 1px solid var(--mh-rule);
+	/* border-right is on the group's block supports. */
 	min-width: 0;
 	margin-top: 0 !important;
 	margin-block-start: 0 !important;
 }
 
 .mh-pdp__side {
-	background: var(--mh-paper-2);
+	/* background is on the aside group's block supports. */
 	min-width: 0;
 	margin-top: 0 !important;
 	margin-block-start: 0 !important;
 }
 
-/* Permalink line */
-.mh-pdp__permalink {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	padding-bottom: 10px;
-	border-bottom: 1px dashed var(--mh-rule);
-	word-break: break-all;
-	margin: 0 0 14px;
-}
+/* Permalink line — see blocks/src/pdp-permalink/style.css */
 
-.mh-pdp__permalink .k { color: var(--mh-wp); }
-.mh-pdp__permalink b { color: var(--mh-ink); background: var(--mh-blue-tint); padding: 0 5px; border-radius: 2px; font-weight: 500; }
-.mh-pdp__permalink-meta { margin-left: 10px; color: var(--mh-slate-2); }
-
-/* Title rendered as an "input field" */
+/* Title rendered as an "input field" — the chrome (mono font, ink-on-
+   paper-2, 1px rule border + radius, padding, zeroed margin) lives on
+   the core/post-title block's own supports; see single-product.html.
+   Only text-wrap stays here — no block-support analog. */
 .mh-pdp .mh-pdp__title,
 .mh-pdp .wp-block-post-title.mh-pdp__title {
-	font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace !important;
-	font-weight: 600 !important;
-	font-size: clamp(20px, 2.6vw, 28px) !important;
-	line-height: 1.2 !important;
-	letter-spacing: -0.01em !important;
-	background: var(--mh-paper-2) !important;
-	border: 1px solid var(--mh-rule) !important;
-	border-radius: 4px !important;
-	padding: 12px 14px !important;
-	color: var(--mh-ink) !important;
-	margin: 0 !important;
 	text-wrap: balance;
 }
 
@@ -532,42 +452,9 @@ body {
 	font-style: italic !important;
 }
 
-/* Marginalia pill row */
-.mh-pdp .mh-marginalia {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin: 14px 0;
-}
-
-.mh-pdp .mh-marginalia .mh-pill {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--mh-slate);
-	padding: 2px 8px;
-	border: 1px solid var(--mh-rule);
-	border-radius: 2px;
-	background: var(--mh-paper-2);
-}
-
-.mh-pdp .mh-marginalia .mh-pill.is-blue {
-	background: var(--mh-blue-tint);
-	border-color: #c5d0ff;
-	color: var(--mh-ink);
-}
-
-.mh-pdp .mh-marginalia .mh-pill.is-pink {
-	background: #fff3b0;
-	border-color: #ffe478;
-	color: var(--mh-ink);
-}
-
-/* Gallery box */
+/* Gallery box — background + border are on the group's block supports;
+   aspect-ratio / position / overflow have no block-support analog. */
 .mh-pdp__gallery {
-	background: #fff;
-	border: 1px solid var(--mh-rule);
 	aspect-ratio: 4 / 5;
 	position: relative;
 	overflow: hidden;
@@ -639,66 +526,8 @@ body {
 	font-size: 80px;
 }
 
-/* Dark shortcode strip below the gallery. Two-line layout: the
-   [mercantile id="…"] codeblock sits on top, the "copy shortcode ⟶"
-   link drops to its own line below. This keeps the block's height
-   stable when the easter-egg replaces "copy shortcode ⟶" with a
-   longer snark — the snark wraps within the reserved second-line
-   area instead of pushing the codeblock up. */
-.mh-shortcode {
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-	padding: 10px 14px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	gap: 6px;
-	margin: 0;
-}
-
-.mh-shortcode__code {
-	word-break: break-all; /* long slugs shouldn't overflow on narrow widths */
-}
-
-.mh-shortcode .k { color: #9ab1ff; }
-.mh-shortcode .v { color: #fff; }
-.mh-shortcode .copy {
-	align-self: flex-start;
-	text-align: left;
-	color: var(--mh-slate-2);
-	font-size: 10px;
-	letter-spacing: 0.05em;
-	text-transform: uppercase;
-	cursor: pointer;
-	transition: color 0.2s;
-	/* Reserve room for ~2 lines of snark text so the block doesn't
-	   resize when the snark replaces "copy shortcode ⟶". 2.4em ≈
-	   two lines at the .copy font size; tweak if any snark grows. */
-	min-height: 2.4em;
-}
-
-.mh-shortcode .copy:hover { color: #fff; }
-
-/* When the copy easter-egg snark is showing: drop caps, lighten, bump
-   size, italicise. assets/js/copy-easter-egg.js toggles `.snarked`. */
-.mh-shortcode .copy.snarked {
-	text-transform: none;
-	letter-spacing: 0;
-	font-size: 12px;
-	color: #fff;
-	font-style: italic;
-}
-
-.mh-shortcode .copy:focus-visible {
-	outline: 1px dotted #fff;
-	outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.mh-shortcode .copy { transition: none; }
-}
+/* Dark shortcode strip below the gallery — see
+   blocks/src/pdp-codeblock/style.css */
 
 /* ===== PDP Side panel ===== */
 .mh-pdp__side > * { margin-block-start: 0 !important; margin-block-end: 0 !important; }
@@ -709,30 +538,11 @@ body {
 
 .mh-pdp__panel:first-child { padding-top: 0; }
 
-.mh-pdp__panel h3,
-.mh-pdp__panel-h3 {
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 10px !important;
-	color: var(--mh-slate) !important;
-	letter-spacing: 0.1em !important;
-	text-transform: uppercase !important;
-	margin: 0 0 10px !important;
-	font-weight: 500 !important;
-}
+/* Panel headings — the Details / Related core/heading blocks carry their
+   own typography/color/spacing as block supports; the Publish panel's
+   <h3> is styled in blocks/src/pdp-publish-meta/style.css. */
 
-.mh-status-row {
-	display: flex;
-	justify-content: space-between;
-	font-size: 12px;
-	padding: 3px 0;
-	border-bottom: 1px dashed var(--mh-rule);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-}
-
-.mh-status-row:last-of-type { border-bottom: 0; }
-.mh-status-row .v { color: var(--mh-slate); }
-.mh-status-row .v.g { color: var(--mh-ok); }
-.mh-status-row .v b { color: var(--mh-ink); font-weight: 600; }
+/* Publish meta-box status rows — see blocks/src/pdp-publish-meta/style.css */
 
 .mh-side-label {
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -975,26 +785,29 @@ body {
 	border-bottom: 0;
 }
 
-/* WooCommerce [product_attributes] shortcode — restyle the default
-   .shop_attributes table to match our .mh-pdp__spec-row rhythm so per-
-   product attributes (material, care, capacity, fit, etc.) render as
-   labeled rows below price/category/tags.
+/* WooCommerce Product Specifications block — restyle the default
+   wp-block-table figure/table to match our .mh-pdp__spec-row rhythm so
+   per-product attributes (material, care, weight, dimensions, etc.)
+   render as labeled rows below price/category/tags.
 
-   IMPORTANT: WooCommerce ships its own .woocommerce table.shop_attributes
-   styles (padding:8px on th, font-weight:700, font-style:italic on td,
-   border-bottom on each cell) that beat ours on specificity (3 classes
-   vs our 2). We use !important here to override them — the alternative
-   would be chaining `.woocommerce` into every selector, which is fragile
-   if WC changes its body classes in future. */
-.mh-pdp__panel--details .shop_attributes,
-.mh-pdp__panel--details .shop_attributes tbody {
+   IMPORTANT: the block ships with core's .wp-block-table styles (figure
+   margin, per-cell border + padding) plus WooCommerce's own table
+   styles; we use !important here to override them rather than chaining
+   `.woocommerce` / higher-specificity selectors, which is fragile if
+   either changes its markup in future. */
+.mh-pdp__panel--details .wp-block-woocommerce-product-specifications {
+	margin: 0;
+}
+
+.mh-pdp__panel--details .wp-block-woocommerce-product-specifications table,
+.mh-pdp__panel--details .wp-block-woocommerce-product-specifications tbody {
 	width: 100%;
 	border-collapse: collapse;
 	border: 0;
 	margin: 0;
 }
 
-.mh-pdp__panel--details .shop_attributes tr {
+.mh-pdp__panel--details .wp-block-product-specifications-item {
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
@@ -1003,23 +816,23 @@ body {
 	gap: 10px;
 }
 
-.mh-pdp__panel--details .shop_attributes tr:last-child {
+.mh-pdp__panel--details .wp-block-product-specifications-item:last-child {
 	border-bottom: 0;
 }
 
-/* Reset WC's per-cell border + padding so the dashed border we put on
-   the <tr> is the only horizontal rule. Without this, the th and td
-   each carry their own border-bottom and the gap between them shows as
-   a "split into two" dashed line. */
-.mh-pdp__panel--details .shop_attributes th,
-.mh-pdp__panel--details .shop_attributes td {
+/* Reset core/WC per-cell border + padding so the dashed border we put
+   on the row is the only horizontal rule. Without this, the label and
+   value cells each carry their own border-bottom and the gap between
+   them shows as a "split into two" dashed line. */
+.mh-pdp__panel--details .wp-block-product-specifications-item__label,
+.mh-pdp__panel--details .wp-block-product-specifications-item__value {
 	border: 0 !important;
 	padding: 0 !important;
 	background: transparent !important;
 	line-height: 1.4;
 }
 
-.mh-pdp__panel--details .shop_attributes th {
+.mh-pdp__panel--details .wp-block-product-specifications-item__label {
 	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
 	font-size: 10px !important;
 	letter-spacing: 0.08em !important;
@@ -1031,8 +844,8 @@ body {
 	width: auto !important;
 }
 
-.mh-pdp__panel--details .shop_attributes td,
-.mh-pdp__panel--details .shop_attributes td p {
+.mh-pdp__panel--details .wp-block-product-specifications-item__value,
+.mh-pdp__panel--details .wp-block-product-specifications-item__value p {
 	font-family: 'Newsreader', Georgia, serif !important;
 	font-style: normal !important;
 	font-size: 13px;
@@ -1042,18 +855,18 @@ body {
 	font-weight: 400;
 }
 
-/* Hide variation-driving attributes from the [product_attributes] table —
-   Size, Color, Style, etc. are already represented by the size button
-   picker (assets/js/variation-buttons.js). Showing them here as a
-   comma-separated list is redundant and visually noisy (a 5-line block
-   of "Adult Unisex 2XL, Adult Unisex 3XL, …"). */
-.mh-pdp__panel--details .shop_attributes tr.woocommerce-product-attributes-item--attribute_pa_size,
-.mh-pdp__panel--details .shop_attributes tr.woocommerce-product-attributes-item--attribute_pa_color,
-.mh-pdp__panel--details .shop_attributes tr.woocommerce-product-attributes-item--attribute_pa_style,
-.mh-pdp__panel--details .shop_attributes tr.woocommerce-product-attributes-item--attribute_pa_embroidery_color,
-.mh-pdp__panel--details .shop_attributes tr.woocommerce-product-attributes-item--attribute_pa_package,
-.mh-pdp__panel--details .shop_attributes tr.woocommerce-product-attributes-item--attribute_pa_number_of_sheets,
-.mh-pdp__panel--details .shop_attributes tr.woocommerce-product-attributes-item--attribute_pa_magsafe_popsocket {
+/* Hide variation-driving attributes from the specifications table —
+   Size, Color, Style, etc. are already represented by the add-to-cart
+   variation picker. Showing them here as a comma-separated list is
+   redundant and visually noisy (a 5-line block of "Adult Unisex 2XL,
+   Adult Unisex 3XL, …"). */
+.mh-pdp__panel--details .wp-block-product-specifications-item-attribute_pa_size,
+.mh-pdp__panel--details .wp-block-product-specifications-item-attribute_pa_color,
+.mh-pdp__panel--details .wp-block-product-specifications-item-attribute_pa_style,
+.mh-pdp__panel--details .wp-block-product-specifications-item-attribute_pa_embroidery_color,
+.mh-pdp__panel--details .wp-block-product-specifications-item-attribute_pa_package,
+.mh-pdp__panel--details .wp-block-product-specifications-item-attribute_pa_number_of_sheets,
+.mh-pdp__panel--details .wp-block-product-specifications-item-attribute_pa_magsafe_popsocket {
 	display: none;
 }
 

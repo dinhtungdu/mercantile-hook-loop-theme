@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/pdp-flags",
+	"version": "1.0.0",
+	"title": "PDP Flags",
+	"category": "theme",
+	"description": "Product-state pills for the single-product template — highlighted / indexed / in stock — each derived from real WooCommerce product state (featured, catalog visibility, stock status).",
+	"icon": "tag",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true,
+		"multiple": false,
+		"reusable": false
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

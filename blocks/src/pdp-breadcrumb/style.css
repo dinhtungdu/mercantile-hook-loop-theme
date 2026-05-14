@@ -1,0 +1,50 @@
+/**
+ * mercantile/pdp-breadcrumb — the editor-style crumb bar at the top of
+ * the PDP card. CSS variables resolve against the theme's :root (style.css).
+ */
+
+.mh-pdp__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 14px 20px;
+	background: var(--mh-paper-2);
+	border-bottom: 1px solid var(--mh-rule);
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	min-height: 56px;
+	box-sizing: border-box;
+}
+
+.mh-pdp__crumb {
+	letter-spacing: 0.02em;
+}
+.mh-pdp__crumb .sl {
+	color: var(--mh-rule);
+	margin: 0 6px;
+}
+.mh-pdp__crumb b {
+	color: var(--mh-ink);
+	font-weight: 600;
+}
+
+.mh-pdp__close {
+	width: 28px;
+	height: 28px;
+	border: 1px solid var(--mh-rule);
+	background: var(--mh-paper);
+	color: var(--mh-slate);
+	font-size: 16px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	line-height: 1;
+}
+
+.mh-pdp__close:hover {
+	background: var(--mh-accent);
+	color: #fff;
+	border-color: var(--mh-accent);
+}

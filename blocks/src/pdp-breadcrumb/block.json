@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/pdp-breadcrumb",
+	"version": "1.0.0",
+	"title": "PDP Breadcrumb",
+	"category": "theme",
+	"description": "Editor-style breadcrumb header for the single-product template — mercantile / shop / category / title — with a close (×) button wired to the PDP modal's close action. Renders real product data.",
+	"icon": "arrow-left-alt2",
+	"textdomain": "mercantile-hook-loop",
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true,
+		"multiple": false,
+		"reusable": false
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

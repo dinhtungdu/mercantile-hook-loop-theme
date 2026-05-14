@@ -27,6 +27,11 @@ import { store, getConfig } from '@wordpress/interactivity';
 const NAMESPACE = 'mercantile/pdp-modal';
 const EMBED_PARAM = 'mh-embed';
 
+// Consent string for WooCommerce's locked `woocommerce` iAPI store —
+// must match the one wc-blocks and mercantile/cart-tab use verbatim.
+const WC_LOCK =
+	'I acknowledge that using a private store means my plugin will inevitably break on the next store release.';
+
 // `window.parent === window` on a top-level document; they differ when this
 // document is the product page running inside the modal's <iframe>.
 const isEmbedded = window.parent !== window;
@@ -274,6 +279,18 @@ if ( ! isEmbedded ) {
 	const dialog = getDialog();
 	const frame = getFrame();
 
+	// Re-sync the parent's WooCommerce cart store after a change made
+	// inside the iframe. The iframe and parent each hold their own
+	// `woocommerce` iAPI store instance against the same server cart;
+	// refreshCartItems() re-fetches /wc/store/v1/cart so the parent's
+	// cart-tab counter reflects what was added in the modal.
+	function refreshParentCart() {
+		try {
+			const wc = store( 'woocommerce', {}, { lock: WC_LOCK } );
+			wc?.actions?.refreshCartItems?.();
+		} catch ( e ) { /* WC store not on this page — nothing to sync */ }
+	}
+
 	if ( dialog && frame ) {
 		frame.addEventListener( 'load', () => {
 			hideLoading();
@@ -292,15 +309,19 @@ if ( ! isEmbedded ) {
 				// steps shouldn't stack history entries).
 				showLoading();
 				history.replaceState( { mhPdp: data.path }, '', data.path );
+			} else if ( data.type === 'mh-pdp:cart-updated' ) {
+				refreshParentCart();
 			}
 		} );
 
 		// Closing the dialog (Escape, or dialog.close()) is the single place
 		// history is rewound — the close button, Escape, and a programmatic
-		// close all converge here and only `back()` once.
+		// close all converge here and only `back()` once. Also a catch-all
+		// cart re-sync, in case anything was added/removed in the modal.
 		dialog.addEventListener( 'close', () => {
 			hideLoading();
 			document.body.classList.remove( 'mh-pdp-open' );
+			refreshParentCart();
 			if ( history.state?.mhPdp ) history.back();
 		} );
 
@@ -327,4 +348,33 @@ if ( ! isEmbedded ) {
 			}
 		} );
 	}
+}
+
+// ---------------------------------------------------------------------------
+// Embedded-only wiring (the product page running inside the modal's iframe).
+// ---------------------------------------------------------------------------
+if ( isEmbedded ) {
+	// Click anywhere outside the .mh-pdp card — the transparent
+	// .mh-pdp-wrap area, which is the dimmed catalog showing through —
+	// closes the modal, the way clicking a dialog's backdrop would. The
+	// iframe covers the whole dialog, so the parent never sees these
+	// clicks; the embedded page has to report them.
+	document.addEventListener( 'click', ( event ) => {
+		if ( ! event.target?.closest?.( '.mh-pdp' ) ) {
+			window.parent.postMessage(
+				{ type: 'mh-pdp:close' },
+				window.location.origin
+			);
+		}
+	} );
+
+	// WooCommerce fires `wc-blocks_added_to_cart` on document.body when an
+	// item is added via blocks. Relay it up so the parent re-syncs its own
+	// cart store — the two documents hold separate `woocommerce` stores.
+	document.body.addEventListener( 'wc-blocks_added_to_cart', () => {
+		window.parent.postMessage(
+			{ type: 'mh-pdp:cart-updated' },
+			window.location.origin
+		);
+	} );
 }

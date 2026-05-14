@@ -99,6 +99,7 @@
 			"lineHeight": "1.5"
 		},
 		"spacing": {
+			"blockGap": "0",
 			"padding": {
 				"top": "0",
 				"bottom": "0",

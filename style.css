@@ -104,20 +104,6 @@ body {
 	margin-bottom: 0 !important;
 }
 
-/* Kill the 24px WP block-gap between every top-level section in the home/shop
-   chain. Each landing-page band already supplies its own border, so we want
-   them flush. The selector covers both direct mh-* groups and the
-   template-part wrappers that hold ticker / section-head / footer. */
-.wp-site-blocks > .wp-block-template-part,
-.wp-site-blocks > .mh-hero,
-.wp-site-blocks > .mh-grid-wrap,
-.wp-site-blocks > .mh-band,
-.wp-site-blocks > .mh-pdp-wrap {
-	margin-top: 0 !important;
-	margin-block-start: 0 !important;
-}
-
-
 /* Mini-cart button — match the prototype's dark cart pill */
 .mh-section-head .mh-mini-cart.wp-block-woocommerce-mini-cart,
 .mh-section-head .wp-block-woocommerce-mini-cart {

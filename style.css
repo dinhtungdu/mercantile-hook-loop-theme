@@ -373,6 +373,13 @@ body {
 	overflow: hidden;
 }
 
+/* WC hardcodes `.wc-block-product-template.is-flex-container { gap: 1.25em }`
+   — a real class selector no block-support blockGap can beat (note 32).
+   The related list wants its rows flush, separated by the row border. */
+.mh-pdp .wc-block-product-template {
+	gap: 0;
+}
+
 /* Title "input field" caret — the only PDP title chrome with no
    block-support analog; the rest lives on the post-title block. */
 .mh-pdp .mh-pdp__title::after {

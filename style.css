@@ -2137,70 +2137,74 @@ body {
 
 
 /* ============================================================
-   PDP MODAL — Interactivity API client-side overlay.
+   PDP MODAL — native <dialog> + <iframe>.
 
-   Shown while the browser navigates to a product page. The scrim
-   uses the exact same colour as .mh-pdp-wrap (the product page's
-   own backdrop), and the loading card has the same chrome and
-   top position as .mh-pdp — so when navigation completes and the
-   product page replaces the current document, the user perceives
-   only the card contents changing in place. The catalog behind
-   the scrim is fully occluded, so the page swap is invisible.
+   The product page loads for real inside the iframe (fully
+   hydrated, every WC asset, isolated context). The <dialog>,
+   shown via showModal(), sits in the top layer with the real
+   catalog still mounted underneath — `::backdrop` dims it. No
+   fake scrim, no screenshot: the actual loop, dimmed.
+
+   The dialog, iframe, and (in the embedded product page) the
+   .mh-pdp-wrap are all transparent, so `::backdrop` shows
+   through everywhere except the .mh-pdp card itself.
    ============================================================ */
-.mh-pdp-modal {
-	position: fixed;
-	inset: 0;
-	z-index: 200;
-	padding: 40px var(--wp--preset--spacing--gutter, 24px) 64px;
-	overflow-y: auto;
-	box-sizing: border-box;
-}
-.mh-pdp-modal[hidden] { display: none; }
-.mh-pdp-modal.is-loading[hidden] { display: block; }
-
-.mh-pdp-modal__scrim {
-	position: fixed;
-	inset: 0;
-	/* Same colour the product page paints on its .mh-pdp-wrap "scrim" —
-	   which is actually the body's --mh-paper showing through (the
-	   wrap's own var(--mh-rule-soft) is undefined, falling back to
-	   transparent). Using --mh-paper here keeps the two surfaces in
-	   lockstep, so the swap is invisible. */
-	background: var(--mh-paper);
+.mh-pdp-dialog {
+	width: 100vw;
+	height: 100dvh;
+	max-width: 100vw;
+	max-height: 100dvh;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	overflow: hidden;
 }
 
-.mh-pdp-modal__loading {
-	position: relative;
-	max-width: 1040px;
-	margin: 0 auto;
-	background: var(--mh-paper);
-	border: 1px solid var(--mh-rule);
-	border-radius: 6px;
-	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
-	min-height: 420px;
-	padding: 64px 20px;
-	display: flex;
+.mh-pdp-dialog::backdrop {
+	background: rgba(17, 18, 20, 0.5);
+	-webkit-backdrop-filter: blur(2px);
+	backdrop-filter: blur(2px);
+}
+
+.mh-pdp-dialog__frame {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+	background: transparent;
+}
+/* While the iframe is fetching, hide it so only the wapuu shows. */
+.mh-pdp-dialog.is-loading .mh-pdp-dialog__frame {
+	visibility: hidden;
+}
+
+/* Loading overlay — the wapuu reveal, centred over the dimmed catalog. */
+.mh-pdp-dialog__loading {
+	position: absolute;
+	inset: 0;
+	display: none;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	gap: 32px;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 13px;
-	color: var(--mh-slate);
+	color: var(--mh-rule);
 	letter-spacing: 0.02em;
 	pointer-events: none;
 	white-space: nowrap;
-	overflow: hidden;
+}
+.mh-pdp-dialog.is-loading .mh-pdp-dialog__loading {
+	display: flex;
 }
 @media (max-width: 600px) {
-	.mh-pdp-modal__loading {
+	.mh-pdp-dialog__loading {
 		gap: 20px;
-		padding: 40px 12px;
 		font-size: 12px;
-		min-height: 320px;
 	}
 }
-.mh-pdp-modal__loading-line::after {
+.mh-pdp-dialog__loading-line::after {
 	content: '\2588';
 	display: inline-block;
 	width: 0.55em;
@@ -2219,6 +2223,19 @@ body {
 	letter-spacing: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-	.mh-pdp-modal__loading-line::after { animation: none; opacity: 0.9; }
+	.mh-pdp-dialog__loading-line::after { animation: none; opacity: 0.9; }
+}
+
+/* Parent (catalog) scroll-lock while the dialog is open. */
+body.mh-pdp-open {
+	overflow: hidden;
+}
+
+/* Embedded product page (iframe src carries ?mh-embed=1): drop the
+   opaque surfaces so the dialog's `::backdrop` — the real, dimmed
+   catalog — shows through, leaving just the .mh-pdp card floating. */
+body.mh-pdp-embed,
+body.mh-pdp-embed .mh-pdp-wrap {
+	background: transparent;
 }
 

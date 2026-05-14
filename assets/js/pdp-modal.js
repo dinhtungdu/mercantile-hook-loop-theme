@@ -1,23 +1,58 @@
 /**
- * Mercantile Hook Loop — PDP loading overlay via the WordPress Interactivity API.
+ * Mercantile Hook Loop — PDP modal via a native <dialog> + <iframe>.
  *
- * When the user clicks a product link inside a wc:product-collection (catalog
- * grids, related-products sidebar), this module shows a card-on-scrim loading
- * overlay with an ASCII Wapuu reveal animation, then hands off to the
- * Interactivity Router to swap the page client-side. The router preloads
- * the destination's stylesheets and script modules, then swaps the
- * `mercantile/page` region — no real navigation, the modal stays mounted
- * across the swap. The loading card sits at the same top position as `.mh-pdp`
- * on the destination, so the moment of swap is invisible.
+ * This module runs in two contexts and branches on `isEmbedded`:
  *
- * The close button on the product page (wired via the [mh_pdp_breadcrumb]
- * shortcode) calls actions.close(), which goes back via history.back() with
- * a homepage fallback when there's no same-origin referrer.
+ * 1. Parent (a catalog/archive/search page). It owns the `.mh-pdp-dialog`
+ *    injected on wp_footer. Clicking a product link calls `actions.open()`,
+ *    which `showModal()`s the dialog — putting the dialog in the top layer
+ *    with the *real* catalog still mounted underneath, dimmed by the
+ *    `::backdrop` — and points the `<iframe>` at `/product/<slug>?mh-embed=1`.
+ *    A real page load, fully hydrated, every WooCommerce asset, isolated.
+ *    The URL is kept in sync with `history.pushState`/`replaceState`.
+ *
+ * 2. Embedded (the product page loaded inside that iframe). The close
+ *    button and any related-product links resolve to the same store here.
+ *    `actions.close()` posts a message up to the parent; `actions.open()`
+ *    navigates the iframe in place (`location.replace`, so the iframe's own
+ *    history stays flat) and tells the parent to show the loading overlay.
+ *
+ * A direct visit to /product/<slug> (no iframe) is the standalone product
+ * page: `isEmbedded` is false and there is no dialog, so `actions.close()`
+ * falls back to a normal navigation home.
  */
 
 import { store, getConfig } from '@wordpress/interactivity';
 
 const NAMESPACE = 'mercantile/pdp-modal';
+const EMBED_PARAM = 'mh-embed';
+
+// `window.parent === window` on a top-level document; they differ when this
+// document is the product page running inside the modal's <iframe>.
+const isEmbedded = window.parent !== window;
+
+function getDialog() {
+	return document.querySelector( '.mh-pdp-dialog' );
+}
+function getFrame() {
+	return document.querySelector( '.mh-pdp-dialog__frame' );
+}
+
+// Build the iframe URL for a product: same path, plus the ?mh-embed=1 flag
+// that tells functions.php to add the `mh-pdp-embed` body class.
+function toEmbedUrl( url ) {
+	const u = new URL( url, window.location.origin );
+	u.searchParams.set( EMBED_PARAM, '1' );
+	return u.toString();
+}
+
+// The clean (shareable) path the address bar should show for a product —
+// the embed flag stripped back off.
+function toCleanPath( url ) {
+	const u = new URL( url, window.location.origin );
+	u.searchParams.delete( EMBED_PARAM );
+	return u.pathname + u.search;
+}
 
 let lastLoadingLabel = null;
 function pickLoadingLabel() {
@@ -96,7 +131,7 @@ let wapuuTimer = null;
 
 function startWapuuReveal() {
 	stopWapuuReveal();
-	const el = document.querySelector( '.mh-pdp-modal__loading .mh-wapuu-ascii' );
+	const el = document.querySelector( '.mh-pdp-dialog__loading .mh-wapuu-ascii' );
 	if ( ! el ) return;
 
 	const blank = WAPUU_ART.replace( /█/g, ' ' );
@@ -135,38 +170,80 @@ function stopWapuuReveal() {
 	}
 }
 
+function showLoading() {
+	state.isLoading = true;
+	state.loadingText = pickLoadingLabel();
+	startWapuuReveal();
+}
+function hideLoading() {
+	state.isLoading = false;
+	stopWapuuReveal();
+}
+
+// Point the iframe at a product. Always `location.replace()` rather than
+// assigning `iframe.src`: assigning `src` pushes a joint session-history
+// entry and makes the browser re-navigate the iframe on back/forward —
+// `replace()` keeps the iframe out of session history entirely, so the
+// parent's pushState/replaceState entries are the *only* thing back/forward
+// traverses. Falls back to `src` only if the contentWindow isn't reachable.
+function loadFrame( frame, url ) {
+	const embedUrl = toEmbedUrl( url );
+	try {
+		frame.contentWindow.location.replace( embedUrl );
+	} catch ( e ) {
+		frame.src = embedUrl;
+	}
+}
+
 const { state, actions } = store( NAMESPACE, {
 	state: {
 		isLoading: false,
 		loadingText: 'compiling…',
 	},
 	actions: {
-		*open( url ) {
-			state.isLoading = true;
-			state.loadingText = pickLoadingLabel();
-			document.body.style.overflow = 'hidden';
-			startWapuuReveal();
-			const { actions: router } = yield import(
-				'@wordpress/interactivity-router'
-			);
-			yield router.navigate( url );
-			state.isLoading = false;
-			stopWapuuReveal();
-			document.body.style.overflow = '';
+		open( url ) {
+			// Inside the iframe: a related-product click. Tell the parent
+			// the new path (so it can replaceState) and navigate the iframe
+			// in place. The parent never reads the iframe's location — the
+			// embedded page reports it explicitly.
+			if ( isEmbedded ) {
+				window.parent.postMessage(
+					{ type: 'mh-pdp:navigate', path: toCleanPath( url ) },
+					window.location.origin
+				);
+				window.location.replace( toEmbedUrl( url ) );
+				return;
+			}
+			const dialog = getDialog();
+			const frame = getFrame();
+			if ( ! dialog || ! frame ) return;
+			showLoading();
+			loadFrame( frame, url );
+			if ( ! dialog.open ) {
+				dialog.showModal();
+				document.body.classList.add( 'mh-pdp-open' );
+			}
+			const path = toCleanPath( url );
+			history.pushState( { mhPdp: path }, '', path );
 		},
-		*close() {
-			let target = '/';
-			try {
-				const ref = document.referrer;
-				if ( ref && new URL( ref ).origin === window.location.origin ) {
-					window.history.back();
-					return;
-				}
-			} catch ( e ) { /* invalid referrer — fall through */ }
-			const { actions: router } = yield import(
-				'@wordpress/interactivity-router'
-			);
-			yield router.navigate( target );
+		close() {
+			// Inside the iframe: the [mh_pdp_breadcrumb] close button.
+			// The parent owns the dialog, so hand the close up to it.
+			if ( isEmbedded ) {
+				window.parent.postMessage(
+					{ type: 'mh-pdp:close' },
+					window.location.origin
+				);
+				return;
+			}
+			const dialog = getDialog();
+			if ( dialog && dialog.open ) {
+				// The dialog's `close` event handler syncs history.
+				dialog.close();
+				return;
+			}
+			// Standalone product page (direct visit, no dialog): plain nav.
+			window.location.href = '/';
 		},
 	},
 	callbacks: {
@@ -182,3 +259,72 @@ const { state, actions } = store( NAMESPACE, {
 		},
 	},
 } );
+
+// ---------------------------------------------------------------------------
+// Parent-only wiring. The embedded product page never owns the dialog, the
+// history, or the iframe — it only posts messages up (see actions above).
+//
+// History model: the parent's pushState/replaceState entries are the single
+// source of truth. The iframe is decoupled from session history (loadFrame
+// uses location.replace), so `back`/`forward` only ever traverse the parent's
+// entries. The iframe's `load` event therefore does nothing but drop the
+// loading overlay — it never touches history.
+// ---------------------------------------------------------------------------
+if ( ! isEmbedded ) {
+	const dialog = getDialog();
+	const frame = getFrame();
+
+	if ( dialog && frame ) {
+		frame.addEventListener( 'load', () => {
+			hideLoading();
+		} );
+
+		// Messages from the product page running inside the iframe.
+		window.addEventListener( 'message', ( event ) => {
+			if ( event.origin !== window.location.origin ) return;
+			const data = event.data || {};
+			if ( data.type === 'mh-pdp:close' ) {
+				if ( dialog.open ) dialog.close();
+			} else if ( data.type === 'mh-pdp:navigate' && data.path ) {
+				// A related-product click inside the iframe. The iframe is
+				// already navigating itself; just show the overlay and keep
+				// the address bar in sync (replace, not push — intra-modal
+				// steps shouldn't stack history entries).
+				showLoading();
+				history.replaceState( { mhPdp: data.path }, '', data.path );
+			}
+		} );
+
+		// Closing the dialog (Escape, or dialog.close()) is the single place
+		// history is rewound — the close button, Escape, and a programmatic
+		// close all converge here and only `back()` once.
+		dialog.addEventListener( 'close', () => {
+			hideLoading();
+			document.body.classList.remove( 'mh-pdp-open' );
+			if ( history.state?.mhPdp ) history.back();
+		} );
+
+		// Back/forward across the parent's product entries.
+		window.addEventListener( 'popstate', ( event ) => {
+			const path = event.state?.mhPdp;
+			if ( path ) {
+				// Forward into (or back to) a product entry.
+				let current;
+				try {
+					current = toCleanPath( frame.contentWindow.location.href );
+				} catch ( e ) { /* unreachable — reload below */ }
+				if ( current !== path ) {
+					showLoading();
+					loadFrame( frame, path );
+				}
+				if ( ! dialog.open ) {
+					dialog.showModal();
+					document.body.classList.add( 'mh-pdp-open' );
+				}
+			} else if ( dialog.open ) {
+				// Stepped back out to the catalog.
+				dialog.close();
+			}
+		} );
+	}
+}

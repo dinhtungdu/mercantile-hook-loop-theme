@@ -67,16 +67,17 @@ add_action(
  * Register and enqueue the PDP modal script as an Interactivity API
  * client-side module, plus seed translatable loading labels into the iAPI
  * config. Triggered globally so a click on any product link (catalog cell,
- * related-products row) opens the product in a modal instead of full-page
- * navigation.
+ * related-products row) opens the product in a `<dialog>` instead of a
+ * full-page navigation.
  *
  * Loading labels flow through `wp_interactivity_config()` rather than the JS
  * `__()` runtime (CLAUDE.md note 19/20: static values use config, reactive
  * values use state). The JS picks one at random per open via `getConfig()`.
  *
- * Direct loads of /product/<slug> still render the page normally; the
- * modal scaffold (injected on wp_footer below) sits dormant via the
- * `hidden` attribute on its root until the iAPI store flips `state.isOpen`.
+ * Direct loads of /product/<slug> render the standalone product page. The
+ * same module runs there too: its close button posts a message to the
+ * parent when embedded in the modal's <iframe>, or navigates home on a
+ * direct visit.
  */
 add_action(
 	'wp_enqueue_scripts',
@@ -87,7 +88,7 @@ add_action(
 		wp_enqueue_script_module(
 			'mercantile-hook-loop/pdp-modal',
 			get_template_directory_uri() . '/assets/js/pdp-modal.js',
-			array( '@wordpress/interactivity', '@wordpress/interactivity-router' ),
+			array( '@wordpress/interactivity' ),
 			wp_get_theme()->get( 'Version' )
 		);
 		if ( function_exists( 'wp_interactivity_config' ) ) {
@@ -112,72 +113,60 @@ add_action(
 );
 
 /**
- * Wrap every page's body content in a router region so the Interactivity
- * Router can swap pages without a real navigation. The open tag goes in
- * `wp_body_open` (right after admin bar) and the close tag rides early on
- * `wp_footer` so the modal scaffold below ends up OUTSIDE the region —
- * the modal must stay mounted across navigations.
+ * Inject the PDP `<dialog>` scaffold on catalog-type pages (anything that
+ * is not itself a single product). Clicking a product link calls
+ * actions.open(), which `showModal()`s this dialog and points the
+ * `<iframe>` at the product URL — a real page load, fully hydrated, with
+ * every WooCommerce asset, in an isolated browsing context.
  *
- * Same id on every template, so navigating catalog → product (or
- * product → product) finds a matching region in the response and swaps
- * its content. Templates with no header/footer (single-product.html)
- * naturally render an empty header/footer area inside the region; the
- * router does a one-shot DOM swap and the new content takes over.
- */
-add_action(
-	'wp_body_open',
-	function () {
-		if ( is_admin() ) {
-			return;
-		}
-		echo '<div data-wp-router-region="mercantile/page">';
-	}
-);
-add_action(
-	'wp_footer',
-	function () {
-		if ( is_admin() ) {
-			return;
-		}
-		echo '</div>';
-	},
-	0
-);
-
-/**
- * Loading overlay shown while the router fetches the destination page.
+ * The native `<dialog>` earns its keep: top-layer rendering (no z-index
+ * fights), a `::backdrop` pseudo-element that dims the *real* catalog
+ * still mounted underneath (no fake scrim, no screenshot), focus
+ * trapping, and Escape-to-close — all from the platform.
  *
- * Clicking a product link triggers actions.open(), which (1) flips
- * state.isLoading to true, revealing this overlay with a Wapuu ASCII
- * reveal animation, (2) calls the router's `navigate` action, then (3)
- * clears state.isLoading once the swap completes. The scrim is opaque
- * and the loading card sits at the same top position as `.mh-pdp`, so
- * the moment of swap is invisible — only the card contents change.
- *
- * The scaffold lives OUTSIDE the router region (the region closes at
- * priority 0 above) so this element survives every navigation.
+ * Skipped on `is_product()` because the product page IS the thing the
+ * iframe loads; it must never nest its own dialog. The wapuu overlay
+ * shows while the iframe's `load` event is pending.
  */
 add_action(
 	'wp_footer',
 	function () {
-		if ( is_admin() ) {
+		if ( is_admin() || ( function_exists( 'is_product' ) && is_product() ) ) {
 			return;
 		}
 		?>
-		<div
-			class="mh-pdp-modal"
+		<dialog
+			class="mh-pdp-dialog"
 			data-wp-interactive="mercantile/pdp-modal"
 			data-wp-class--is-loading="state.isLoading"
-			data-wp-bind--hidden="!state.isLoading"
-			hidden
 		>
-			<div class="mh-pdp-modal__scrim"></div>
-			<div class="mh-pdp-modal__loading">
-				<pre class="mh-wapuu-ascii" aria-hidden="true"></pre>
-				<span class="mh-pdp-modal__loading-line" data-wp-text="state.loadingText"></span>
+			<iframe
+				class="mh-pdp-dialog__frame"
+				title="<?php esc_attr_e( 'Product details', 'mercantile-hook-loop' ); ?>"
+			></iframe>
+			<div class="mh-pdp-dialog__loading" aria-hidden="true">
+				<pre class="mh-wapuu-ascii"></pre>
+				<span class="mh-pdp-dialog__loading-line" data-wp-text="state.loadingText"></span>
 			</div>
-		</div>
+		</dialog>
 		<?php
+	}
+);
+
+/**
+ * Tag the document body with `mh-pdp-embed` when the product page is
+ * being requested inside the modal's `<iframe>` (the iframe src carries
+ * `?mh-embed=1`). The class lets the stylesheet drop `.mh-pdp-wrap`'s
+ * own background so the dialog's translucent `::backdrop` — and the real
+ * catalog behind it — shows through, instead of an opaque grey panel.
+ */
+add_filter(
+	'body_class',
+	function ( $classes ) {
+		if ( isset( $_GET['mh-embed'] ) ) {
+			$classes[] = 'mh-pdp-embed';
+		}
+		return $classes;
 	}
 );
 

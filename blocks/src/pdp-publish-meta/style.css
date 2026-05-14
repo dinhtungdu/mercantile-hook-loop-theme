@@ -1,21 +1,10 @@
 /**
  * mercantile/pdp-publish-meta — the status / visibility / stock rows of
- * the Publish meta-box mimic, plus the panel `<h3>`. The `.mh-pdp__panel`
- * wrapper padding is shared chrome and stays in the theme's style.css;
- * the `<h3>` is scoped to this block's own wrapper here (the Details /
- * Related headings are core/heading blocks carrying their own supports).
- * CSS variables resolve against the theme's :root.
+ * the Publish meta-box mimic. The panel title is a core/heading block in
+ * the template (matching the Details / Related headings); this block
+ * only owns the status rows. CSS variables resolve against the theme's
+ * :root.
  */
-
-.wp-block-mercantile-pdp-publish-meta h3 {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	color: var(--mh-slate);
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	margin: 0 0 10px;
-	font-weight: 500;
-}
 
 .mh-status-row {
 	display: flex;

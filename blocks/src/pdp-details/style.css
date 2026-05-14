@@ -1,0 +1,78 @@
+/**
+ * mercantile/pdp-details — the Details panel body (price / category /
+ * tags / per-product attributes), one labeled row per value. The panel
+ * heading is a core/heading block in the template. CSS variables
+ * resolve against the theme's :root (style.css).
+ */
+
+.mh-pdp__details {
+	display: flex;
+	flex-direction: column;
+}
+
+.mh-pdp__spec-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	flex-wrap: nowrap;
+	gap: 10px;
+	padding: 4px 0;
+	border-bottom: 1px dashed var(--mh-rule);
+}
+
+.mh-pdp__spec-row:last-child {
+	border-bottom: 0;
+}
+
+.mh-pdp__spec-key {
+	flex: none;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	white-space: nowrap;
+}
+
+.mh-pdp__spec-val {
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 13px;
+	color: var(--mh-ink);
+	text-align: right;
+}
+
+/* Price — blue-tint highlight pill, the way a wp-admin inspector field
+   frames its value. WC wraps the amount in .woocommerce-Price-amount. */
+.mh-pdp__spec-price .woocommerce-Price-amount {
+	font-size: 14px;
+	font-weight: 500;
+	padding: 0 5px;
+	border-radius: 2px;
+	background: var(--mh-blue-tint);
+}
+
+/* Category — plain ink links, no underline. */
+.mh-pdp__spec-cat a {
+	color: var(--mh-ink);
+	text-decoration: none;
+}
+
+/* Tags — mono "#" pills. */
+.mh-pdp__spec-tags {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+}
+
+.mh-pdp__spec-tags a {
+	display: inline-block;
+	margin-left: 4px;
+	padding: 0 6px;
+	border-radius: 2px;
+	background: var(--mh-pink);
+	color: var(--mh-ink);
+	text-decoration: none;
+}
+
+.mh-pdp__spec-tags a::before {
+	content: '#';
+}

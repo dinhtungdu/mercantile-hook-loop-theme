@@ -37,7 +37,7 @@ $stock_text = $in_stock ? '<b>in stock</b>' : '<b class="oos">out of stock</b>';
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'mh-pdp__panel' ) );
 
 printf(
-	'<section %1$s><h3>Publish</h3>' .
+	'<section %1$s>' .
 	'<div class="mh-status-row"><span>status</span><span class="v %2$s">&bull; %3$s</span></div>' .
 	'<div class="mh-status-row"><span>visibility</span><span class="v">%4$s</span></div>' .
 	'<div class="mh-status-row"><span>stock</span><span class="v">%5$s</span></div>' .

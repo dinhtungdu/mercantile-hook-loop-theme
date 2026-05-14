@@ -2159,12 +2159,54 @@ body {
 	border: 0;
 	background: transparent;
 	overflow: hidden;
+	/* Open: card slides up 18px + settles from a hair under scale, fades
+	   in. Mirrors the prototype's mb-modal curve (slight overshoot at the
+	   end). `overlay`/`display` ride `allow-discrete` so the dialog stays
+	   in the top layer through the close transition too. */
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	transform-origin: 50% 30%;
+	transition:
+		opacity 0.25s ease,
+		transform 0.42s cubic-bezier(.22, .9, .28, 1.06),
+		overlay 0.42s allow-discrete,
+		display 0.42s allow-discrete;
+}
+.mh-pdp-dialog:not([open]) {
+	opacity: 0;
+	transform: translateY(18px) scale(0.985);
+}
+@starting-style {
+	.mh-pdp-dialog[open] {
+		opacity: 0;
+		transform: translateY(18px) scale(0.985);
+	}
 }
 
 .mh-pdp-dialog::backdrop {
 	background: rgba(17, 18, 20, 0.5);
 	-webkit-backdrop-filter: blur(2px);
 	backdrop-filter: blur(2px);
+	opacity: 1;
+	transition:
+		opacity 0.28s cubic-bezier(.2, .7, .3, 1),
+		overlay 0.28s allow-discrete,
+		display 0.28s allow-discrete;
+}
+.mh-pdp-dialog:not([open])::backdrop {
+	opacity: 0;
+}
+@starting-style {
+	.mh-pdp-dialog[open]::backdrop {
+		opacity: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mh-pdp-dialog,
+	.mh-pdp-dialog::backdrop {
+		transition: none;
+	}
 }
 
 .mh-pdp-dialog__frame {

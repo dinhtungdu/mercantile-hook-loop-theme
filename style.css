@@ -303,20 +303,6 @@ body {
 	max-width: 50ch;
 }
 
-/* ===== Tag pill (decorative typography pop) ===== */
-.mh-pill {
-	display: inline-block;
-	background: var(--mh-blue-tint);
-	color: var(--mh-ink);
-	padding: 0 6px;
-	border-radius: 2px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-}
-
-.mh-pill.is-pink { background: var(--mh-pink); }
-.mh-pill.is-paper { background: var(--mh-paper-2); border: 1px solid var(--mh-rule); }
-
 /* ===== Editor parity tweaks ===== */
 .editor-styles-wrapper {
 	background: var(--mh-paper);
@@ -479,38 +465,6 @@ body {
 	margin: 0 !important;
 	max-width: 56ch;
 	font-style: italic !important;
-}
-
-/* Marginalia pill row */
-.mh-pdp .mh-marginalia {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin: 14px 0;
-}
-
-.mh-pdp .mh-marginalia .mh-pill {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--mh-slate);
-	padding: 2px 8px;
-	border: 1px solid var(--mh-rule);
-	border-radius: 2px;
-	background: var(--mh-paper-2);
-}
-
-.mh-pdp .mh-marginalia .mh-pill.is-blue {
-	background: var(--mh-blue-tint);
-	border-color: #c5d0ff;
-	color: var(--mh-ink);
-}
-
-.mh-pdp .mh-marginalia .mh-pill.is-pink {
-	background: #fff3b0;
-	border-color: #ffe478;
-	color: var(--mh-ink);
 }
 
 /* Gallery box */

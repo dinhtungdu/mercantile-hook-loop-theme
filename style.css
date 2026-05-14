@@ -2159,18 +2159,20 @@ body {
 	border: 0;
 	background: transparent;
 	overflow: hidden;
-	/* Open: card slides up 18px + settles from a hair under scale, fades
-	   in. Mirrors the prototype's mb-modal curve (slight overshoot at the
-	   end). `overlay`/`display` ride `allow-discrete` so the dialog stays
-	   in the top layer through the close transition too. */
+	/* Open = fade only. The dialog appears while the iframe is still
+	   loading the wapuu, so the slide-up belongs to the content reveal
+	   (on the frame, below), not here. Close = fade + settle downward,
+	   mirroring the prototype's mb-modal-out curve. `overlay`/`display`
+	   ride `allow-discrete` so the dialog stays in the top layer through
+	   the close transition. */
 	opacity: 1;
 	transform: translateY(0) scale(1);
 	transform-origin: 50% 30%;
 	transition:
 		opacity 0.25s ease,
-		transform 0.42s cubic-bezier(.22, .9, .28, 1.06),
-		overlay 0.42s allow-discrete,
-		display 0.42s allow-discrete;
+		transform 0.32s cubic-bezier(.4, .1, .7, 1),
+		overlay 0.32s allow-discrete,
+		display 0.32s allow-discrete;
 }
 .mh-pdp-dialog:not([open]) {
 	opacity: 0;
@@ -2179,7 +2181,6 @@ body {
 @starting-style {
 	.mh-pdp-dialog[open] {
 		opacity: 0;
-		transform: translateY(18px) scale(0.985);
 	}
 }
 
@@ -2204,7 +2205,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
 	.mh-pdp-dialog,
-	.mh-pdp-dialog::backdrop {
+	.mh-pdp-dialog::backdrop,
+	.mh-pdp-dialog__frame {
 		transition: none;
 	}
 }
@@ -2215,10 +2217,22 @@ body {
 	height: 100%;
 	border: 0;
 	background: transparent;
+	/* Content reveal: when the iframe finishes loading and `.is-loading`
+	   is dropped, the product slides up 18px + settles from scale(0.985)
+	   with a slight overshoot, fading in — the prototype's mb-modal curve.
+	   Entering the loading state snaps (transition: none), so this only
+	   ever plays on the way *out* of loading, never as a reverse. */
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	transform-origin: 50% 30%;
+	transition:
+		opacity 0.25s ease,
+		transform 0.42s cubic-bezier(.22, .9, .28, 1.06);
 }
-/* While the iframe is fetching, hide it so only the wapuu shows. */
 .mh-pdp-dialog.is-loading .mh-pdp-dialog__frame {
-	visibility: hidden;
+	opacity: 0;
+	transform: translateY(18px) scale(0.985);
+	transition: none;
 }
 
 /* Loading overlay — the wapuu reveal, centred over the dimmed catalog. */

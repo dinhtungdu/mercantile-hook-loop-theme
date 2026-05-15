@@ -95,6 +95,7 @@ add_action(
 			wp_interactivity_config(
 				'mercantile/pdp-modal',
 				array(
+					'homeUrl'       => home_url( '/' ),
 					'loadingLabels' => array(
 						__( 'compiling…', 'mercantile-hook-loop' ),
 						__( 'unwrapping it…', 'mercantile-hook-loop' ),

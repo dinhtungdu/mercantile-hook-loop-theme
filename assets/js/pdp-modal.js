@@ -248,7 +248,9 @@ const { state, actions } = store( NAMESPACE, {
 				return;
 			}
 			// Standalone product page (direct visit, no dialog): plain nav.
-			window.location.href = '/';
+			// home_url() seeded via wp_interactivity_config() so subdirectory
+			// installs land on the site root, not the domain root.
+			window.location.href = getConfig( NAMESPACE ).homeUrl || '/';
 		},
 	},
 	callbacks: {

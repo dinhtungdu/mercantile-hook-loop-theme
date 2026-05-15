@@ -520,18 +520,25 @@ body {
  * solid border and roomier padding so the chips read as proper buttons. WC's
  * default border uses `color-mix(--pill-color 40%, transparent)` (faint) and
  * its view module sets --pill-color/--pill-background-color on :checked from
- * the nearest ancestor — we override both pairs here. Font shrunk to 11px so
- * long attribute term labels (e.g. "Adult Unisex 2XL") still fit. */
-label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill {
+ * the nearest ancestor — we override both pairs here. Font shrunk to 12px so
+ * long attribute term labels (e.g. "Adult Unisex 2XL") still fit. Editor
+ * renders pills as <li> with a --selected modifier; frontend renders them
+ * as <label> wrapping a radio. Both shapes covered. */
+.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill {
 	--pill-color: var(--mh-wp);
 	--pill-background-color: var(--mh-card);
 	border-color: var(--pill-color);
-	margin-bottom: 0;
 	padding: 8px 12px;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 12px;
 	font-weight: 600;
 }
+/* Bumps past WC's `.woocommerce-page label { margin-bottom: 0.7em }` so
+ * pills sit flush on the frontend. Editor pills are <li>, immune to it. */
+label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill {
+	margin-bottom: 0;
+}
+.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill--selected,
 .wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill:has(.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill-input:checked) {
 	--pill-color: #fff;
 	--pill-background-color: var(--mh-wp);

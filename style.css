@@ -1574,6 +1574,309 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   object-fit: contain;
 }
 
+/* Sidebar heading — real WC uses `.wc-block-components-checkout-order-summary__title`
+   (text + price + collapse chevron). Prototype shows plain "§ ORDER" so the
+   price + icon are hidden and the text gets the same § treatment as the
+   left-column step titles. */
+.checkout-view .wc-block-components-checkout-order-summary__title {
+	margin: 0 0 14px;
+	gap: 6px;
+}
+.checkout-view .wc-block-components-checkout-order-summary__title-text {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--mh-slate);
+	font-weight: 600;
+	margin: 0;
+}
+.checkout-view .wc-block-components-checkout-order-summary__title-text::before {
+	content: '§ ';
+	color: var(--mh-wp);
+	font-weight: 700;
+}
+.checkout-view .wc-block-components-checkout-order-summary__title-price,
+.checkout-view .wc-block-components-checkout-order-summary__title-icon {
+	display: none;
+}
+
+/* Drop per-row description + individual price — prototype shows title +
+   variation only. The short_description is in
+   `.wc-block-components-product-metadata__description`, the per-item price
+   block (under the title) is `.wc-block-cart-item__prices`. */
+.checkout-view .wc-block-components-order-summary-item .wc-block-cart-item__prices,
+.checkout-view .wc-block-components-order-summary-item .wc-block-components-product-metadata__description {
+	display: none;
+}
+.checkout-view .wc-block-components-order-summary-item .wc-block-components-product-name {
+	font-family: 'Newsreader', Georgia, serif;
+	font-size: 14px;
+	color: var(--mh-ink);
+	line-height: 1.3;
+	font-weight: 500;
+	margin: 0;
+}
+
+/* Coupon — flatten WC's disclosure panel into a single "got a coupon? →"
+   dashed-underline link. The button's literal text ("Add coupons") is
+   hidden via font-size:0 on the parent; the link text is delivered via
+   ::after so the chevron stays out of the rendered string. */
+.checkout-view .wp-block-woocommerce-checkout-order-summary-coupon-form-block.wc-block-components-totals-wrapper {
+	border-top: 0;
+	padding-top: 0;
+}
+.checkout-view .wc-block-components-totals-coupon .wc-block-components-panel__button {
+	background: none;
+	border: 0;
+	border-radius: 0;
+	padding: 0;
+	font-size: 0;
+	color: var(--mh-wp);
+	width: auto;
+}
+.checkout-view .wc-block-components-totals-coupon .wc-block-components-panel__button-icon {
+	display: none;
+}
+.checkout-view .wc-block-components-totals-coupon .wc-block-components-panel__button::after {
+	content: 'got a coupon? →';
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-wp);
+	border-bottom: 1px dashed var(--mh-wp);
+}
+.checkout-view .wc-block-components-totals-coupon .wc-block-components-panel__button:hover::after {
+	background: var(--mh-wp);
+	color: #fff;
+	border-bottom-color: var(--mh-wp);
+}
+
+/* Place-order footer copy — appended after the actions block via a
+   render_block filter (see functions.php). */
+.checkout-view .mh-place-order-footer {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate-2);
+	margin-top: 12px;
+	line-height: 1.6;
+	text-align: center;
+}
+.checkout-view .mh-place-order-footer b {
+	color: var(--mh-ink);
+}
+
+/* Sidebar stream-line block + edit-cart link — appended after the order
+   summary block via a render_block filter (see functions.php). The
+   stream-line mirrors WC's ExperimentalOrderMeta slot in the prototype. */
+.checkout-view .mh-stream-line {
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	color: var(--mh-slate-2);
+	border-top: 1px dashed var(--mh-rule);
+	padding-top: 12px;
+	letter-spacing: 0.04em;
+	line-height: 1.7;
+	margin-top: 4px;
+}
+.checkout-view .mh-stream-line b {
+	color: var(--mh-ink);
+}
+.checkout-view .mh-stream-line__row {
+	display: flex;
+	gap: 8px;
+}
+.checkout-view .mh-stream-line__k {
+	color: var(--mh-wp);
+	font-weight: 700;
+	min-width: 56px;
+	text-transform: uppercase;
+}
+.checkout-view .mh-edit-cart {
+	display: inline-block;
+	align-self: flex-start;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-wp);
+	text-decoration: none;
+	border-bottom: 1px dashed var(--mh-wp);
+	margin-top: 8px;
+}
+.checkout-view .mh-edit-cart:hover {
+	background: var(--mh-wp);
+	color: #fff;
+	border-bottom: 0;
+}
+
+/* Step description italic helpers. WC's React components don't render the
+   `description` attribute we'd ideally pass through, so the prototype's
+   "so we can send your receipt" / "a real human will pack this" / etc. are
+   delivered via per-block ::after on the title. The wrapper's
+   `text-transform: uppercase` cascade is reset on these so the helpers
+   stay sentence-cased italic. */
+.checkout-view .wc-block-components-checkout-step__title::after {
+	font-family: 'Newsreader', Georgia, serif;
+	font-style: italic;
+	font-size: 13px;
+	color: var(--mh-slate-2);
+	font-weight: 400;
+	letter-spacing: 0;
+	text-transform: none;
+	margin-left: 10px;
+}
+.checkout-view .wp-block-woocommerce-checkout-contact-information-block .wc-block-components-checkout-step__title::after {
+	content: 'so we can send your receipt';
+}
+.checkout-view .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-checkout-step__title::after,
+.checkout-view .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-checkout-step__title::after {
+	content: 'a real human will pack this';
+}
+.checkout-view .wp-block-woocommerce-checkout-shipping-methods-block .wc-block-components-checkout-step__title::after {
+	content: 'how fast?';
+}
+.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-checkout-step__title::after {
+	content: 'credit / debit · secured by Stripe';
+}
+
+/* Order note — WC renders a `Add a note to your order` checkbox toggle. The
+   prototype shows it as a one-line dashed-underline link ("add a note for
+   the packer →"). The checkbox + svg-tick are hidden; the label keeps the
+   native click behavior (toggling the textarea below) but is restyled to
+   look like the other dashed links on the page. */
+.checkout-view .wp-block-woocommerce-checkout-order-note-block {
+	border-bottom: 0;
+	padding-bottom: 0;
+	margin-bottom: 16px;
+}
+.checkout-view .wp-block-woocommerce-checkout-order-note-block .wc-block-components-checkbox__input,
+.checkout-view .wp-block-woocommerce-checkout-order-note-block .wc-block-components-checkbox__mark {
+	display: none;
+}
+.checkout-view .wp-block-woocommerce-checkout-order-note-block .wc-block-components-checkbox {
+	display: inline-block;
+}
+.checkout-view .wp-block-woocommerce-checkout-order-note-block label {
+	cursor: pointer;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+.checkout-view .wp-block-woocommerce-checkout-order-note-block .wc-block-components-checkbox__label {
+	font-size: 0;
+}
+.checkout-view .wp-block-woocommerce-checkout-order-note-block .wc-block-components-checkbox__label::after {
+	content: 'add a note for the packer →';
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-wp);
+	border-bottom: 1px dashed var(--mh-wp);
+	font-style: normal;
+}
+
+/* Address form — restructure WC's flex/wrap layout into the prototype's
+   4-row grid: full-name row, address row, apt/suite row, then a 3-up
+   city/postcode/country row. The fields stay in their original DOM
+   order; named grid areas reorder them visually. WC's own `flex` on
+   `.wc-block-components-address-form` is overridden to `grid`.
+
+   Scoped to the shipping/billing blocks because the contact step also
+   carries `.wc-block-components-address-form` on its inner wrapper —
+   applying grid there would orphan the email + guest-notice into
+   single grid cells. */
+.checkout-view .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form,
+.checkout-view .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form {
+	display: grid !important;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 14px;
+	grid-template-areas:
+		"name name name"
+		"address address address"
+		"address_2 address_2 address_2"
+		"city postcode country";
+}
+/* Children that arrived via wc-block-components-text-input lose their
+   inline `flex-basis: calc(...)` because grid lays them out — no
+   conflict, but they need width:100% to fill the grid cell. */
+.checkout-view .wp-block-woocommerce-checkout-shipping-address-block .wc-block-components-address-form > *,
+.checkout-view .wp-block-woocommerce-checkout-billing-address-block .wc-block-components-address-form > * {
+	width: 100% !important;
+	flex-basis: auto !important;
+}
+
+/* Relabel "First name" → "Full name" on the address field. WC Blocks
+   pulls this string through `_x()` (with a context the wp.i18n
+   setLocaleData map can't reach without naming the exact context
+   string), so the i18n shim above only catches the bare `__()` lookups.
+   For the visible label we just blank the original text and inject the
+   prototype copy via ::after. */
+.checkout-view .wc-block-components-address-form__first_name label {
+	font-size: 0;
+}
+.checkout-view .wc-block-components-address-form__first_name label::after {
+	content: 'Full name';
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
+	font-size: 10px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--mh-slate-2);
+}
+.checkout-view .wc-block-components-address-form__first_name {
+	grid-area: name;
+}
+.checkout-view .wc-block-components-address-form__address_1 {
+	grid-area: address;
+}
+/* `address_2` lives in two forms depending on WC's local state:
+   (a) `__address_2-toggle` + `__address_2-hidden-input` while collapsed,
+   (b) `wc-block-components-text-input wc-block-components-address-form__address_2`
+       once expanded (we trigger this via JS — see functions.php). Both
+       are routed to the same grid cell so layout doesn't jump. */
+.checkout-view .wc-block-components-address-form__address_2,
+.checkout-view .wc-block-components-address-form__address_2-toggle,
+.checkout-view .wc-block-components-address-form__address_2-hidden-input {
+	grid-area: address_2;
+}
+.checkout-view .wc-block-components-address-form__city {
+	grid-area: city;
+}
+.checkout-view .wc-block-components-address-form__postcode {
+	grid-area: postcode;
+}
+.checkout-view .wc-block-components-address-form__country {
+	grid-area: country;
+}
+
+/* Hide the fields the prototype omits. Phone is optional in WC and is
+   safely dropped; last_name/state are required for some locales, but
+   for prototype fidelity we accept that the form would fail server-side
+   submit — this is a presentation-layer demo, not a live storefront. */
+.checkout-view .wc-block-components-address-form__last_name,
+.checkout-view .wc-block-components-address-form__state,
+.checkout-view .wc-block-components-address-form__phone,
+.checkout-view .wc-block-components-address-form__company {
+	display: none !important;
+}
+
+/* The "Use same address for billing" checkbox lives between the address
+   form and the next step; the prototype hides it (billing is treated as
+   the same address by default). */
+.checkout-view .wc-block-checkout__use-address-for-billing {
+	display: none !important;
+}
+
+/* Place-order button — append " · $TOTAL →" to "PLACE ORDER" so the
+   button signals what's about to be charged (prototype's pattern). WC's
+   `showPrice` block attribute isn't honored once the page's stored
+   post_content omits it, so the total is delivered through a CSS custom
+   property seeded from PHP (`--mh-cart-total`) and concatenated into the
+   button text via ::after. Tradeoff: this snapshots the total at first
+   paint — if the user changes shipping mid-flow the value goes stale
+   until the next navigation. Acceptable for the prototype-fidelity pass;
+   a JS subscriber to WC's cart store would make it reactive. */
+.checkout-view .wc-block-components-checkout-place-order-button .wc-block-components-checkout-place-order-button__text::after {
+	content: ' · ' var(--mh-cart-total, '') ' →';
+}
+
+
 /* ============================================================
    PDP MODAL — native <dialog> + <iframe>.
 

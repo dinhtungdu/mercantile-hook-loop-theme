@@ -236,6 +236,11 @@ add_filter(
 /**
  * Re-label a few WooCommerce Checkout step headings to match the
  * Mercantile prototype (Contact / Shipping address / Payment).
+ *
+ * WC Blocks renders step titles on the client via wp.i18n.__() rather
+ * than server-side gettext, so the PHP filter alone won't catch them.
+ * The companion inline script below mirrors the same mapping into
+ * wp.i18n.setLocaleData so the React-rendered titles match.
  */
 add_filter(
 	'gettext_woocommerce',
@@ -253,6 +258,194 @@ add_filter(
 	},
 	10,
 	2
+);
+
+/**
+ * JS-side label overrides for the WooCommerce Checkout block titles. The
+ * step / summary strings live in WC Blocks' React bundle and reach the
+ * DOM via `wp.i18n.__()` rather than server-side gettext, so the PHP
+ * `gettext_woocommerce` filter alone never sees them. Attaching the
+ * inline script to `wp-i18n` guarantees it runs before WC Blocks reads
+ * its locale data.
+ *
+ * The companion server-side cart-count state for the meta bar is seeded
+ * in `blocks/src/checkout-chrome/render.php`, which keeps that block's
+ * data dependencies in one place.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+			return;
+		}
+		wp_add_inline_script(
+			'wp-i18n',
+			"( function( i18n ) {"
+			. " if ( ! i18n ) { return; }"
+			. " i18n.setLocaleData( {"
+			. " 'Contact information': [ 'Contact' ],"
+			. " 'Billing address': [ 'Shipping address' ],"
+			. " 'Payment options': [ 'Payment' ],"
+			. " 'Shipping options': [ 'Shipping method' ],"
+			. " 'Order summary': [ 'Order' ],"
+			. " 'First name': [ 'Full name' ]"
+			. " }, 'woocommerce' );"
+			. "} )( window.wp && window.wp.i18n );"
+		);
+		// Address-2 (apt/suite) ships collapsed behind a "+ Add apartment,
+		// suite, etc." toggle in WC Blocks. The prototype shows it as a
+		// visible field by default, so we click the toggle as soon as it
+		// mounts. A MutationObserver picks up React's hydration and re-
+		// clicks if the toggle reappears (e.g. after country change forces
+		// a form re-render). The query returns empty once the field is
+		// expanded, so no busy-loop.
+		wp_add_inline_script(
+			'wp-i18n',
+			"( function() {"
+			. " var expand = function() {"
+			. "   document.querySelectorAll( '.wc-block-components-address-form__address_2-toggle' ).forEach( function( b ) { b.click(); } );"
+			. " };"
+			. " var run = function() {"
+			. "   expand();"
+			. "   new MutationObserver( expand ).observe( document.body, { childList: true, subtree: true } );"
+			. " };"
+			. " if ( document.readyState === 'loading' ) {"
+			. "   document.addEventListener( 'DOMContentLoaded', run );"
+			. " } else { run(); }"
+			. "} )();"
+		);
+		// Seed the place-order button's cart-total suffix (CSS variable
+		// read by `.wc-block-components-checkout-place-order-button ::after`
+		// in style.css). Snapshot at first paint — not reactive to mid-
+		// flow shipping/tax changes; see the rule in style.css for the
+		// tradeoff.
+		if ( function_exists( 'WC' ) && WC() && WC()->cart ) {
+			// wc_price() returns markup with HTML entities (`&#36;` for $);
+			// strip tags and decode so the CSS `content` string renders
+			// the real glyph rather than the literal entity.
+			$total = html_entity_decode(
+				wp_strip_all_tags( wc_price( WC()->cart->get_total( 'edit' ) ) ),
+				ENT_QUOTES | ENT_HTML5,
+				'UTF-8'
+			);
+			wp_add_inline_style(
+				'mercantile-hook-loop-style',
+				'.checkout-view { --mh-cart-total: ' . wp_json_encode( $total ) . '; }'
+			);
+		}
+	}
+);
+
+/**
+ * Force the checkout-terms-block to render its real checkbox + label
+ * rather than the implicit "By proceeding…" notice. The block has a
+ * `checkbox` attribute (boolean) that defaults to false and isn't set
+ * in the page's stored post_content; render_block_data flips it on
+ * before WC renders.
+ */
+add_filter(
+	'render_block_data',
+	function ( $block ) {
+		if ( 'woocommerce/checkout-terms-block' === ( $block['blockName'] ?? '' ) ) {
+			$terms_page_id = (int) get_option( 'woocommerce_terms_page_id' );
+			$terms_link    = $terms_page_id
+				? '<a href="' . esc_url( get_permalink( $terms_page_id ) ) . '">' . esc_html__( 'Terms of Service', 'mercantile-hook-loop' ) . '</a>'
+				: esc_html__( 'Terms of Service', 'mercantile-hook-loop' );
+			$mailto        = '<a href="mailto:mercantile@wordpress.org">mercantile@wordpress.org</a>';
+
+			$block['attrs']             = is_array( $block['attrs'] ?? null ) ? $block['attrs'] : array();
+			$block['attrs']['checkbox'] = true;
+			$block['attrs']['text']     = sprintf(
+				/* translators: 1: linked Terms of Service, 2: linked mailto. */
+				__( 'I agree to the %1$s and acknowledge that all sales are final unless the item arrives defective. Issues to %2$s within 14 days. Shipping and credit card fees non-refundable.', 'mercantile-hook-loop' ),
+				$terms_link,
+				$mailto
+			);
+		}
+		return $block;
+	}
+);
+
+/**
+ * Append the "hosted by Automattic · all profits…" footer copy under the
+ * checkout-actions block (i.e. directly below the Place Order button).
+ * Doing this with a render_block filter keeps the markup out of the page's
+ * stored post_content — the theme owns the chrome.
+ */
+add_filter(
+	'render_block_woocommerce/checkout-actions-block',
+	function ( $block_content ) {
+		if ( ! is_string( $block_content ) ) {
+			return $block_content;
+		}
+		$copy  = '<p class="mh-place-order-footer">';
+		$copy .= esc_html__( 'hosted by ', 'mercantile-hook-loop' );
+		$copy .= '<b>' . esc_html__( 'Automattic', 'mercantile-hook-loop' ) . '</b>';
+		$copy .= ' · ' . esc_html__( 'all profits to the ', 'mercantile-hook-loop' );
+		$copy .= '<b>' . esc_html__( 'WordPress Foundation', 'mercantile-hook-loop' ) . '</b>';
+		$copy .= ' (501(c)(3)) · ' . esc_html__( 'payments via ', 'mercantile-hook-loop' );
+		$copy .= '<b>' . esc_html__( 'Stripe', 'mercantile-hook-loop' ) . '</b>';
+		$copy .= '</p>';
+		return $block_content . $copy;
+	}
+);
+
+/**
+ * Append the sidebar `HOSTED / PROFITS / RUNTIME / PACKED BY` stream-line
+ * block and the "edit cart →" link after the order-summary block. In the
+ * prototype this content occupies the ExperimentalOrderMeta slot/fill on
+ * the right column; we render it server-side instead so it ships with the
+ * theme and stays out of the page's stored block tree.
+ */
+add_filter(
+	'render_block_woocommerce/checkout-order-summary-block',
+	function ( $block_content ) {
+		if ( ! is_string( $block_content ) ) {
+			return $block_content;
+		}
+		$runtime = sprintf(
+			/* translators: 1: PHP version, 2: WP version. */
+			esc_html__( 'PHP %1$s · WP %2$s · WC Blocks', 'mercantile-hook-loop' ),
+			esc_html( phpversion() ),
+			esc_html( get_bloginfo( 'version' ) )
+		);
+		$cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' );
+
+		$rows = array(
+			array(
+				'k' => esc_html__( 'Hosted', 'mercantile-hook-loop' ),
+				'v' => esc_html__( 'by ', 'mercantile-hook-loop' )
+					. '<b>' . esc_html__( 'Automattic', 'mercantile-hook-loop' ) . '</b> · '
+					. esc_html__( 'since 2015', 'mercantile-hook-loop' ),
+			),
+			array(
+				'k' => esc_html__( 'Profits', 'mercantile-hook-loop' ),
+				'v' => esc_html__( 'to the ', 'mercantile-hook-loop' )
+					. '<b>' . esc_html__( 'WordPress Foundation', 'mercantile-hook-loop' ) . '</b> · 501(c)(3)',
+			),
+			array(
+				'k' => esc_html__( 'Runtime', 'mercantile-hook-loop' ),
+				'v' => $runtime,
+			),
+			array(
+				'k' => esc_html__( 'Packed by', 'mercantile-hook-loop' ),
+				'v' => '<b>' . esc_html__( 'a human', 'mercantile-hook-loop' ) . '</b>',
+			),
+		);
+
+		$html = '<div class="mh-stream-line">';
+		foreach ( $rows as $row ) {
+			$html .= '<div class="mh-stream-line__row">';
+			$html .= '<span class="mh-stream-line__k">' . $row['k'] . '</span>';
+			$html .= '<span>' . $row['v'] . '</span>';
+			$html .= '</div>';
+		}
+		$html .= '</div>';
+		$html .= '<a class="mh-edit-cart" href="' . esc_url( $cart_url ) . '">'
+			. esc_html__( 'edit cart →', 'mercantile-hook-loop' ) . '</a>';
+
+		return $block_content . $html;
+	}
 );
 
 // `enqueue_block_assets` (unlike `enqueue_block_editor_assets`) fires inside

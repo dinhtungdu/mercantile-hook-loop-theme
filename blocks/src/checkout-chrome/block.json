@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/checkout-chrome",
+	"version": "1.0.0",
+	"title": "Checkout Chrome",
+	"category": "theme",
+	"description": "Breadcrumb + meta bar + 01/02/03 step nav rendered above the WooCommerce Checkout block. Item count is server-seeded from WC()->cart via the Interactivity API.",
+	"icon": "list-view",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"currentStep": {
+			"type": "string",
+			"default": "details"
+		},
+		"estShipText": {
+			"type": "string",
+			"default": "1–2 business days"
+		}
+	},
+	"supports": {
+		"html": false,
+		"interactivity": true,
+		"className": true,
+		"customClassName": true
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

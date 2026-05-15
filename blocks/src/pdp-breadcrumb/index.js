@@ -21,8 +21,6 @@ registerBlockType( metadata.name, {
 				<div className="mh-pdp__crumb">
 					<span>mercantile</span>
 					<span className="sl">/</span>
-					<span>shop</span>
-					<span className="sl">/</span>
 					<span>{ __( 'category', 'mercantile-hook-loop' ) }</span>
 					<span className="sl">/</span>
 					<b>{ __( 'product title', 'mercantile-hook-loop' ) }</b>

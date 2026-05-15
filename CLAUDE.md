@@ -411,6 +411,108 @@ or editing blocks here.
     was present, both fine once computed. For the supports-first stack,
     check `getComputedStyle` on the rendered page, not the source.
 
+40. **`wc:add-to-cart-with-options` IGNORES inner-block markup in the
+    template.** Its `render()` always loads from a template part at
+    `templates/parts/<type>-product-add-to-cart-with-options.html`
+    (one per product type: `simple`, `variable`, `external`,
+    `grouped`). Editing the block's inner content in
+    `single-product.html` does nothing — the block re-`do_blocks()`'s
+    the template part regardless. Theme override path: ship matching
+    files in `parts/` and `BlockTemplateUtils::theme_has_template_part()`
+    picks them up over the WC defaults. To match a prototype's buy
+    box, you almost always need all four parts, not just the one
+    you're looking at — a simple-product page renders from
+    `simple-product-…`, not from `variable-product-…`, and they
+    diverge in WC's defaults (qty stepper on simple, absent on
+    external; variation selector on variable, item list on grouped).
+
+41. **WC variation pill selected-state colors are auto-inverted from
+    the nearest non-transparent ancestor.** `add-to-cart-with-options-
+    variation-selector.js` injects a runtime `<style>` that walks up
+    from `.__pills` via `parentElement.style[prop]`, returns the first
+    non-`transparent` value for `backgroundColor` and `color`, then
+    writes them onto `:has(.__pill-input:checked) { --pill-color:
+    {ancestor-bg}; --pill-background-color: {ancestor-color} }` — an
+    inversion. So selected text = parent bg, selected bg = parent
+    text. Two levers:
+    - **Parent-color trick:** wrap `.__pills` in a `core/group` with
+      `style.color.text/background` set, walker stops there. But
+      unselected pill text inherits via `--pill-color: currentColor`,
+      so the parent color also tints unselected pills.
+    - **Direct CSS:** `.…__pill:has(.__pill-input:checked) {
+      --pill-color, --pill-background-color }` — specificity 0,2,0
+      beats the `:where()` injected rule (0,0,0). Lets you override
+      the selected colors without touching unselected.
+
+    Pill border is also a trap: WC defaults to `border: 1px solid
+    color-mix(in srgb, var(--pill-color) 40%, transparent)` which
+    reads washed out. Override with `border-color: var(--pill-color)`
+    (or a fixed value on the checked state) for solid.
+
+42. **WC pill markup differs editor vs frontend.** Editor renders
+    placeholder pills as `<li class="…__pill[--selected]">Blue</li>`
+    (no input, modifier class for selection). Frontend renders as
+    `<label class="…__pill"><input type="radio" data-wp-bind--checked
+    …/>Blue</label>` (`:has(input:checked)` for selection). A
+    `label.__pill` selector only hits the frontend; a
+    `:has(.__pill-input:checked)` selector only hits the frontend.
+    Cover both: `.…__pill--selected, .…__pill:has(.__pill-input:checked)
+    { … }`. WC's `woocommerce-blocktheme.css` also adds
+    `.woocommerce-page label { margin-bottom: 0.7em }` (specificity
+    0,1,1) which only hits the frontend `<label>` shape — scope the
+    margin override to `label.__pill` (same specificity, wins by load
+    order) so the editor's `<li>` is unaffected.
+
+43. **`add_editor_style('style.css')` does not reliably reach the
+    site-editor canvas iframe.** Block-editor (post) canvas usually
+    picks it up; the site editor sometimes silently doesn't. Symptom:
+    block-supports-driven chrome (inline `style="…"`) renders
+    correctly in the editor preview, but anything coming from the
+    theme stylesheet (custom pill colors, surface overrides) falls
+    back to WC/WP defaults inside the canvas. Fix: re-enqueue the
+    theme stylesheet via `enqueue_block_assets` with an `is_admin()`
+    guard, same pattern as note 26's font enqueuing —
+    `wp_enqueue_style( 'foo-editor', get_stylesheet_uri(), ... )`.
+    Costs one extra HTTP request inside the editor iframe; nothing on
+    the frontend.
+
+44. **`wc:product-button` auto-hides when the selected variation is
+    out of stock.** Inside `add-to-cart-with-options` it carries
+    `data-wp-bind--hidden="!state.allowsAddingToCart"`, and
+    `allowsAddingToCart = productData?.is_in_stock ?? true`. So
+    selecting an out-of-stock variation silently removes the button —
+    no fallback text, no error. To communicate the state, include
+    `wp:woocommerce/product-stock-indicator` between the variation
+    selector and the button; its text switches reactively to
+    "OUT OF STOCK" / "X IN STOCK" based on the selected variation.
+    Without it the UI just blinks the button off and the user has no
+    idea why.
+
+45. **WC's `disabledAttributesAction` does NOT consider stock.** It
+    only flags attribute combinations with no matching variation at
+    all (i.e. impossible combos on multi-attribute products). Out-of-
+    stock variations stay selectable by design — WC's stance is that
+    users should be able to see which size is unavailable. Setting
+    `disabled` on the radio server-side gets clobbered by the
+    reactive `data-wp-bind--disabled="state.isOptionDisabled"` binding
+    once iAPI hydrates. If you absolutely must mark stock-out pills
+    visually, tag a non-iAPI-bound attribute on the `<label>` wrapper
+    (e.g. `data-stock="out"` via a `render_block_*` filter using
+    `WP_HTML_Tag_Processor`) and style via CSS — iAPI doesn't bind
+    anything on the label, so the attribute persists across renders.
+    But the WC-blessed UX is just the stock indicator from note 44.
+
+46. **`wc_price()` HTML entities print literally through
+    `data-wp-text`.** `wc_price()` returns
+    `<span>…<span>&#36;</span>28.00</span>` etc. `product-button`'s
+    label is rendered via the iAPI `data-wp-text="state.addToCartText"`
+    directive, which sets `textContent` — and `textContent` prints
+    `&#36;` as the literal four characters, not `$`. If you're
+    injecting the price into the button via a
+    `woocommerce_product_single_add_to_cart_text` filter, run the
+    output through `html_entity_decode( wp_strip_all_tags( wc_price(
+    $p ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' )` first.
+
 ## Project layout for theme-local blocks
 
 ```

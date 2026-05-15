@@ -234,6 +234,39 @@ add_filter(
 );
 
 /**
+ * Append a "$X ea" entry to each cart item's metadata, surfaced in the
+ * mini-cart row alongside any variation attributes (e.g. "size: m ·
+ * color: blue · $28 ea"). Riding through the standard
+ * `woocommerce_get_item_data` filter means the new line is rendered by
+ * WC's own ProductDetails component — no extra markup, no extra block
+ * — and gets the same restyling as the variation list. The empty `key`
+ * keeps the "Name:" label off (ProductDetails skips the name span when
+ * `name`/`key` is empty), so the row reads as just the value: "$28 ea".
+ */
+add_filter(
+	'woocommerce_get_item_data',
+	function ( $item_data, $cart_item ) {
+		$product = isset( $cart_item['data'] ) ? $cart_item['data'] : null;
+		if ( ! $product instanceof WC_Product ) {
+			return $item_data;
+		}
+		$unit_price  = wc_get_price_to_display( $product );
+		$item_data[] = array(
+			'key'     => '',
+			'value'   => '',
+			'display' => sprintf(
+				/* translators: %s is the formatted per-unit price, e.g. $28.00 */
+				__( '%s ea', 'mercantile-hook-loop' ),
+				wp_strip_all_tags( wc_price( $unit_price ) )
+			),
+		);
+		return $item_data;
+	},
+	10,
+	2
+);
+
+/**
  * Re-label a few WooCommerce Checkout step headings to match the
  * Mercantile prototype (Contact / Shipping address / Payment).
  */

@@ -15,12 +15,15 @@
  *   isn't on the page, the action is a no-op and the link follows its
  *   href to /cart/ as a graceful fallback.
  */
-import { store } from '@wordpress/interactivity';
+import { getConfig, store } from '@wordpress/interactivity';
 
 const wcLock =
 	'I acknowledge that using a private store means my plugin will inevitably break on the next store release.';
 
 const { state: wcState } = store( 'woocommerce', {}, { lock: wcLock } );
+
+const { itemSingular = 'item', itemPlural = 'items' } =
+	getConfig( 'mercantile/cart-tab' ) || {};
 
 store( 'mercantile/cart-tab', {
 	state: {
@@ -30,6 +33,11 @@ store( 'mercantile/cart-tab', {
 				( total, item ) => total + ( item.quantity || 0 ),
 				0
 			);
+		},
+		get itemsLabel() {
+			const count = this.itemCount;
+			const word = count === 1 ? itemSingular : itemPlural;
+			return `${ count } ${ word }`;
 		},
 	},
 	actions: {

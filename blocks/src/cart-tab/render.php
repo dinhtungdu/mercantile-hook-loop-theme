@@ -36,14 +36,32 @@ if ( class_exists( 'Automattic\\WooCommerce\\Blocks\\Utils\\BlocksSharedState' )
 
 $initial_count = isset( WC()->cart ) ? (int) WC()->cart->get_cart_contents_count() : 0;
 
+// Translatable singular/plural words for the "N items" label rendered
+// by the mini-cart drawer header (data-wp-text="state.itemsLabel"). Per
+// CLAUDE.md note 19/20, view.js never calls __(); strings are seeded
+// here and read via getConfig().
+wp_interactivity_config(
+	'mercantile/cart-tab',
+	array(
+		'itemSingular' => __( 'item', 'mercantile-hook-loop' ),
+		'itemPlural'   => __( 'items', 'mercantile-hook-loop' ),
+	)
+);
+
 // Seed our own state so the SSR pass for data-wp-text="state.itemCount"
-// resolves to the same number that the client-side getter will compute
-// once view.js hydrates. Stored as a string so a 0 count still renders
-// as "0" rather than being coerced to an empty value by the directive
-// processor.
+// (and state.itemsLabel) resolves to the same number/label that the
+// client-side getters compute once view.js hydrates. itemCount is a
+// string so a 0 count still renders as "0" rather than being coerced to
+// an empty value by the directive processor.
+$items_word = 1 === $initial_count
+	? __( 'item', 'mercantile-hook-loop' )
+	: __( 'items', 'mercantile-hook-loop' );
 wp_interactivity_state(
 	'mercantile/cart-tab',
-	array( 'itemCount' => (string) $initial_count )
+	array(
+		'itemCount'  => (string) $initial_count,
+		'itemsLabel' => sprintf( '%d %s', $initial_count, $items_word ),
+	)
 );
 
 $wrapper_attrs = get_block_wrapper_attributes(

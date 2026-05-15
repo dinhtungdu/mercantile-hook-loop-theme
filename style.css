@@ -588,7 +588,14 @@ body {
 	border-color: var(--mh-rule);
 }
 
-/* ===== Mini cart drawer ===== */
+/* ===== Mini cart drawer =====
+   Skin for the wc:mini-cart drawer. The drawer's inner-block tree is
+   theme-controlled via parts/mini-cart.html (WC honors a theme template
+   part at that path), so the rules below assume:
+     - our own header at .mh-mini-cart__head replaces wc:mini-cart-title
+     - filled state has no cart-button (only checkout)
+     - empty state has a fraktur "Empty." heading + custom paragraph
+   See parts/mini-cart.html for the matching block tree.                */
 .wc-block-mini-cart__drawer {
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	background: var(--mh-paper);
@@ -610,45 +617,38 @@ body {
 	height: 100%;
 }
 
-/* Title row — replace fraktur with mono uppercase "CART · N ITEMS" */
-.wc-block-mini-cart__drawer .wc-block-mini-cart__title {
-	margin: 0 !important;
-	padding: 16px 56px 16px 20px;
-	background: var(--mh-paper-2);
-	border-bottom: 1px solid var(--mh-rule);
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 11px !important;
-	font-weight: 600 !important;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: var(--mh-ink) !important;
+/* Header — always-visible "cart · N items" bar (sibling to filled+empty). */
+.wc-block-mini-cart__drawer .mh-mini-cart__head {
 	display: flex;
 	align-items: baseline;
 	gap: 8px;
+	padding: 16px 56px 16px 20px;
+	background: var(--mh-paper-2);
+	border-bottom: 1px solid var(--mh-rule);
 }
 
-.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-label-block {
-	font-size: 0;
-	line-height: 0;
-}
-
-.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-label-block::before {
-	content: 'cart ·';
+.wc-block-mini-cart__drawer .mh-mini-cart__head-title {
+	margin: 0;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 11px;
-	line-height: 1;
+	font-weight: 600;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
-	font-weight: 600;
 	color: var(--mh-ink);
 }
 
-.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-items-counter-block {
-	font-weight: 400;
-	color: var(--mh-slate);
-	font-family: inherit;
+.wc-block-mini-cart__drawer .mh-mini-cart__head-count {
+	margin: 0;
+	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 11px;
+	font-weight: 400;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
+	color: var(--mh-slate);
+}
+
+.wc-block-mini-cart__drawer .mh-mini-cart__head-count::before {
+	content: '· ';
 }
 
 /* Close button — square outline */
@@ -761,21 +761,57 @@ body {
 	text-wrap: balance;
 }
 
+/* Hide the per-row line-item price column (the duplicate $X.XX next to
+   the product name). The line total still shows in the right column
+   via .wc-block-cart-item__total. !important needed because WC's own
+   stylesheet sets display:flex on this with similar specificity.       */
 .wc-block-mini-cart__drawer .wc-block-cart-item__prices {
-	display: none;
+	display: none !important;
 }
 
+/* Hide the truncated short_description — too noisy for the row.
+   Variation attributes + injected "$X ea" line still render via
+   .wc-block-components-product-details below.                          */
 .wc-block-mini-cart__drawer .wc-block-components-product-metadata__description {
+	display: none !important;
+}
+
+/* Variation + injected item_data line:  size: m · color: blue · $28 ea
+   WC renders each entry as <span class="…__name">Size:</span> <span
+   class="…__value">M</span> with a <span aria-hidden> / </span> between
+   entries. We keep the markup, restyle to inline mono with · separators. */
+.wc-block-mini-cart__drawer .wc-block-components-product-details {
+	display: block;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 10px;
 	color: var(--mh-slate);
 	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	margin: 0;
+	text-transform: lowercase;
+	margin: 4px 0 0;
 }
 
-.wc-block-mini-cart__drawer .wc-block-components-product-metadata__description p {
-	margin: 0;
+.wc-block-mini-cart__drawer .wc-block-components-product-details > span {
+	display: inline;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-product-details__name {
+	color: var(--mh-slate-2);
+	margin-right: 4px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-product-details__value {
+	color: var(--mh-ink);
+}
+
+/* Replace WC's " / " separator between entries with " · ". */
+.wc-block-mini-cart__drawer .wc-block-components-product-details > span > span[aria-hidden="true"] {
+	font-size: 0;
+	margin: 0 4px;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-product-details > span > span[aria-hidden="true"]::before {
+	content: '·';
+	font-size: 10px;
 }
 
 /* Quantity selector — mono pill */
@@ -838,7 +874,10 @@ body {
 	color: var(--mh-ink);
 }
 
-/* Remove link — small underlined slate text */
+/* Remove link — small underlined slate text.
+   WC ships an SVG-icon-only button here; we hide the SVG and inject
+   the word "remove" via ::before. The aria-label remains the full WC
+   string so screen readers still announce the product name.            */
 .wc-block-mini-cart__drawer .wc-block-cart-item__remove-link {
 	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
 	font-size: 10px !important;
@@ -850,6 +889,16 @@ body {
 	text-transform: lowercase;
 	letter-spacing: 0;
 	cursor: pointer;
+	width: auto !important;
+	height: auto !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__remove-link svg {
+	display: none !important;
+}
+
+.wc-block-mini-cart__drawer .wc-block-cart-item__remove-link::before {
+	content: 'remove';
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__remove-link:hover {
@@ -874,11 +923,16 @@ body {
 	color: var(--mh-ink);
 }
 
-/* Footer */
+/* Footer — wraps subtotal row + checkout button. Prototype omits the
+   shipping/total rows and the "view my cart" outline link, so we only
+   style the subtotal block + the single checkout button. The fine-print
+   caption ("ships worldwide…") is a sibling core/paragraph in the
+   template (not a ::after pseudo) so it can be edited in the Site
+   Editor without touching CSS. */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer {
 	background: var(--mh-paper-2);
 	border-top: 1px solid var(--mh-rule);
-	padding: 18px 20px 20px;
+	padding: 18px 20px 12px;
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
@@ -886,35 +940,16 @@ body {
 
 .wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal {
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 13px;
-	font-weight: 600;
+	font-size: 15px;
+	font-weight: 700;
 	color: var(--mh-ink);
-	border-top: 1px solid var(--mh-rule);
-	padding-top: 8px;
 	margin: 0;
 	display: flex;
-	flex-wrap: wrap;
 	align-items: baseline;
 	justify-content: space-between;
 }
 
-.wc-block-mini-cart__drawer .wc-block-components-totals-item__label {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	text-transform: lowercase;
-	font-weight: 500;
-	letter-spacing: 0.04em;
-}
-
-.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__label {
-	font-size: 15px;
-	font-weight: 700;
-	color: var(--mh-ink);
-	text-transform: lowercase;
-	letter-spacing: 0;
-}
-
+.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__label,
 .wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__value {
 	font-size: 15px;
 	font-weight: 700;
@@ -925,38 +960,15 @@ body {
 	flex: 1 1 100%;
 	font-size: 10px;
 	color: var(--mh-slate-2);
-	margin-top: 4px;
+	margin-top: 2px;
 	letter-spacing: 0.04em;
 	text-align: left;
 }
 
-/* Footer actions: stack View cart (outline) + Checkout (solid blue) */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-actions {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
-	margin-top: 8px;
-}
-
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-cart {
-	background: transparent !important;
-	color: var(--mh-ink) !important;
-	border: 1px solid var(--mh-rule) !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 11px !important;
-	font-weight: 500;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	padding: 10px 12px !important;
-	border-radius: 0 !important;
-	text-align: center;
-	box-shadow: none !important;
-}
-
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer-cart:hover {
-	background: var(--mh-ink) !important;
-	color: var(--mh-paper) !important;
-	border-color: var(--mh-ink) !important;
+	margin-top: 4px;
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout {
@@ -982,37 +994,47 @@ body {
 	background: var(--mh-wp-d) !important;
 }
 
-/* Mono caption appended to footer */
-.wc-block-mini-cart__drawer .wc-block-mini-cart__footer::after {
-	content: 'ships worldwide · profits to the WordPress Foundation · 14-day defect window';
-	display: block;
+/* "ships worldwide · …" caption — real <p> block under the footer. */
+.wc-block-mini-cart__drawer .mh-mini-cart__caption {
+	margin: 0;
+	padding: 0 20px 16px;
+	background: var(--mh-paper-2);
 	text-align: center;
 	font-family: 'JetBrains Mono', ui-monospace, monospace;
 	font-size: 10px;
 	color: var(--mh-slate-2);
 	letter-spacing: 0.04em;
-	margin-top: 8px;
 }
 
-/* Empty state — fraktur */
-.wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper {
+/* Empty state — big fraktur "Empty.", italic Newsreader caption,
+   ink-on-paper "keep shopping" button.
+   `:not([hidden])` so WC's data-wp-bind--hidden toggle can still
+   collapse this block when the cart has items (otherwise our
+   display:flex would beat the [hidden] UA rule).                       */
+.wc-block-mini-cart__drawer .wp-block-woocommerce-empty-mini-cart-contents-block:not([hidden]) {
+	flex: 1;
 	padding: 60px 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	text-align: center;
 	color: var(--mh-slate);
 }
 
-.wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper p {
+.wc-block-mini-cart__drawer .mh-mini-cart__empty-frak {
+	margin: 0 0 16px;
+	font-size: 64px;
+	line-height: 1;
+	color: var(--mh-slate-2);
+}
+
+.wc-block-mini-cart__drawer .mh-mini-cart__empty-text {
 	font-family: 'Newsreader', Georgia, serif;
 	font-style: italic;
 	font-size: 16px;
 	color: var(--mh-slate);
 	margin: 0 0 18px;
-}
-
-.wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper p strong {
-	font-style: normal;
-	font-weight: 500;
-	color: var(--mh-ink);
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__shopping-button {
@@ -1025,6 +1047,15 @@ body {
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	padding: 10px 16px !important;
+}
+
+/* Defensive: hide the WC default "Your cart is currently empty!" pattern
+   in case our heading/paragraph blocks fail to render — keeps the empty
+   state from double-printing during a misconfigured deploy. Scoped to
+   <p> so the wp:button wrapper (also has-text-align-center) keeps its
+   default block layout and the "keep shopping" CTA stays visible. */
+.wc-block-mini-cart__drawer .wp-block-woocommerce-empty-mini-cart-contents-block > .wc-block-mini-cart__empty-cart-wrapper > p.has-text-align-center:not(.mh-mini-cart__empty-text) {
+	display: none;
 }
 
 /* ============================================================

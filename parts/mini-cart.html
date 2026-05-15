@@ -1,0 +1,60 @@
+<!-- wp:woocommerce/mini-cart-contents -->
+<div class="wp-block-woocommerce-mini-cart-contents">
+
+	<!-- Always-visible header (shown in BOTH filled and empty states).
+	     WC's wc:mini-cart-title-block is parent-locked to filled-mini-cart-
+	     contents-block, so we drop it and render our own header above the
+	     filled/empty siblings. The counter binds to the existing
+	     `mercantile/cart-tab` iAPI store (loaded by the ticker on every
+	     page that has the mini-cart drawer). -->
+	<!-- wp:html -->
+	<div class="mh-mini-cart__head" data-wp-interactive='{"namespace":"mercantile/cart-tab"}'>
+		<p class="mh-mini-cart__head-title">cart</p>
+		<p class="mh-mini-cart__head-count" data-wp-text="state.itemsLabel">0 items</p>
+	</div>
+	<!-- /wp:html -->
+
+	<!-- wp:woocommerce/filled-mini-cart-contents-block -->
+	<div class="wp-block-woocommerce-filled-mini-cart-contents-block">
+		<!-- wp:woocommerce/mini-cart-items-block -->
+		<div class="wp-block-woocommerce-mini-cart-items-block">
+			<!-- wp:woocommerce/mini-cart-products-table-block -->
+			<div class="wp-block-woocommerce-mini-cart-products-table-block"></div>
+			<!-- /wp:woocommerce/mini-cart-products-table-block -->
+		</div>
+		<!-- /wp:woocommerce/mini-cart-items-block -->
+
+		<!-- wp:woocommerce/mini-cart-footer-block -->
+		<div class="wp-block-woocommerce-mini-cart-footer-block">
+			<!-- Drop wc:mini-cart-cart-button-block — prototype shows only
+			     the checkout CTA; the outline "view my cart" link is gone. -->
+			<!-- wp:woocommerce/mini-cart-checkout-button-block {"checkoutButtonLabel":"proceed to checkout"} -->
+			<div class="wp-block-woocommerce-mini-cart-checkout-button-block"></div>
+			<!-- /wp:woocommerce/mini-cart-checkout-button-block -->
+		</div>
+		<!-- /wp:woocommerce/mini-cart-footer-block -->
+
+		<!-- wp:paragraph {"className":"mh-mini-cart__caption"} -->
+		<p class="mh-mini-cart__caption">ships worldwide · profits to the WordPress Foundation · 14-day defect window</p>
+		<!-- /wp:paragraph -->
+	</div>
+	<!-- /wp:woocommerce/filled-mini-cart-contents-block -->
+
+	<!-- wp:woocommerce/empty-mini-cart-contents-block -->
+	<div class="wp-block-woocommerce-empty-mini-cart-contents-block">
+		<!-- wp:heading {"level":2,"fontFamily":"unifraktur","className":"mh-mini-cart__empty-frak"} -->
+		<h2 class="wp-block-heading mh-mini-cart__empty-frak has-unifraktur-font-family">Empty.</h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:paragraph {"className":"mh-mini-cart__empty-text"} -->
+		<p class="mh-mini-cart__empty-text">Nothing here yet — the catalog is waiting.</p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:woocommerce/mini-cart-shopping-button-block {"startShoppingButtonLabel":"keep shopping"} -->
+		<div class="wp-block-woocommerce-mini-cart-shopping-button-block"></div>
+		<!-- /wp:woocommerce/mini-cart-shopping-button-block -->
+	</div>
+	<!-- /wp:woocommerce/empty-mini-cart-contents-block -->
+
+</div>
+<!-- /wp:woocommerce/mini-cart-contents -->

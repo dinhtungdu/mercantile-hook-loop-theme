@@ -62,3 +62,22 @@
 	color: #fff;
 	outline: none;
 }
+
+/**
+ * Plug WC's missing aspect-ratio rule for non-auto ratios.
+ *
+ * WC ships only one `:has()` rule for `large-image`'s aspect-ratio —
+ * for the `--aspect-ratio-auto` slug. With `aspectRatio: "4/5"` set on
+ * our `wc:product-image`, the inner div gets `--aspect-ratio-4-5` but
+ * no matching CSS rule, so `large-image` has no explicit height in
+ * the editor canvas; WC's `overflow: hidden` then clips the
+ * placeholder. Mirror WC's own `:has()` pattern for the 4/5 slug.
+ *
+ * Front end doesn't need this — real `<li>` images give `large-image`
+ * real height — but the rule is a harmless no-op there.
+ */
+.wp-block-woocommerce-product-gallery-large-image:has(
+		.wc-block-components-product-image--aspect-ratio-4-5
+	) {
+	aspect-ratio: 4 / 5;
+}

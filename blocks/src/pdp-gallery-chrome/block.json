@@ -1,0 +1,67 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/pdp-gallery-chrome",
+	"version": "1.1.0",
+	"title": "PDP Gallery Chrome",
+	"category": "theme",
+	"description": "Toolbar strip above the product gallery: per-product 'fig. NN · CATEGORY' badge on the left, image counter pill on the right. Clicking the pill advances to the next gallery image (wraps back to the first after the last) by hooking WooCommerce's product-gallery store.",
+	"icon": "format-gallery",
+	"textdomain": "mercantile-hook-loop",
+	"ancestor": [ "woocommerce/product-gallery" ],
+	"attributes": {
+		"backgroundColor": {
+			"type": "string",
+			"default": "paper-2"
+		},
+		"style": {
+			"type": "object",
+			"default": {
+				"spacing": {
+					"padding": {
+						"top": "8px",
+						"bottom": "8px",
+						"left": "12px",
+						"right": "12px"
+					}
+				},
+				"border": {
+					"bottom": {
+						"color": "var:preset|color|rule",
+						"width": "1px",
+						"style": "solid"
+					}
+				}
+			}
+		}
+	},
+	"supports": {
+		"html": false,
+		"interactivity": true,
+		"className": false,
+		"customClassName": false,
+		"color": {
+			"background": true,
+			"text": false,
+			"link": false
+		},
+		"spacing": {
+			"padding": true,
+			"__experimentalDefaultControls": { "padding": true }
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"width": true,
+			"style": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"width": true,
+				"style": true
+			}
+		}
+	},
+	"editorScript": "file:./index.js",
+	"viewScriptModule": "file:./view.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

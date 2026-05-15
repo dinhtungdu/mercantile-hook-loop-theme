@@ -1,0 +1,90 @@
+/**
+ * mercantile/pdp-gallery-chrome — toolbar strip above the PDP gallery.
+ *
+ * Block-level chrome (background, border, padding) is expressed via
+ * block supports + attribute defaults in block.json — see paper-2
+ * backgroundColor, style.spacing.padding, style.border.bottom there.
+ * What stays here is composition the wrapper supports can't express
+ * (flex row, badge/pill inline shape, hover state on the pill).
+ */
+
+.mh-gallery-chrome {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	font-family: var( --wp--preset--font-family--jetbrains-mono );
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	line-height: 1;
+}
+
+.mh-gallery-chrome__fig {
+	display: inline-block;
+	background: var( --wp--preset--color--blue-tint );
+	color: var( --wp--preset--color--ink );
+	padding: 3px 8px;
+	border-radius: 2px;
+	font-weight: 600;
+}
+
+.mh-gallery-chrome__pill {
+	display: inline-block;
+	background: var( --wp--preset--color--blue-tint );
+	color: var( --wp--preset--color--ink );
+	padding: 3px 8px;
+	border: 1px solid var( --wp--preset--color--ink );
+	border-radius: 2px;
+	font-family: var( --wp--preset--font-family--jetbrains-mono );
+	font-size: 10px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mh-gallery-chrome__pill:hover,
+.mh-gallery-chrome__pill:focus-visible {
+	background: var( --wp--preset--color--wp );
+	color: #fff;
+	outline: none;
+}
+
+/**
+ * Drop WC's 5px inset on the large-image inner-blocks overlay so our
+ * chrome strip sits flush with the wrapping card edges.
+ *
+ * WC ships (specificity 0,0,0 via `:where()`):
+ *   top: 5px; left: 5px;
+ *   width:  calc(100% - 10px);
+ *   height: calc(100% - 10px);
+ * which paints inner-blocks as an inset frame on top of the gallery
+ * image. We keep the same `position: absolute` overlay model (matches
+ * the prototype) and only zero out the four insets. A real selector
+ * (0,2,0) beats `:where()` without `!important`.
+ */
+.wp-block-woocommerce-product-gallery-large-image
+	> .wc-block-product-gallery-large-image__inner-blocks {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: auto;
+}
+
+/**
+ * Editor-only preview shape.
+ *
+ * In the Site Editor template view there's no real `WC_Product`, so
+ * `wc:product-image` renders nothing and WC's `<ul>__container` stays
+ * empty. With our chrome `position: absolute`, `large-image` has no
+ * in-flow children — its computed height collapses to 0 and the card
+ * shrinks to just the chrome strip. `.editor-styles-wrapper` scopes
+ * this min-height to the editor iframe so the front end is unaffected.
+ */
+.editor-styles-wrapper
+	.wp-block-woocommerce-product-gallery-large-image {
+	min-height: 400px;
+}

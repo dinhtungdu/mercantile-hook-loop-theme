@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.0
+Version: 0.2.2
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,32 +11,32 @@ Tags: full-site-editing, block-theme, editorial, shop, monospace
 */
 
 :root {
-	--mh-wp: #3858e9;
-	--mh-wp-d: #183ad6;
-	--mh-ink: #1d2327;
-	--mh-ink-2: #2c3338;
-	--mh-slate: #646970;
-	--mh-slate-2: #8c8f94;
-	--mh-rule: #c3c4c7;
-	--mh-rule-2: #dcdcde;
-	--mh-paper: #f0f0f1;
-	--mh-paper-2: #f6f7f7;
-	--mh-card: #ffffff;
-	--mh-accent: #d63638;
-	--mh-ok: #1f8f3a;
-	--mh-pink: #ffd4e1;
-	--mh-blue-tint: #e2e8ff;
-	--mh-gutter: max(clamp(20px, 5vw, 40px), calc(50vw - 800px));
+  --mh-wp: #3858e9;
+  --mh-wp-d: #183ad6;
+  --mh-ink: #1d2327;
+  --mh-ink-2: #2c3338;
+  --mh-slate: #646970;
+  --mh-slate-2: #8c8f94;
+  --mh-rule: #c3c4c7;
+  --mh-rule-2: #dcdcde;
+  --mh-paper: #f0f0f1;
+  --mh-paper-2: #f6f7f7;
+  --mh-card: #ffffff;
+  --mh-accent: #d63638;
+  --mh-ok: #1f8f3a;
+  --mh-pink: #ffd4e1;
+  --mh-blue-tint: #e2e8ff;
+  --mh-gutter: max(clamp(20px, 5vw, 40px), calc(50vw - 800px));
 }
 
 body {
-	background: var(--mh-paper);
-	color: var(--mh-ink);
+  background: var(--mh-paper);
+  color: var(--mh-ink);
 }
 
 ::selection {
-	background: var(--mh-wp);
-	color: #fff;
+  background: var(--mh-wp);
+  color: #fff;
 }
 
 /* ===== Ticker =====
@@ -50,9 +50,9 @@ body {
    a stacking context above the page, and the overflow clip the
    marquee track relies on. */
 .mh-ticker {
-	height: 34px;
-	z-index: 50;
-	overflow: hidden;
+  height: 34px;
+  z-index: 50;
+  overflow: hidden;
 }
 
 /* ===== Hero =====
@@ -72,16 +72,15 @@ body {
    preset supplies the clamp, and ink color is the heading default.
    Only what supports can't reach stays here. */
 .mh-mark {
-	letter-spacing: -0.005em;
-	text-wrap: balance;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
 }
 
 /* Blurb paragraph — caps measure at 38ch like the prototype. No
    block-supports analog for max-width on a paragraph. */
 .mh-blurb {
-	max-width: 38ch;
+  max-width: 38ch;
 }
-
 
 /* ===== Section head =====
    Outer surface chrome (sticky position, background, border-bottom,
@@ -93,70 +92,72 @@ body {
    reset, surface block-gap collapse, and the WC mini-cart skin
    (cross-block selectors into woocommerce/mini-cart internals). */
 .mh-section-head {
-	z-index: 40;
+  z-index: 40;
 }
 
 /* Reset WP flow-layout child margins so flex children sit on the cross-axis center. */
 .mh-section-head > * {
-	margin-block-start: 0 !important;
-	margin-block-end: 0 !important;
-	margin-top: 0 !important;
-	margin-bottom: 0 !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 /* Mini-cart button — match the prototype's dark cart pill */
 .mh-section-head .mh-mini-cart.wp-block-woocommerce-mini-cart,
 .mh-section-head .wp-block-woocommerce-mini-cart {
-	margin: 0;
+  margin: 0;
 }
 
 .mh-section-head .wc-block-mini-cart__button,
 .mh-section-head .wp-block-woocommerce-mini-cart .wc-block-mini-cart__button {
-	background: var(--mh-ink) !important;
-	color: var(--mh-paper) !important;
-	border: 1px solid var(--mh-ink) !important;
-	border-radius: 0 !important;
-	padding: 6px 10px !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 12px !important;
-	line-height: 1.4 !important;
-	letter-spacing: 0 !important;
-	text-transform: lowercase !important;
-	font-weight: 400 !important;
-	min-height: 0 !important;
-	box-sizing: border-box !important;
-	gap: 6px;
-	display: inline-flex;
-	align-items: center;
+  background: var(--mh-ink) !important;
+  color: var(--mh-paper) !important;
+  border: 1px solid var(--mh-ink) !important;
+  border-radius: 0 !important;
+  padding: 6px 10px !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  text-transform: lowercase !important;
+  font-weight: 400 !important;
+  min-height: 0 !important;
+  box-sizing: border-box !important;
+  gap: 6px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .mh-section-head .wc-block-mini-cart__button:hover {
-	background: var(--mh-ink-2) !important;
-	color: #fff !important;
+  background: var(--mh-ink-2) !important;
+  color: #fff !important;
 }
 
 /* Cart total — the prototype reads `cart · 0 · $0`, so the price stays
    visible with a `·` separator inline before it. Mono-styled to match
    the count. */
 .mh-section-head .wc-block-mini-cart__button .wc-block-mini-cart__amount {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	font-weight: 400;
-	color: var(--mh-paper);
-	display: inline-flex;
-	align-items: baseline;
-	gap: 6px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--mh-paper);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
 }
-.mh-section-head .wc-block-mini-cart__button .wc-block-mini-cart__amount::before {
-	content: '·';
-	color: var(--mh-slate-2);
-	font-weight: 400;
+.mh-section-head
+  .wc-block-mini-cart__button
+  .wc-block-mini-cart__amount::before {
+  content: "·";
+  color: var(--mh-slate-2);
+  font-weight: 400;
 }
 
 /* Hide the WC cart icon — the prototype uses a plain `cart 0` mono pill. */
 .mh-section-head .wc-block-mini-cart__icon,
 .mh-section-head svg.wc-block-mini-cart__icon {
-	display: none !important;
+  display: none !important;
 }
 
 /* Quantity badge — render inline as a count pill `0` next to the word.
@@ -167,77 +168,77 @@ body {
    inline `· N` segment between `cart` and the price. Its ::before
    supplies the `·` separator. */
 .mh-section-head .wc-block-mini-cart__quantity-badge {
-	background: transparent !important;
-	color: var(--mh-paper) !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 12px !important;
-	font-weight: 400 !important;
-	position: static !important;
-	padding: 0 !important;
-	width: auto !important;
-	height: auto !important;
-	min-width: 0 !important;
-	border: 0 !important;
-	display: inline-flex !important;
-	align-items: center !important;
-	gap: 6px !important;
-	letter-spacing: 0 !important;
-	transform: none !important;
+  background: transparent !important;
+  color: var(--mh-paper) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  position: static !important;
+  padding: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  border: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  letter-spacing: 0 !important;
+  transform: none !important;
 }
 .mh-section-head .wc-block-mini-cart__quantity-badge::before {
-	content: '·';
-	color: var(--mh-slate-2);
-	font-weight: 400;
-	margin-right: 6px;
+  content: "·";
+  color: var(--mh-slate-2);
+  font-weight: 400;
+  margin-right: 6px;
 }
 
 /* Inner badge bubble normally floats absolutely as a notification dot
    over the cart icon. With the icon hidden, flatten the bubble back
    into an inline number so the row reads `cart · 7 · $89.00` cleanly. */
 .mh-section-head .wc-block-mini-cart__badge {
-	background: transparent !important;
-	color: var(--mh-paper) !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 12px !important;
-	font-weight: 400 !important;
-	position: static !important;
-	padding: 0 !important;
-	margin: 0 !important;
-	left: auto !important;
-	width: auto !important;
-	height: auto !important;
-	min-width: 0 !important;
-	border: 0 !important;
-	display: inline !important;
-	letter-spacing: 0 !important;
-	transform: none !important;
-	line-height: inherit !important;
+  background: transparent !important;
+  color: var(--mh-paper) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  position: static !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  border: 0 !important;
+  display: inline !important;
+  letter-spacing: 0 !important;
+  transform: none !important;
+  line-height: inherit !important;
 }
 
 /* Pseudo-element prefix `cart ` so the layout reads `cart 0` even when WC
    only outputs the numeric badge. */
 .mh-section-head .wc-block-mini-cart__button::before {
-	content: 'cart';
-	color: var(--mh-paper);
-	margin-right: 6px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	font-weight: 400;
-	text-transform: lowercase;
+  content: "cart";
+  color: var(--mh-paper);
+  margin-right: 6px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: lowercase;
 }
 
 /* Phone: bump mini-cart touch-target so the cart pill sits at the same
    height as the filter dropdown. The filters block owns its own
    internal mobile behavior (label/chips hide, select takes over). */
 @media (max-width: 700px) {
-	.mh-section-head .wc-block-mini-cart__button,
-	.mh-section-head .wp-block-woocommerce-mini-cart .wc-block-mini-cart__button {
-		padding: 10px 14px !important;
-		font-size: 13px !important;
-	}
-	.mh-section-head .wc-block-mini-cart__button::before {
-		font-size: 13px;
-	}
+  .mh-section-head .wc-block-mini-cart__button,
+  .mh-section-head .wp-block-woocommerce-mini-cart .wc-block-mini-cart__button {
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+  }
+  .mh-section-head .wc-block-mini-cart__button::before {
+    font-size: 13px;
+  }
 }
 
 /* ===== Product grid + cell CSS temporarily removed — see git history.
@@ -245,26 +246,33 @@ body {
 
 /* ===== Interstitial ===== */
 .mh-interstitial {
-	grid-column: 1 / -1;
-	margin-top: -1px;
-	border-top: 1px solid var(--mh-rule);
-	border-right: 1px solid var(--mh-rule);
-	border-bottom: 1px solid var(--mh-rule);
-	padding: 14px 20px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10.5px;
-	color: var(--mh-slate);
-	letter-spacing: 0.02em;
-	background: var(--mh-paper-2);
-	display: flex;
-	gap: 4px 18px;
-	flex-wrap: wrap;
-	align-items: baseline;
+  grid-column: 1 / -1;
+  margin-top: -1px;
+  border-top: 1px solid var(--mh-rule);
+  border-right: 1px solid var(--mh-rule);
+  border-bottom: 1px solid var(--mh-rule);
+  padding: 14px 20px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  color: var(--mh-slate);
+  letter-spacing: 0.02em;
+  background: var(--mh-paper-2);
+  display: flex;
+  gap: 4px 18px;
+  flex-wrap: wrap;
+  align-items: baseline;
 }
 
-.mh-interstitial b { color: var(--mh-ink); font-weight: 600; }
-.mh-interstitial .k { color: var(--mh-wp); }
-.mh-interstitial .c { color: var(--mh-slate-2); }
+.mh-interstitial b {
+  color: var(--mh-ink);
+  font-weight: 600;
+}
+.mh-interstitial .k {
+  color: var(--mh-wp);
+}
+.mh-interstitial .c {
+  color: var(--mh-slate-2);
+}
 
 /* ===== Band =====
    Surface is a wp:group; lines and caption are core/paragraph blocks
@@ -276,16 +284,18 @@ body {
    scoped to the band line. Strips the UA <code> background and tunes
    size/weight to sit alongside the Fraktur display type. */
 .mh-band__line code {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-weight: 600;
-	font-size: 0.72em;
-	letter-spacing: -0.01em;
-	vertical-align: 0.06em;
-	background: none;
-	padding: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 600;
+  font-size: 0.72em;
+  letter-spacing: -0.01em;
+  vertical-align: 0.06em;
+  background: none;
+  padding: 0;
 }
 
-.mh-band__caption { max-width: 42em; }
+.mh-band__caption {
+  max-width: 42em;
+}
 
 /* ===== Footer =====
    Surface hooks for parts/footer.html. Brand wordmark, tagline, and
@@ -300,12 +310,12 @@ body {
 /* Tagline measure — caps at 50ch like the prototype. No block-
    supports analog for max-width on a paragraph. */
 .mh-footer__tagline {
-	max-width: 50ch;
+  max-width: 50ch;
 }
 
 /* ===== Editor parity tweaks ===== */
 .editor-styles-wrapper {
-	background: var(--mh-paper);
+  background: var(--mh-paper);
 }
 
 /* ===== WC product collection grid + cell CSS temporarily removed — see
@@ -320,12 +330,12 @@ body {
      match the tallest one (otherwise a 1-line title cell ends shorter
      than a 3-line title sibling). */
 .mh-grid-wrap .wc-block-product-template {
-	gap: 0;
-	border-left: 1px solid var(--wp--preset--color--rule);
+  gap: 0;
+  border-left: 1px solid var(--wp--preset--color--rule);
 }
 
 .mh-grid-wrap .wc-block-product-template > li > .mh-cell {
-	height: 100%;
+  height: 100%;
 }
 
 /* Stock indicator stamp — absolutely positioned to the bottom-left of
@@ -333,14 +343,14 @@ body {
    context is set via :has() so we don't have to add a className just
    for positioning. */
 .mh-cell .wp-block-group:has(> .mh-cell__stamp) {
-	position: relative;
+  position: relative;
 }
 
 .mh-cell .mh-cell__stamp {
-	position: absolute;
-	bottom: -5px;
-	right: -1px;
-	transition: background-color 0.12s;
+  position: absolute;
+  bottom: -5px;
+  right: -1px;
+  transition: background-color 0.12s;
 }
 
 /* Cell + stamp both flip to card (white) on hover. Color presets
@@ -349,171 +359,194 @@ body {
    .has-X-background-color preset class with !important, so a plain
    :hover rule (even at higher specificity) loses to it. */
 .mh-cell.wp-block-group {
-	transition: background-color 0.12s;
+  transition: background-color 0.12s;
 }
 
 .mh-cell.wp-block-group:hover {
-	background-color: var(--wp--preset--color--card) !important;
+  background-color: var(--wp--preset--color--card) !important;
 }
 
 .mh-cell:hover .mh-cell__stamp {
-	background-color: var(--wp--preset--color--card) !important;
+  background-color: var(--wp--preset--color--card) !important;
 }
 
 /* ===== Single product (admin-editor framing) ===== */
-.mh-breadcrumbs.wc-block-components-breadcrumbs { display: none; } /* prefer custom crumb header */
+.mh-breadcrumbs.wc-block-components-breadcrumbs {
+  display: none;
+} /* prefer custom crumb header */
 
 .mh-pdp {
-	max-width: 1040px;
-	margin-left: auto;
-	margin-right: auto;
-	/* background / border / radius are on the card group's block supports.
+  max-width: 1040px;
+  margin-left: auto;
+  margin-right: auto;
+  /* background / border / radius are on the card group's block supports.
 	   box-shadow stays here — safecss_filter_attr strips rgba() (note 25). */
-	box-shadow: 0 18px 50px -12px rgba(17, 18, 20, 0.18), 0 6px 18px -6px rgba(17, 18, 20, 0.10);
-	overflow: hidden;
+  box-shadow:
+    0 18px 50px -12px rgba(17, 18, 20, 0.18),
+    0 6px 18px -6px rgba(17, 18, 20, 0.1);
+  overflow: hidden;
 }
 
 /* WC hardcodes `.wc-block-product-template.is-flex-container { gap: 1.25em }`
    — a real class selector no block-support blockGap can beat (note 32).
    The related list wants its rows flush, separated by the row border. */
 .mh-pdp .wc-block-product-template {
-	gap: 0;
+  gap: 0;
 }
 
 /* Title "input field" caret — the only PDP title chrome with no
    block-support analog; the rest lives on the post-title block. */
 .mh-pdp .mh-pdp__title::after {
-	content: '';
-	display: inline-block;
-	width: 0.06em;
-	height: 0.9em;
-	background: var(--mh-wp);
-	margin-left: 0.2em;
-	vertical-align: -0.08em;
-	animation: mh-caret 1.1s steps(2, start) infinite;
+  content: "";
+  display: inline-block;
+  width: 0.06em;
+  height: 0.9em;
+  background: var(--mh-wp);
+  margin-left: 0.2em;
+  vertical-align: -0.08em;
+  animation: mh-caret 1.1s steps(2, start) infinite;
 }
 
-@keyframes mh-caret { to { opacity: 0; } }
+@keyframes mh-caret {
+  to {
+    opacity: 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-	.mh-pdp .mh-pdp__title::after { animation: none; opacity: 0.9; }
+  .mh-pdp .mh-pdp__title::after {
+    animation: none;
+    opacity: 0.9;
+  }
 }
 
 .mh-side-label {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	color: var(--mh-slate);
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
-	margin-top: 14px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  color: var(--mh-slate);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 14px;
 }
 
 .mh-sizes {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px;
-	margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 .mh-sizes button {
-	min-width: 40px;
-	padding: 8px 12px;
-	border: 1.5px solid var(--mh-wp);
-	border-radius: 4px;
-	background: #fff;
-	color: var(--mh-wp);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 13px;
-	font-weight: 600;
-	letter-spacing: 0.02em;
-	cursor: pointer;
-	transition: background 0.15s, color 0.15s;
+  min-width: 40px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--mh-wp);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--mh-wp);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
-.mh-sizes button:hover { background: var(--mh-blue-tint); }
-.mh-sizes button.on { background: var(--mh-wp); color: #fff; }
+.mh-sizes button:hover {
+  background: var(--mh-blue-tint);
+}
+.mh-sizes button.on {
+  background: var(--mh-wp);
+  color: #fff;
+}
 
 /* Mono-button picker injected by assets/js/variation-buttons.js. Mirrors
    the .mh-sizes treatment used elsewhere in the prototype, with extra
    states for unavailable / aria-checked. */
 .mh-variation-buttons {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px;
-	margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 .mh-variation-buttons button {
-	min-width: 40px;
-	padding: 8px 12px;
-	border: 1.5px solid var(--mh-wp);
-	border-radius: 4px;
-	background: #fff;
-	color: var(--mh-wp);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 13px;
-	font-weight: 600;
-	letter-spacing: 0.02em;
-	cursor: pointer;
-	transition: background 0.15s, color 0.15s, opacity 0.15s;
+  min-width: 40px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--mh-wp);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--mh-wp);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    opacity 0.15s;
 }
 
 .mh-variation-buttons button:hover:not(.is-unavailable):not(.on) {
-	background: var(--mh-blue-tint);
+  background: var(--mh-blue-tint);
 }
 
 .mh-variation-buttons button.on {
-	background: var(--mh-wp);
-	color: #fff;
+  background: var(--mh-wp);
+  color: #fff;
 }
 
 .mh-variation-buttons button.is-unavailable {
-	opacity: 0.35;
-	cursor: not-allowed;
-	text-decoration: line-through;
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.mh-variation-buttons button {
-		transition: none;
-	}
+  .mh-variation-buttons button {
+    transition: none;
+  }
 }
 
 /* Revisions log */
 .mh-revisions {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10.5px;
-	color: var(--mh-slate);
-	line-height: 1.8;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  color: var(--mh-slate);
+  line-height: 1.8;
 }
 
-.mh-revisions b { color: var(--mh-ink); }
+.mh-revisions b {
+  color: var(--mh-ink);
+}
 
 .wp-block-woocommerce-add-to-cart-form .quantity input,
 .woocommerce-variation-add-to-cart .quantity input {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	border: 1px solid var(--mh-rule);
-	background: #fff;
-	padding: 10px 8px;
-	color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  border: 1px solid var(--mh-rule);
+  background: #fff;
+  padding: 10px 8px;
+  color: var(--mh-ink);
 }
 
 .wp-block-woocommerce-add-to-cart-form .single_add_to_cart_button,
 .woocommerce-variation-add-to-cart .single_add_to_cart_button {
-	background: var(--mh-wp);
-	border: 1px solid var(--mh-wp-d);
-	color: #fff;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-weight: 600;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	font-size: 13px;
-	padding: 12px 18px;
-	border-radius: 0;
-	transition: background 0.15s;
+  background: var(--mh-wp);
+  border: 1px solid var(--mh-wp-d);
+  color: #fff;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 13px;
+  padding: 12px 18px;
+  border-radius: 0;
+  transition: background 0.15s;
 }
 
 .wp-block-woocommerce-add-to-cart-form .single_add_to_cart_button:hover {
-	background: var(--mh-wp-d);
+  background: var(--mh-wp-d);
 }
 
 /* Variation pill: recolor to the prototype's WP-blue-on-card scheme with a
@@ -525,535 +558,550 @@ body {
  * renders pills as <li> with a --selected modifier; frontend renders them
  * as <label> wrapping a radio. Both shapes covered. */
 .wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill {
-	--pill-color: var(--mh-wp);
-	--pill-background-color: var(--mh-card);
-	border-color: var(--pill-color);
-	padding: 8px 12px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	font-weight: 600;
+  --pill-color: var(--mh-wp);
+  --pill-background-color: var(--mh-card);
+  border-color: var(--pill-color);
+  padding: 8px 12px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 600;
 }
 /* Bumps past WC's `.woocommerce-page label { margin-bottom: 0.7em }` so
  * pills sit flush on the frontend. Editor pills are <li>, immune to it. */
 label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 .wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill--selected,
-.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill:has(.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill-input:checked) {
-	--pill-color: #fff;
-	--pill-background-color: var(--mh-wp);
-	border-color: var(--mh-wp);
+.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill:has(
+    .wc-block-add-to-cart-with-options-variation-selector-attribute-options__pill-input:checked
+  ) {
+  --pill-color: #fff;
+  --pill-background-color: var(--mh-wp);
+  border-color: var(--mh-wp);
 }
 
 .product_meta,
 .wp-block-woocommerce-product-meta {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	letter-spacing: 0.04em;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--mh-slate);
+  letter-spacing: 0.04em;
 }
 
 .product_meta a,
 .wp-block-woocommerce-product-meta a {
-	color: var(--mh-wp);
+  color: var(--mh-wp);
 }
 
 /* WooCommerce notices */
 .woocommerce-notices-wrapper .woocommerce-message,
 .woocommerce-notices-wrapper .woocommerce-info,
 .woocommerce-notices-wrapper .woocommerce-error {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	border: 1px solid var(--mh-rule);
-	background: var(--mh-paper-2);
-	color: var(--mh-ink);
-	border-left: 3px solid var(--mh-wp);
-	border-radius: 0;
-	padding: 12px 16px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  border: 1px solid var(--mh-rule);
+  background: var(--mh-paper-2);
+  color: var(--mh-ink);
+  border-left: 3px solid var(--mh-wp);
+  border-radius: 0;
+  padding: 12px 16px;
 }
 
 .woocommerce-notices-wrapper .woocommerce-error {
-	border-left-color: var(--mh-accent);
+  border-left-color: var(--mh-accent);
 }
 
 /* Cart + checkout typography */
 .wp-block-woocommerce-cart,
 .wp-block-woocommerce-checkout {
-	font-family: 'Newsreader', Georgia, serif;
+  font-family: "Newsreader", Georgia, serif;
 }
 
 .wp-block-woocommerce-cart .wc-block-components-product-name,
 .wp-block-woocommerce-checkout .wc-block-components-product-name {
-	font-family: 'Newsreader', Georgia, serif;
-	font-size: 16px;
-	font-weight: 500;
-	color: var(--mh-ink);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--mh-ink);
 }
 
 .wp-block-woocommerce-cart .wc-block-components-product-price,
 .wp-block-woocommerce-checkout .wc-block-components-product-price,
 .wp-block-woocommerce-cart .wc-block-formatted-money-amount,
 .wp-block-woocommerce-checkout .wc-block-formatted-money-amount {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  color: var(--mh-ink);
 }
 
 .wp-block-woocommerce-cart .wc-block-components-button,
 .wp-block-woocommerce-checkout .wc-block-components-button,
 .wp-block-woocommerce-mini-cart .wc-block-components-button {
-	border-radius: 0;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
+  border-radius: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.wp-block-woocommerce-cart .wc-block-components-button.wc-block-cart__submit-button,
+.wp-block-woocommerce-cart
+  .wc-block-components-button.wc-block-cart__submit-button,
 .wc-block-components-checkout-place-order-button {
-	background: var(--mh-wp);
-	color: #fff;
+  background: var(--mh-wp);
+  color: #fff;
 }
 
 .wc-block-components-totals-wrapper {
-	border-color: var(--mh-rule);
+  border-color: var(--mh-rule);
 }
 
 /* ===== Mini cart drawer ===== */
 .wc-block-mini-cart__drawer {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	background: var(--mh-paper);
-	color: var(--mh-ink);
-	border-left: 1px solid var(--mh-rule);
-	max-width: 440px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  background: var(--mh-paper);
+  color: var(--mh-ink);
+  border-left: 1px solid var(--mh-rule);
+  max-width: 440px;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-drawer__content {
-	background: var(--mh-paper);
-	display: flex;
-	flex-direction: column;
+  background: var(--mh-paper);
+  display: flex;
+  flex-direction: column;
 }
 
 .wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-contents {
-	background: var(--mh-paper) !important;
-	display: flex;
-	flex-direction: column;
-	height: 100%;
+  background: var(--mh-paper) !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* Title row — replace fraktur with mono uppercase "CART · N ITEMS" */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__title {
-	margin: 0 !important;
-	padding: 16px 56px 16px 20px;
-	background: var(--mh-paper-2);
-	border-bottom: 1px solid var(--mh-rule);
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 11px !important;
-	font-weight: 600 !important;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: var(--mh-ink) !important;
-	display: flex;
-	align-items: baseline;
-	gap: 8px;
+  margin: 0 !important;
+  padding: 16px 56px 16px 20px;
+  background: var(--mh-paper-2);
+  border-bottom: 1px solid var(--mh-rule);
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mh-ink) !important;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-label-block {
-	font-size: 0;
-	line-height: 0;
+  font-size: 0;
+  line-height: 0;
 }
 
-.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-label-block::before {
-	content: 'cart ·';
-	font-size: 11px;
-	line-height: 1;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	font-weight: 600;
-	color: var(--mh-ink);
+.wc-block-mini-cart__drawer
+  .wp-block-woocommerce-mini-cart-title-label-block::before {
+  content: "cart ·";
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--mh-ink);
 }
 
-.wc-block-mini-cart__drawer .wp-block-woocommerce-mini-cart-title-items-counter-block {
-	font-weight: 400;
-	color: var(--mh-slate);
-	font-family: inherit;
-	font-size: 11px;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
+.wc-block-mini-cart__drawer
+  .wp-block-woocommerce-mini-cart-title-items-counter-block {
+  font-weight: 400;
+  color: var(--mh-slate);
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 /* Close button — square outline */
 .wc-block-mini-cart__drawer .wc-block-components-drawer__close-wrapper {
-	position: absolute;
-	top: 14px;
-	right: 14px;
-	z-index: 5;
-	height: auto;
-	padding: 0;
-	background: transparent;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  height: auto;
+  padding: 0;
+  background: transparent;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-drawer__close {
-	width: 28px !important;
-	height: 28px !important;
-	min-width: 0 !important;
-	min-height: 0 !important;
-	border: 1px solid var(--mh-rule) !important;
-	background: transparent !important;
-	color: var(--mh-ink) !important;
-	border-radius: 0 !important;
-	padding: 4px !important;
-	box-shadow: none !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border: 1px solid var(--mh-rule) !important;
+  background: transparent !important;
+  color: var(--mh-ink) !important;
+  border-radius: 0 !important;
+  padding: 4px !important;
+  box-shadow: none !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-drawer__close:hover {
-	background: var(--mh-accent) !important;
-	color: #fff !important;
-	border-color: var(--mh-accent) !important;
+  background: var(--mh-accent) !important;
+  color: #fff !important;
+  border-color: var(--mh-accent) !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-drawer__close svg {
-	width: 16px;
-	height: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Items area */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__items {
-	flex: 1;
-	overflow-y: auto;
-	padding: 0 20px;
-	background: var(--mh-paper);
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+  background: var(--mh-paper);
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart-items,
 .wc-block-mini-cart__drawer .wc-block-cart-items {
-	background: transparent;
-	border: 0;
-	margin: 0;
+  background: transparent;
+  border: 0;
+  margin: 0;
 }
 
-.wc-block-mini-cart__drawer .wc-block-cart-items__header { display: none; }
+.wc-block-mini-cart__drawer .wc-block-cart-items__header {
+  display: none;
+}
 
 .wc-block-mini-cart__drawer .wc-block-cart-items__row,
 .wc-block-mini-cart__drawer tr.wc-block-cart-items__row {
-	border-bottom: 1px dashed var(--mh-rule);
-	padding: 14px 0;
+  border-bottom: 1px dashed var(--mh-rule);
+  padding: 14px 0;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-items__row:last-child {
-	border-bottom: 0;
+  border-bottom: 0;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__image {
-	width: 68px;
-	padding: 0 12px 0 0;
+  width: 68px;
+  padding: 0 12px 0 0;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__image [hidden] {
-	display: none !important;
+  display: none !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__image > a,
 .wc-block-mini-cart__drawer .wc-block-cart-item__image > img:not([hidden]) {
-	display: block;
-	width: 68px;
-	height: 68px;
-	border-radius: 2px;
-	background: #fff;
+  display: block;
+  width: 68px;
+  height: 68px;
+  border-radius: 2px;
+  background: #fff;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__image img:not([hidden]) {
-	width: 68px;
-	height: 68px;
-	border: 1px solid var(--mh-rule);
-	background: #fff;
-	object-fit: contain;
-	border-radius: 2px;
-	display: block;
+  width: 68px;
+  height: 68px;
+  border: 1px solid var(--mh-rule);
+  background: #fff;
+  object-fit: contain;
+  border-radius: 2px;
+  display: block;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__product {
-	padding: 0;
+  padding: 0;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__wrap {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-product-name {
-	font-family: 'Newsreader', Georgia, serif !important;
-	font-size: 15px !important;
-	font-weight: 500 !important;
-	color: var(--mh-ink) !important;
-	line-height: 1.2 !important;
-	text-decoration: none !important;
-	text-wrap: balance;
+  font-family: "Newsreader", Georgia, serif !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: var(--mh-ink) !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+  text-wrap: balance;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__prices {
-	display: none;
+  display: none;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-product-metadata__description {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	color: var(--mh-slate);
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	margin: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  color: var(--mh-slate);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0;
 }
 
-.wc-block-mini-cart__drawer .wc-block-components-product-metadata__description p {
-	margin: 0;
+.wc-block-mini-cart__drawer
+  .wc-block-components-product-metadata__description
+  p {
+  margin: 0;
 }
 
 /* Quantity selector — mono pill */
 .wc-block-mini-cart__drawer .wc-block-cart-item__quantity {
-	margin-top: 8px;
-	display: flex;
-	align-items: center;
-	gap: 10px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-quantity-selector {
-	display: inline-flex !important;
-	align-items: stretch;
-	border: 1px solid var(--mh-rule) !important;
-	border-radius: 0 !important;
-	background: #fff;
-	height: auto;
-	min-height: 0;
-	padding: 0 !important;
+  display: inline-flex !important;
+  align-items: stretch;
+  border: 1px solid var(--mh-rule) !important;
+  border-radius: 0 !important;
+  background: #fff;
+  height: auto;
+  min-height: 0;
+  padding: 0 !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-quantity-selector::before,
 .wc-block-mini-cart__drawer .wc-block-components-quantity-selector::after {
-	display: none !important;
+  display: none !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-quantity-selector__button {
-	width: 24px;
-	height: 22px;
-	background: transparent !important;
-	border: 0 !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 14px !important;
-	color: var(--mh-ink) !important;
-	cursor: pointer;
-	line-height: 1;
-	padding: 0 !important;
-	min-width: 0 !important;
+  width: 24px;
+  height: 22px;
+  background: transparent !important;
+  border: 0 !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 14px !important;
+  color: var(--mh-ink) !important;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 !important;
+  min-width: 0 !important;
 }
 
-.wc-block-mini-cart__drawer .wc-block-components-quantity-selector__button:hover {
-	background: var(--mh-ink) !important;
-	color: var(--mh-paper) !important;
+.wc-block-mini-cart__drawer
+  .wc-block-components-quantity-selector__button:hover {
+  background: var(--mh-ink) !important;
+  color: var(--mh-paper) !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-quantity-selector__input {
-	width: 28px !important;
-	min-width: 0 !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 12px !important;
-	border: 0 !important;
-	border-left: 1px solid var(--mh-rule) !important;
-	border-right: 1px solid var(--mh-rule) !important;
-	border-radius: 0 !important;
-	text-align: center;
-	padding: 0 !important;
-	background: transparent;
-	height: 22px;
-	line-height: 22px;
-	color: var(--mh-ink);
+  width: 28px !important;
+  min-width: 0 !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 12px !important;
+  border: 0 !important;
+  border-left: 1px solid var(--mh-rule) !important;
+  border-right: 1px solid var(--mh-rule) !important;
+  border-radius: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  background: transparent;
+  height: 22px;
+  line-height: 22px;
+  color: var(--mh-ink);
 }
 
 /* Remove link — small underlined slate text */
 .wc-block-mini-cart__drawer .wc-block-cart-item__remove-link {
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 10px !important;
-	color: var(--mh-slate-2) !important;
-	background: transparent !important;
-	border: 0 !important;
-	padding: 0 !important;
-	text-decoration: underline;
-	text-transform: lowercase;
-	letter-spacing: 0;
-	cursor: pointer;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 10px !important;
+  color: var(--mh-slate-2) !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  text-decoration: underline;
+  text-transform: lowercase;
+  letter-spacing: 0;
+  cursor: pointer;
 }
 
 .wc-block-mini-cart__drawer .wc-block-cart-item__remove-link:hover {
-	color: var(--mh-accent) !important;
+  color: var(--mh-accent) !important;
 }
 
 /* Item total (right column) */
 .wc-block-mini-cart__drawer .wc-block-cart-item__total {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-weight: 600;
-	font-size: 13px;
-	color: var(--mh-ink);
-	text-align: right;
-	white-space: nowrap;
-	padding: 0 0 0 8px;
-	vertical-align: top;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--mh-ink);
+  text-align: right;
+  white-space: nowrap;
+  padding: 0 0 0 8px;
+  vertical-align: top;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-formatted-money-amount,
 .wc-block-mini-cart__drawer .wc-block-formatted-money-amount {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  color: var(--mh-ink);
 }
 
 /* Footer */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer {
-	background: var(--mh-paper-2);
-	border-top: 1px solid var(--mh-rule);
-	padding: 18px 20px 20px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
+  background: var(--mh-paper-2);
+  border-top: 1px solid var(--mh-rule);
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 13px;
-	font-weight: 600;
-	color: var(--mh-ink);
-	border-top: 1px solid var(--mh-rule);
-	padding-top: 8px;
-	margin: 0;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	justify-content: space-between;
+.wc-block-mini-cart__drawer
+  .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mh-ink);
+  border-top: 1px solid var(--mh-rule);
+  padding-top: 8px;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-totals-item__label {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	text-transform: lowercase;
-	font-weight: 500;
-	letter-spacing: 0.04em;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--mh-slate);
+  text-transform: lowercase;
+  font-weight: 500;
+  letter-spacing: 0.04em;
 }
 
-.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__label {
-	font-size: 15px;
-	font-weight: 700;
-	color: var(--mh-ink);
-	text-transform: lowercase;
-	letter-spacing: 0;
+.wc-block-mini-cart__drawer
+  .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal
+  .wc-block-components-totals-item__label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--mh-ink);
+  text-transform: lowercase;
+  letter-spacing: 0;
 }
 
-.wc-block-mini-cart__drawer .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal .wc-block-components-totals-item__value {
-	font-size: 15px;
-	font-weight: 700;
-	color: var(--mh-ink);
+.wc-block-mini-cart__drawer
+  .wc-block-components-totals-item.wc-block-mini-cart__footer-subtotal
+  .wc-block-components-totals-item__value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--mh-ink);
 }
 
 .wc-block-mini-cart__drawer .wc-block-components-totals-item__description {
-	flex: 1 1 100%;
-	font-size: 10px;
-	color: var(--mh-slate-2);
-	margin-top: 4px;
-	letter-spacing: 0.04em;
-	text-align: left;
+  flex: 1 1 100%;
+  font-size: 10px;
+  color: var(--mh-slate-2);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+  text-align: left;
 }
 
 /* Footer actions: stack View cart (outline) + Checkout (solid blue) */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-actions {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-cart {
-	background: transparent !important;
-	color: var(--mh-ink) !important;
-	border: 1px solid var(--mh-rule) !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 11px !important;
-	font-weight: 500;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	padding: 10px 12px !important;
-	border-radius: 0 !important;
-	text-align: center;
-	box-shadow: none !important;
+  background: transparent !important;
+  color: var(--mh-ink) !important;
+  border: 1px solid var(--mh-rule) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 11px !important;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 12px !important;
+  border-radius: 0 !important;
+  text-align: center;
+  box-shadow: none !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-cart:hover {
-	background: var(--mh-ink) !important;
-	color: var(--mh-paper) !important;
-	border-color: var(--mh-ink) !important;
+  background: var(--mh-ink) !important;
+  color: var(--mh-paper) !important;
+  border-color: var(--mh-ink) !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout {
-	background: var(--mh-wp) !important;
-	color: #fff !important;
-	border: 1px solid var(--mh-wp-d) !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 12px !important;
-	font-weight: 600;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	padding: 12px !important;
-	border-radius: 0 !important;
-	text-align: center;
-	box-shadow: none !important;
+  background: var(--mh-wp) !important;
+  color: #fff !important;
+  border: 1px solid var(--mh-wp-d) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 12px !important;
+  border-radius: 0 !important;
+  text-align: center;
+  box-shadow: none !important;
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout::after {
-	content: ' →';
+  content: " →";
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer-checkout:hover {
-	background: var(--mh-wp-d) !important;
+  background: var(--mh-wp-d) !important;
 }
 
 /* Mono caption appended to footer */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__footer::after {
-	content: 'ships worldwide · profits to the WordPress Foundation · 14-day defect window';
-	display: block;
-	text-align: center;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	color: var(--mh-slate-2);
-	letter-spacing: 0.04em;
-	margin-top: 8px;
+  content: "ships worldwide · profits to the WordPress Foundation · 14-day defect window";
+  display: block;
+  text-align: center;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  color: var(--mh-slate-2);
+  letter-spacing: 0.04em;
+  margin-top: 8px;
 }
 
 /* Empty state — fraktur */
 .wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper {
-	padding: 60px 24px;
-	text-align: center;
-	color: var(--mh-slate);
+  padding: 60px 24px;
+  text-align: center;
+  color: var(--mh-slate);
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper p {
-	font-family: 'Newsreader', Georgia, serif;
-	font-style: italic;
-	font-size: 16px;
-	color: var(--mh-slate);
-	margin: 0 0 18px;
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--mh-slate);
+  margin: 0 0 18px;
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__empty-cart-wrapper p strong {
-	font-style: normal;
-	font-weight: 500;
-	color: var(--mh-ink);
+  font-style: normal;
+  font-weight: 500;
+  color: var(--mh-ink);
 }
 
 .wc-block-mini-cart__drawer .wc-block-mini-cart__shopping-button {
-	background: var(--mh-ink) !important;
-	color: var(--mh-paper) !important;
-	border: 1px solid var(--mh-ink) !important;
-	border-radius: 0 !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 11px !important;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	padding: 10px 16px !important;
+  background: var(--mh-ink) !important;
+  color: var(--mh-paper) !important;
+  border: 1px solid var(--mh-ink) !important;
+  border-radius: 0 !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 16px !important;
 }
 
 /* ============================================================
@@ -1062,140 +1110,142 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
    /explore/03-hook-loop/#/checkout
    ============================================================ */
 .checkout-view {
-	background: var(--mh-paper);
-	min-height: calc(100vh - 28px);
-	display: flex;
-	flex-direction: column;
-	padding: 0;
+  background: var(--mh-paper);
+  min-height: calc(100vh - 28px);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
 }
 
 .checkout-view .ckhead {
-	border-bottom: 1px solid var(--mh-rule);
-	padding: 16px var(--mh-gutter);
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	background: var(--mh-paper-2);
-	flex-wrap: wrap;
-	gap: 8px;
+  border-bottom: 1px solid var(--mh-rule);
+  padding: 16px var(--mh-gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--mh-slate);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--mh-paper-2);
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .checkout-view .ckhead .crumb a {
-	color: var(--mh-ink);
-	text-decoration: none;
-	border-bottom: 1px dashed var(--mh-slate-2);
+  color: var(--mh-ink);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--mh-slate-2);
 }
 .checkout-view .ckhead .crumb a:hover {
-	border-bottom-color: var(--mh-wp);
-	color: var(--mh-wp);
+  border-bottom-color: var(--mh-wp);
+  color: var(--mh-wp);
 }
 .checkout-view .ckhead .crumb b {
-	color: var(--mh-ink);
-	margin: 0 8px;
+  color: var(--mh-ink);
+  margin: 0 8px;
 }
 .checkout-view .ckhead .meta {
-	display: flex;
-	gap: 16px;
-	align-items: center;
-	color: var(--mh-slate-2);
-	flex-wrap: wrap;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  color: var(--mh-slate-2);
+  flex-wrap: wrap;
 }
 .checkout-view .ckhead .meta b {
-	color: var(--mh-ink);
+  color: var(--mh-ink);
 }
 
 .checkout-view .step-nav {
-	display: flex;
-	gap: 0;
-	border-bottom: 1px solid var(--mh-rule);
-	padding: 0 var(--mh-gutter);
-	background: var(--mh-paper);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--mh-rule);
+  padding: 0 var(--mh-gutter);
+  background: var(--mh-paper);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
 }
 .checkout-view .step-nav .step {
-	padding: 14px 18px;
-	color: var(--mh-slate-2);
-	display: flex;
-	gap: 8px;
-	align-items: baseline;
-	border-right: 1px solid var(--mh-rule);
+  padding: 14px 18px;
+  color: var(--mh-slate-2);
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  border-right: 1px solid var(--mh-rule);
 }
 .checkout-view .step-nav .step .n {
-	color: var(--mh-slate-2);
-	font-size: 9px;
-	border: 1px solid var(--mh-rule);
-	padding: 1px 5px;
-	border-radius: 1px;
+  color: var(--mh-slate-2);
+  font-size: 9px;
+  border: 1px solid var(--mh-rule);
+  padding: 1px 5px;
+  border-radius: 1px;
 }
 .checkout-view .step-nav .step.now {
-	color: var(--mh-ink);
+  color: var(--mh-ink);
 }
 .checkout-view .step-nav .step.now .n {
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-	border-color: var(--mh-ink);
+  background: var(--mh-ink);
+  color: var(--mh-paper);
+  border-color: var(--mh-ink);
 }
 .checkout-view .step-nav .step.done {
-	color: var(--mh-slate);
+  color: var(--mh-slate);
 }
 
 /* WooCommerce Checkout Block proper */
 .checkout-view .wc-block-checkout,
 .checkout-view .wp-block-woocommerce-checkout {
-	flex: 1;
-	max-width: 1100px;
-	margin: 0 auto;
-	padding: 0 40px;
-	box-sizing: border-box;
-	width: 100%;
+  flex: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .checkout-view .wc-block-checkout__main,
 .checkout-view .wp-block-woocommerce-checkout-fields-block {
-	padding: 32px 36px 48px 0;
-	border-right: 1px solid var(--mh-rule);
+  padding: 32px 36px 48px 0;
+  border-right: 1px solid var(--mh-rule);
 }
 
 .checkout-view .wc-block-components-checkout-step {
-	padding: 0 0 28px;
-	border-bottom: 1px dashed var(--mh-rule);
-	margin-bottom: 28px;
+  padding: 0 0 28px;
+  border-bottom: 1px dashed var(--mh-rule);
+  margin-bottom: 28px;
 }
-.checkout-view .wc-block-checkout__main > .wc-block-components-checkout-step:last-of-type {
-	border-bottom: 0;
+.checkout-view
+  .wc-block-checkout__main
+  > .wc-block-components-checkout-step:last-of-type {
+  border-bottom: 0;
 }
 .checkout-view .wc-block-components-checkout-step__heading {
-	margin-bottom: 14px;
-	display: flex;
-	align-items: baseline;
-	gap: 10px;
-	flex-wrap: wrap;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 .checkout-view .wc-block-components-checkout-step__title {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	color: var(--mh-slate);
-	margin: 0;
-	font-weight: 600;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mh-slate);
+  margin: 0;
+  font-weight: 600;
 }
 .checkout-view .wc-block-components-checkout-step__title::before {
-	content: '§ ';
-	color: var(--mh-wp);
-	font-weight: 700;
+  content: "§ ";
+  color: var(--mh-wp);
+  font-weight: 700;
 }
 .checkout-view .wc-block-components-checkout-step__description {
-	font-family: 'Newsreader', Georgia, serif;
-	font-style: italic;
-	font-size: 13px;
-	color: var(--mh-slate-2);
-	font-weight: 400;
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mh-slate-2);
+  font-weight: 400;
 }
 
 /* Form fields */
@@ -1204,285 +1254,296 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 .checkout-view .wc-block-components-text-input textarea,
 .checkout-view .wc-block-components-address-form input,
 .checkout-view .wc-block-components-address-form select {
-	border: 1px solid var(--mh-rule) !important;
-	background: #fff !important;
-	padding: 10px 12px !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 13px !important;
-	color: var(--mh-ink) !important;
-	border-radius: 0 !important;
-	line-height: 1.4;
-	box-sizing: border-box;
-	width: 100%;
+  border: 1px solid var(--mh-rule) !important;
+  background: #fff !important;
+  padding: 10px 12px !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 13px !important;
+  color: var(--mh-ink) !important;
+  border-radius: 0 !important;
+  line-height: 1.4;
+  box-sizing: border-box;
+  width: 100%;
 }
 .checkout-view .wc-block-components-text-input label,
 .checkout-view .wc-block-components-address-form label {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: var(--mh-slate-2);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mh-slate-2);
 }
 .checkout-view .wc-block-components-text-input input:focus,
 .checkout-view .wc-block-components-text-input select:focus,
 .checkout-view .wc-block-components-text-input textarea:focus {
-	outline: none;
-	border-color: var(--mh-wp) !important;
-	box-shadow: 0 0 0 1px var(--mh-wp);
+  outline: none;
+  border-color: var(--mh-wp) !important;
+  box-shadow: 0 0 0 1px var(--mh-wp);
 }
 
 /* Radio control (shipping methods) */
 .checkout-view .wc-block-components-radio-control__option {
-	border: 1px solid var(--mh-rule);
-	background: #fff;
-	padding: 12px 14px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	color: var(--mh-ink);
-	border-radius: 0;
+  border: 1px solid var(--mh-rule);
+  background: #fff;
+  padding: 12px 14px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--mh-ink);
+  border-radius: 0;
 }
 .checkout-view .wc-block-components-radio-control__option--checked,
 .checkout-view .wc-block-components-radio-control__option-checked {
-	border-color: var(--mh-wp);
-	box-shadow: 0 0 0 1px var(--mh-wp);
-	background: var(--mh-paper-2);
+  border-color: var(--mh-wp);
+  box-shadow: 0 0 0 1px var(--mh-wp);
+  background: var(--mh-paper-2);
 }
 .checkout-view .wc-block-components-radio-control__option input[type="radio"] {
-	accent-color: var(--mh-wp);
+  accent-color: var(--mh-wp);
 }
 
 /* Terms */
 .checkout-view .wc-block-checkout-terms-block label,
 .checkout-view .wp-block-woocommerce-checkout-terms-block label {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	color: var(--mh-slate);
-	line-height: 1.55;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--mh-slate);
+  line-height: 1.55;
 }
 .checkout-view .wc-block-checkout-terms-block input[type="checkbox"] {
-	accent-color: var(--mh-wp);
+  accent-color: var(--mh-wp);
 }
 .checkout-view .wc-block-checkout-terms-block a {
-	color: var(--mh-wp);
-	border-bottom: 1px dashed var(--mh-wp);
+  color: var(--mh-wp);
+  border-bottom: 1px dashed var(--mh-wp);
 }
 
 /* Place order button */
 .checkout-view .wc-block-components-checkout-place-order-button {
-	width: 100%;
-	padding: 16px;
-	background: var(--mh-ink) !important;
-	color: var(--mh-paper) !important;
-	border: 1px solid var(--mh-ink) !important;
-	border-radius: 0 !important;
-	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-	font-size: 13px !important;
-	font-weight: 600;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
+  width: 100%;
+  padding: 16px;
+  background: var(--mh-ink) !important;
+  color: var(--mh-paper) !important;
+  border: 1px solid var(--mh-ink) !important;
+  border-radius: 0 !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 13px !important;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .checkout-view .wc-block-components-checkout-place-order-button:hover {
-	background: var(--mh-wp) !important;
-	border-color: var(--mh-wp) !important;
+  background: var(--mh-wp) !important;
+  border-color: var(--mh-wp) !important;
 }
 
 /* Sidebar (totals) */
 .checkout-view .wc-block-checkout__sidebar,
 .checkout-view .wp-block-woocommerce-checkout-totals-block {
-	padding: 32px 0 32px 36px;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
+  padding: 32px 0 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .checkout-view .wc-block-components-order-summary__heading,
 .checkout-view .wp-block-woocommerce-checkout-order-summary-heading-block {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	color: var(--mh-slate);
-	margin: 0 0 14px;
-	font-weight: 600;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mh-slate);
+  margin: 0 0 14px;
+  font-weight: 600;
 }
 .checkout-view .wc-block-components-order-summary__heading::before {
-	content: '§ ';
-	color: var(--mh-wp);
-	font-weight: 700;
+  content: "§ ";
+  color: var(--mh-wp);
+  font-weight: 700;
 }
 
 .checkout-view .wc-block-components-order-summary-item {
-	border-bottom: 1px solid var(--mh-rule);
-	padding: 10px 0;
+  border-bottom: 1px solid var(--mh-rule);
+  padding: 10px 0;
 }
 .checkout-view .wc-block-components-order-summary-item__description,
 .checkout-view .wc-block-components-product-name {
-	font-family: 'Newsreader', Georgia, serif;
-	font-size: 14px;
-	color: var(--mh-ink);
-	line-height: 1.3;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 14px;
+  color: var(--mh-ink);
+  line-height: 1.3;
 }
 .checkout-view .wc-block-components-order-summary-item__quantity {
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 10px;
-	border: 1.5px solid var(--mh-paper);
+  background: var(--mh-ink);
+  color: var(--mh-paper);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  border: 1.5px solid var(--mh-paper);
 }
 .checkout-view .wc-block-components-order-summary-item__total-price,
 .checkout-view .wc-block-components-product-price {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	color: var(--mh-ink);
-	font-weight: 600;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--mh-ink);
+  font-weight: 600;
 }
 
 /* Coupon */
 .checkout-view .wc-block-components-totals-coupon,
 .checkout-view .wp-block-woocommerce-checkout-order-summary-coupon-form-block {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
 }
 .checkout-view .wc-block-components-totals-coupon__button {
-	color: var(--mh-wp) !important;
-	border-bottom: 1px dashed var(--mh-wp);
+  color: var(--mh-wp) !important;
+  border-bottom: 1px dashed var(--mh-wp);
 }
 .checkout-view .wc-block-components-totals-coupon__content input {
-	border: 1px solid var(--mh-rule);
-	border-radius: 0;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
+  border: 1px solid var(--mh-rule);
+  border-radius: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 .checkout-view .wc-block-components-totals-coupon__content button {
-	background: var(--mh-ink);
-	color: var(--mh-paper);
-	border: 1px solid var(--mh-ink);
-	border-radius: 0;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 11px;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
+  background: var(--mh-ink);
+  color: var(--mh-paper);
+  border: 1px solid var(--mh-ink);
+  border-radius: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .checkout-view .wc-block-components-totals-coupon__content button:hover {
-	background: var(--mh-wp);
-	border-color: var(--mh-wp);
+  background: var(--mh-wp);
+  border-color: var(--mh-wp);
 }
 
 /* Totals */
 .checkout-view .wc-block-components-totals-wrapper {
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 12px;
-	border-top: 1px solid var(--mh-rule);
-	padding-top: 8px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  border-top: 1px solid var(--mh-rule);
+  padding-top: 8px;
 }
 .checkout-view .wc-block-components-totals-item {
-	padding: 6px 0;
-	color: var(--mh-ink);
+  padding: 6px 0;
+  color: var(--mh-ink);
 }
 .checkout-view .wc-block-components-totals-item__label {
-	color: var(--mh-slate);
+  color: var(--mh-slate);
 }
-.checkout-view .wc-block-components-totals-item--discount .wc-block-components-totals-item__value {
-	color: var(--mh-wp);
+.checkout-view
+  .wc-block-components-totals-item--discount
+  .wc-block-components-totals-item__value {
+  color: var(--mh-wp);
 }
 .checkout-view .wc-block-components-totals-footer-item {
-	border-top: 1px solid var(--mh-rule);
-	margin-top: 6px;
-	padding: 12px 0 0;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 14px;
-	font-weight: 700;
+  border-top: 1px solid var(--mh-rule);
+  margin-top: 6px;
+  padding: 12px 0 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 @media (max-width: 800px) {
-	.checkout-view .wc-block-checkout,
-	.checkout-view .wp-block-woocommerce-checkout {
-		padding: 0 20px;
-	}
-	.checkout-view .wc-block-checkout__main,
-	.checkout-view .wp-block-woocommerce-checkout-fields-block {
-		padding: 24px 0 32px;
-		border-right: 0;
-		border-top: 1px solid var(--mh-rule);
-		order: 2;
-	}
-	.checkout-view .wc-block-checkout__sidebar,
-	.checkout-view .wp-block-woocommerce-checkout-totals-block {
-		padding: 24px 0;
-		order: 1;
-		position: static;
-		border-bottom: 1px solid var(--mh-rule);
-	}
-	.checkout-view .step-nav {
-		padding: 0 20px;
-		overflow-x: auto;
-	}
-	.checkout-view .step-nav .step {
-		padding: 12px 14px;
-		flex-shrink: 0;
-	}
+  .checkout-view .wc-block-checkout,
+  .checkout-view .wp-block-woocommerce-checkout {
+    padding: 0 20px;
+  }
+  .checkout-view .wc-block-checkout__main,
+  .checkout-view .wp-block-woocommerce-checkout-fields-block {
+    padding: 24px 0 32px;
+    border-right: 0;
+    border-top: 1px solid var(--mh-rule);
+    order: 2;
+  }
+  .checkout-view .wc-block-checkout__sidebar,
+  .checkout-view .wp-block-woocommerce-checkout-totals-block {
+    padding: 24px 0;
+    order: 1;
+    position: static;
+    border-bottom: 1px solid var(--mh-rule);
+  }
+  .checkout-view .step-nav {
+    padding: 0 20px;
+    overflow-x: auto;
+  }
+  .checkout-view .step-nav .step {
+    padding: 12px 14px;
+    flex-shrink: 0;
+  }
 }
 
 /* Checkout — strip padding/border from order summary block + image */
 .checkout-view .wp-block-post-content {
-	padding-top: 0;
+  padding-top: 0;
 }
 .checkout-view .wp-block-woocommerce-checkout-order-summary-block {
-	border: 0;
-	padding: 0;
-	background: transparent;
+  border: 0;
+  padding: 0;
+  background: transparent;
 }
 .checkout-view .wc-block-components-order-summary-item__image {
-	border: 1px solid var(--mh-rule);
-	background: var(--mh-paper-2);
+  border: 1px solid var(--mh-rule);
+  background: var(--mh-paper-2);
 }
 
 /* Order summary — constrain thumbnail to 44×44 like prototype */
 .checkout-view .wc-block-components-order-summary-item {
-	display: grid;
-	grid-template-columns: 44px 1fr auto;
-	gap: 10px;
-	align-items: center;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 10px;
+  align-items: center;
 }
 .checkout-view .wc-block-components-order-summary-item__image {
-	width: 44px;
-	height: 44px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
-	position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
 }
 .checkout-view .wc-block-components-order-summary-item__image img {
-	max-width: 90%;
-	max-height: 90%;
-	object-fit: contain;
-	width: auto;
-	height: auto;
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  width: auto;
+  height: auto;
 }
 
 /* Payment radio — let WC's native layout breathe; remove the grid override
    inherited from the prototype's shipping-method radios. */
-.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control__option,
-.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control-accordion-option {
-	display: block;
-	padding: 12px 14px 12px 38px;
-	position: relative;
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__option,
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control-accordion-option {
+  display: block;
+  padding: 12px 14px 12px 38px;
+  position: relative;
 }
-.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control__input,
-.checkout-view .wp-block-woocommerce-checkout-payment-block .wc-block-components-radio-control__option input[type="radio"] {
-	position: absolute;
-	left: 14px;
-	top: 14px;
-	margin: 0;
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__input,
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__option
+  input[type="radio"] {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  margin: 0;
 }
 
 /* Totals — drop WC's own border on the footer/wrapper so we don't double up
    with our top rule. */
 .checkout-view .wc-block-components-totals-footer-item {
-	border-bottom: 0;
+  border-bottom: 0;
 }
 .checkout-view .wp-block-woocommerce-checkout-order-summary-totals-block,
 .checkout-view .wp-block-woocommerce-checkout-order-summary-subtotal-block,
@@ -1490,29 +1551,28 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 .checkout-view .wp-block-woocommerce-checkout-order-summary-taxes-block,
 .checkout-view .wp-block-woocommerce-checkout-order-summary-discount-block,
 .checkout-view .wp-block-woocommerce-checkout-order-summary-fee-block {
-	border: 0;
+  border: 0;
 }
 
 /* Order summary thumbnail — force 44×44, top-align in row, override WC's
    width-only constraint which lets tall images stretch the wrapper. */
 .checkout-view .wc-block-components-order-summary-item {
-	align-items: flex-start;
+  align-items: flex-start;
 }
 .checkout-view .wc-block-components-order-summary-item__image {
-	width: 44px !important;
-	height: 44px !important;
-	margin-top: 8px;
-	padding: 0 !important;
-	flex-shrink: 0;
+  width: 44px !important;
+  height: 44px !important;
+  margin-top: 8px;
+  padding: 0 !important;
+  flex-shrink: 0;
 }
 .checkout-view .wc-block-components-order-summary-item__image > img {
-	max-width: 44px !important;
-	max-height: 44px !important;
-	width: auto !important;
-	height: auto !important;
-	object-fit: contain;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain;
 }
-
 
 /* ============================================================
    PDP MODAL — native <dialog> + <iframe>.
@@ -1528,144 +1588,147 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
    through everywhere except the .mh-pdp card itself.
    ============================================================ */
 .mh-pdp-dialog {
-	width: 100vw;
-	height: 100dvh;
-	max-width: 100vw;
-	max-height: 100dvh;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: transparent;
-	overflow: hidden;
-	/* Open = fade only. The dialog appears while the iframe is still
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  /* Open = fade only. The dialog appears while the iframe is still
 	   loading the wapuu, so the slide-up belongs to the content reveal
 	   (on the frame, below), not here. Close = fade + settle downward,
 	   mirroring the prototype's mb-modal-out curve. `overlay`/`display`
 	   ride `allow-discrete` so the dialog stays in the top layer through
 	   the close transition. */
-	opacity: 1;
-	transform: translateY(0) scale(1);
-	transform-origin: 50% 30%;
-	transition:
-		opacity 0.25s ease,
-		transform 0.32s cubic-bezier(.4, .1, .7, 1),
-		overlay 0.32s allow-discrete,
-		display 0.32s allow-discrete;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transform-origin: 50% 30%;
+  transition:
+    opacity 0.25s ease,
+    transform 0.32s cubic-bezier(0.4, 0.1, 0.7, 1),
+    overlay 0.32s allow-discrete,
+    display 0.32s allow-discrete;
 }
 .mh-pdp-dialog:not([open]) {
-	opacity: 0;
-	transform: translateY(18px) scale(0.985);
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
 }
 @starting-style {
-	.mh-pdp-dialog[open] {
-		opacity: 0;
-	}
+  .mh-pdp-dialog[open] {
+    opacity: 0;
+  }
 }
 
 .mh-pdp-dialog::backdrop {
-	/* Light frosted-glass scrim, matching the prototype's .modal-back:
+  /* Light frosted-glass scrim, matching the prototype's .modal-back:
 	   a paper-grey wash over a heavy blur, so the real catalog reads as
 	   a soft texture behind the card rather than a dark dimming. */
-	background: rgba(240, 240, 241, 0.4);
-	-webkit-backdrop-filter: blur(10px) saturate(120%);
-	backdrop-filter: blur(10px) saturate(120%);
-	opacity: 1;
-	transition:
-		opacity 0.28s cubic-bezier(.2, .7, .3, 1),
-		overlay 0.28s allow-discrete,
-		display 0.28s allow-discrete;
+  background: rgba(240, 240, 241, 0.4);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  backdrop-filter: blur(10px) saturate(120%);
+  opacity: 1;
+  transition:
+    opacity 0.28s cubic-bezier(0.2, 0.7, 0.3, 1),
+    overlay 0.28s allow-discrete,
+    display 0.28s allow-discrete;
 }
 .mh-pdp-dialog:not([open])::backdrop {
-	opacity: 0;
+  opacity: 0;
 }
 @starting-style {
-	.mh-pdp-dialog[open]::backdrop {
-		opacity: 0;
-	}
+  .mh-pdp-dialog[open]::backdrop {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.mh-pdp-dialog,
-	.mh-pdp-dialog::backdrop,
-	.mh-pdp-dialog__frame {
-		transition: none;
-	}
+  .mh-pdp-dialog,
+  .mh-pdp-dialog::backdrop,
+  .mh-pdp-dialog__frame {
+    transition: none;
+  }
 }
 
 .mh-pdp-dialog__frame {
-	display: block;
-	width: 100%;
-	height: 100%;
-	border: 0;
-	background: transparent;
-	/* Content reveal: when the iframe finishes loading and `.is-loading`
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  /* Content reveal: when the iframe finishes loading and `.is-loading`
 	   is dropped, the product slides up 18px + settles from scale(0.985)
 	   with a slight overshoot, fading in — the prototype's mb-modal curve.
 	   Entering the loading state snaps (transition: none), so this only
 	   ever plays on the way *out* of loading, never as a reverse. */
-	opacity: 1;
-	transform: translateY(0) scale(1);
-	transform-origin: 50% 30%;
-	transition:
-		opacity 0.25s ease,
-		transform 0.42s cubic-bezier(.22, .9, .28, 1.06);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transform-origin: 50% 30%;
+  transition:
+    opacity 0.25s ease,
+    transform 0.42s cubic-bezier(0.22, 0.9, 0.28, 1.06);
 }
 .mh-pdp-dialog.is-loading .mh-pdp-dialog__frame {
-	opacity: 0;
-	transform: translateY(18px) scale(0.985);
-	transition: none;
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+  transition: none;
 }
 
 /* Loading overlay — the wapuu reveal, centred over the dimmed catalog. */
 .mh-pdp-dialog__loading {
-	position: absolute;
-	inset: 0;
-	display: none;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 32px;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: 13px;
-	color: var(--mh-rule);
-	letter-spacing: 0.02em;
-	pointer-events: none;
-	white-space: nowrap;
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--mh-rule);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  white-space: nowrap;
 }
 .mh-pdp-dialog.is-loading .mh-pdp-dialog__loading {
-	display: flex;
+  display: flex;
 }
 @media (max-width: 600px) {
-	.mh-pdp-dialog__loading {
-		gap: 20px;
-		font-size: 12px;
-	}
+  .mh-pdp-dialog__loading {
+    gap: 20px;
+    font-size: 12px;
+  }
 }
 .mh-pdp-dialog__loading-line::after {
-	content: '\2588';
-	display: inline-block;
-	width: 0.55em;
-	margin-left: 0.3em;
-	vertical-align: -0.06em;
-	color: var(--mh-wp);
-	animation: mh-caret 1.1s steps(2, start) infinite;
+  content: "\2588";
+  display: inline-block;
+  width: 0.55em;
+  margin-left: 0.3em;
+  vertical-align: -0.06em;
+  color: var(--mh-wp);
+  animation: mh-caret 1.1s steps(2, start) infinite;
 }
 .mh-wapuu-ascii {
-	margin: 0;
-	font-family: 'JetBrains Mono', ui-monospace, monospace;
-	font-size: clamp(3.2px, 1.4vw, 6px);
-	line-height: 1.05;
-	color: #9fb1ff;
-	white-space: pre;
-	letter-spacing: 0;
+  margin: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: clamp(3.2px, 1.4vw, 6px);
+  line-height: 1.05;
+  color: #9fb1ff;
+  white-space: pre;
+  letter-spacing: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-	.mh-pdp-dialog__loading-line::after { animation: none; opacity: 0.9; }
+  .mh-pdp-dialog__loading-line::after {
+    animation: none;
+    opacity: 0.9;
+  }
 }
 
 /* Parent (catalog) scroll-lock while the dialog is open. */
 body.mh-pdp-open {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 /* Embedded product page (iframe src carries ?mh-embed=1): drop the
@@ -1676,6 +1739,5 @@ body.mh-pdp-open {
    inline style, which a plain selector rule can't override. */
 body.mh-pdp-embed,
 body.mh-pdp-embed .mh-pdp-wrap {
-	background: transparent !important;
+  background: transparent !important;
 }
-

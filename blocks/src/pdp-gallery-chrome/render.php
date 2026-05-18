@@ -10,10 +10,10 @@
  *   figure number — it's catalog flavour, not data) and CATEGORY is
  *   the first product taxonomy term.
  * - Right pill: "see more · 1/N" image counter. Bound to our own
- *   `actions.next` (registered in view.js) which mutates the locked
- *   WooCommerce product-gallery store's context to advance — and
- *   wraps back to the first image after the last, which WC's own
- *   `selectNextImage` does not.
+ *   `actions.next` (registered in view.js) which computes a wrapped
+ *   next index, then delegates to WooCommerce product-gallery's private
+ *   `selectImage` action. This wraps back to the first image after the
+ *   last, which WC's own `selectNextImage` does not.
  *
  * The block must live inside `wp:woocommerce/product-gallery` (enforced
  * by block.json `ancestor`) so the WC gallery's `data-wp-context` is

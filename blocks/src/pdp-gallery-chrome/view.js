@@ -9,27 +9,27 @@
  *   guaranteed by block.json `ancestor`: our block lives inside the
  *   gallery wrapper, so the closest `data-wp-context` is always WC's.
  *
- * - `actions.next` advances the gallery image and wraps back to the
- *   first after the last (WC's own `selectNextImage` clamps at
- *   length - 1, which is wrong for a "see more" toggle). We bypass
- *   WC's action because calling it across namespaces from JS doesn't
- *   switch iAPI's directive scope, so its internal `getContext()` /
- *   `getElement()` would resolve in our namespace instead of WC's.
+ * - `actions.next` computes the wrapped next index, then calls Woo's
+ *   private `actions.selectImage()`. Woo's own `selectNextImage()`
+ *   clamps at length - 1, which is wrong for a "see more" toggle.
  *
- *   Instead we mutate WC's context directly (`selectedImageId`,
- *   `isDisabledPrevious`, `isDisabledNext`) — reactive, so any of
- *   WC's directives that read those values update — and replicate
- *   WC's smooth scroll of the large-image container so the visible
- *   image actually changes.
+ *   Keep the `selectImage` method lookup inside our action. The iAPI
+ *   store proxy then captures the current event scope (our button) but
+ *   switches the namespace to Woo's store, so Woo's internal
+ *   `getContext()` / `getElement()` still resolve correctly.
  */
-import { store, getContext, getElement } from '@wordpress/interactivity';
+import { store, getContext } from '@wordpress/interactivity';
 
 const wcLock =
 	'I acknowledge that using a private store means my plugin will inevitably break on the next store release.';
 
-// Hold a reference so iAPI knows we're a consumer of the locked
-// namespace. We don't use any methods on it directly.
-store( 'woocommerce/product-gallery', {}, { lock: wcLock } );
+// Hold a reference to Woo's locked namespace. We access methods lazily
+// inside actions so the iAPI proxy captures the active element scope.
+const { actions: productGalleryActions } = store(
+	'woocommerce/product-gallery',
+	{},
+	{ lock: wcLock }
+);
 
 store( 'mercantile/pdp-gallery-chrome', {
 	state: {
@@ -62,47 +62,11 @@ store( 'mercantile/pdp-gallery-chrome', {
 			const total = ctx.imageData.length;
 			const cur = ctx.imageData.indexOf( ctx.selectedImageId );
 			const nextIdx = ( ( cur < 0 ? 0 : cur ) + 1 ) % total;
-			const nextId = ctx.imageData[ nextIdx ];
+			const selectImage = productGalleryActions.selectImage;
 
-			// Reactive mutation of WC's context. Other WC directives
-			// reading these stay in sync (button-disabled state etc.).
-			ctx.selectedImageId = nextId;
-			ctx.isDisabledPrevious = nextIdx === 0;
-			ctx.isDisabledNext = nextIdx === total - 1;
-
-			// Replicate WC's smooth-scroll of the large-image strip so
-			// the visible image actually changes. WC keeps all images
-			// in a horizontal scroller and uses `scrollTo` to bring
-			// the selected one into the viewport.
-			const ref = getElement()?.ref;
-			if ( ! ref ) {
-				return;
+			if ( typeof selectImage === 'function' ) {
+				selectImage( nextIdx );
 			}
-			const gallery = ref.closest(
-				'.wp-block-woocommerce-product-gallery'
-			);
-			if ( ! gallery ) {
-				return;
-			}
-			const container = gallery.querySelector(
-				'.wc-block-product-gallery-large-image__container'
-			);
-			if ( ! container ) {
-				return;
-			}
-			const target = container.querySelector(
-				`img[data-image-id="${ nextId }"]`
-			);
-			if ( ! target ) {
-				return;
-			}
-			const cr = container.getBoundingClientRect();
-			const tr = target.getBoundingClientRect();
-			const left =
-				container.scrollLeft +
-				( tr.left - cr.left ) -
-				( cr.width - tr.width ) / 2;
-			container.scrollTo( { left, behavior: 'smooth' } );
 		},
 	},
 } );

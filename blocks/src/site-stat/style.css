@@ -1,0 +1,24 @@
+/**
+ * mercantile/site-stat — front-end chrome.
+ *
+ * The block's render output is just a <p> with the wrapper className
+ * `wp-block-mercantile-site-stat`. Typography, color, alignment, font
+ * are all delivered by block supports + theme.json — those don't need
+ * any CSS here.
+ *
+ * The only thing block supports can't express is responsive text-align:
+ * the masthead's counts/updated stat is centered at desktop (set by the
+ * editor user via the AlignmentToolbar → `.has-text-align-center` class)
+ * but should drop to left-align when `core/columns` stacks the masthead
+ * onto a vertical flow at ≤781px, so the stack reads as one continuous
+ * left-anchored block alongside the brand/vol pair above.
+ *
+ * Scoped to `.wp-block-mercantile-site-stat` rather than the bare
+ * `.has-text-align-center` so it can't bleed onto unrelated centered
+ * content elsewhere on the page.
+ */
+@media (max-width: 781px) {
+  .wp-block-mercantile-site-stat.has-text-align-center {
+    text-align: left;
+  }
+}

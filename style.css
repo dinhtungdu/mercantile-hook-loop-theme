@@ -1741,3 +1741,14 @@ body.mh-pdp-embed,
 body.mh-pdp-embed .mh-pdp-wrap {
   background: transparent !important;
 }
+
+/* Hero spec-list rows — allow the label + value flex pair to wrap at
+   narrow widths so long values (e.g. `mercantile@wordpress.org`) drop
+   below the label instead of breaking mid-word. The mobile alignment
+   of the counts/updated stat lives in the mercantile/site-stat block's
+   own style.css, scoped to the block class. */
+@media (max-width: 781px) {
+  .mh-hero .wp-block-columns .wp-block-group {
+    flex-wrap: wrap;
+  }
+}

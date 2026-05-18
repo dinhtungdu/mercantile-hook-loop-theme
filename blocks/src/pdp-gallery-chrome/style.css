@@ -1,0 +1,83 @@
+/**
+ * mercantile/pdp-gallery-chrome — toolbar strip above the PDP gallery.
+ *
+ * Block-level chrome (background, border, padding) is expressed via
+ * block supports + attribute defaults in block.json — see paper-2
+ * backgroundColor, style.spacing.padding, style.border.bottom there.
+ * What stays here is composition the wrapper supports can't express
+ * (flex row, badge/pill inline shape, hover state on the pill).
+ *
+ * WC's editor canvas has a few quirks with non-auto product-image
+ * aspect-ratios and with product-gallery's layout attribute — we used
+ * to ship editor-only overrides to paper over those, but they're WC
+ * bugs, not ours. The front end works because real `<li>` images give
+ * `large-image` real height; the editor preview is WC's job to fix.
+ */
+
+.mh-gallery-chrome {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	/* In product-gallery's flex column parent the cross-axis (width)
+	 * doesn't stretch by default — our chrome must span the full
+	 * card width to push the see-more pill to the right edge. */
+	align-self: stretch;
+	font-family: var( --wp--preset--font-family--jetbrains-mono );
+	font-size: 10px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	line-height: 1;
+}
+
+.mh-gallery-chrome__fig {
+	display: inline-block;
+	background: var( --wp--preset--color--blue-tint );
+	color: var( --wp--preset--color--ink );
+	padding: 3px 8px;
+	border-radius: 2px;
+	font-weight: 600;
+}
+
+.mh-gallery-chrome__pill {
+	display: inline-block;
+	background: var( --wp--preset--color--blue-tint );
+	color: var( --wp--preset--color--ink );
+	padding: 3px 8px;
+	border: 1px solid var( --wp--preset--color--ink );
+	border-radius: 2px;
+	font-family: var( --wp--preset--font-family--jetbrains-mono );
+	font-size: 10px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mh-gallery-chrome__pill:hover,
+.mh-gallery-chrome__pill:focus-visible {
+	background: var( --wp--preset--color--wp );
+	color: #fff;
+	outline: none;
+}
+
+/**
+ * Plug WC's missing aspect-ratio rule for non-auto ratios.
+ *
+ * WC ships only one `:has()` rule for `large-image`'s aspect-ratio —
+ * for the `--aspect-ratio-auto` slug. With `aspectRatio: "4/5"` set on
+ * our `wc:product-image`, the inner div gets `--aspect-ratio-4-5` but
+ * no matching CSS rule, so `large-image` has no explicit height in
+ * the editor canvas; WC's `overflow: hidden` then clips the
+ * placeholder. Mirror WC's own `:has()` pattern for the 4/5 slug.
+ *
+ * Front end doesn't need this — real `<li>` images give `large-image`
+ * real height — but the rule is a harmless no-op there.
+ */
+.wp-block-woocommerce-product-gallery-large-image:has(
+		.wc-block-components-product-image--aspect-ratio-4-5
+	) {
+	aspect-ratio: 4 / 5;
+}

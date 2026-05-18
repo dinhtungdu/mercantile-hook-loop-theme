@@ -857,6 +857,12 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 	color: var(--mh-paper) !important;
 }
 
+.wc-block-mini-cart__drawer .wc-block-components-quantity-selector__button:focus {
+	box-shadow: none !important;
+	outline: 1px solid var(--mh-ink) !important;
+	outline-offset: -1px;
+}
+
 .wc-block-mini-cart__drawer .wc-block-components-quantity-selector__input {
 	width: 28px !important;
 	min-width: 0 !important;

@@ -256,10 +256,13 @@ add_filter(
 );
 
 // `enqueue_block_assets` (unlike `enqueue_block_editor_assets`) fires inside
-// the editor iframe — where the canvas actually renders — so the Google Fonts
-// stylesheet reaches the document that needs the @font-face rules. Guarded
-// with `is_admin()` because the same hook also fires on the front-end, where
-// `wp_enqueue_scripts` already loads the font.
+// the editor iframe — where the canvas actually renders — so font + style
+// rules reach the document that needs them. Guarded with `is_admin()`
+// because the same hook also fires on the front-end, where
+// `wp_enqueue_scripts` already loads the same assets. `add_editor_style()`
+// is the documented hook for theme CSS in the editor, but it doesn't
+// reliably propagate to the site-editor canvas iframe — so we re-enqueue
+// here for parity with the front-end.
 add_action(
 	'enqueue_block_assets',
 	function () {
@@ -271,6 +274,12 @@ add_action(
 			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=UnifrakturCook:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap',
 			array(),
 			null
+		);
+		wp_enqueue_style(
+			'mercantile-hook-loop-style-editor',
+			get_stylesheet_uri(),
+			array( 'mercantile-hook-loop-fonts-editor' ),
+			wp_get_theme()->get( 'Version' )
 		);
 	}
 );

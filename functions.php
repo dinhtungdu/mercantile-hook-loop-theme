@@ -234,6 +234,59 @@ add_filter(
 );
 
 /**
+ * Woo's mini-cart footer server-render owns totals markup, so the template
+ * part can choose actions but cannot add the prototype's shipping/total rows.
+ * Patch that render seam, keeping the existing reactive subtotal binding.
+ */
+add_filter(
+	'render_block_woocommerce/mini-cart-footer-block',
+	function ( $block_content ) {
+		if ( ! is_string( $block_content ) || false === strpos( $block_content, 'wc-block-mini-cart__footer-subtotal' ) ) {
+			return $block_content;
+		}
+
+		$value_html = '';
+		if ( preg_match( '/<span\b(?=[^>]*\bwc-block-components-totals-item__value\b)[^>]*>.*?<\/span>/s', $block_content, $matches ) ) {
+			$value_html = $matches[0];
+		}
+
+		$block_content = preg_replace(
+			'/\s*<div class="wc-block-components-totals-item__description">.*?<\/div>/s',
+			'',
+			$block_content,
+			1
+		);
+
+		$rows = sprintf(
+			'<div class="mh-mini-cart__shipping-row"><span class="mh-mini-cart__row-label">%1$s</span><span>%2$s</span></div><div class="wc-block-components-totals-item wc-block-mini-cart__footer-total"><span class="wc-block-components-totals-item__label">%3$s</span>%4$s</div>',
+			esc_html__( 'shipping', 'mercantile-hook-loop' ),
+			esc_html__( 'calc at checkout', 'mercantile-hook-loop' ),
+			esc_html__( 'total', 'mercantile-hook-loop' ),
+			wp_kses_post( $value_html )
+		);
+		$block_content = preg_replace(
+			'/(<div class="wc-block-mini-cart__footer-actions">)/',
+			$rows . '$1',
+			$block_content,
+			1
+		);
+
+		$fine = sprintf(
+			'<div class="mh-mini-cart__fine">%s</div>',
+			esc_html__( 'ships worldwide · profits to the WordPress Foundation · 14-day defect window', 'mercantile-hook-loop' )
+		);
+		$block_content = preg_replace(
+			'/(<\/div>\s*<\/div>\s*)$/',
+			'</div>' . $fine . '</div>',
+			$block_content,
+			1
+		);
+
+		return $block_content;
+	}
+);
+
+/**
  * Re-label a few WooCommerce Checkout step headings to match the
  * Mercantile prototype (Contact / Shipping address / Payment).
  */
@@ -248,6 +301,8 @@ add_filter(
 				return 'Shipping address';
 			case 'Payment options':
 				return 'Payment';
+			case 'Go to checkout':
+				return __( 'proceed to checkout →', 'mercantile-hook-loop' );
 		}
 		return $translation;
 	},

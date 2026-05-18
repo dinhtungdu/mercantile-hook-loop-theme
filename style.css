@@ -842,6 +842,7 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 	height: 22px;
 	background: transparent !important;
 	border: 0 !important;
+	border-radius: 0 !important;
 	font-family: 'JetBrains Mono', ui-monospace, monospace !important;
 	font-size: 14px !important;
 	color: var(--mh-ink) !important;

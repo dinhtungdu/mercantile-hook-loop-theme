@@ -34,6 +34,7 @@
 				}
 			],
 			"fontSizes": [
+				{ "slug": "micro", "size": "10px", "name": "Micro" },
 				{ "slug": "tiny", "size": "11px", "name": "Tiny" },
 				{ "slug": "small", "size": "13px", "name": "Small" },
 				{ "slug": "medium", "size": "15px", "name": "Medium" },

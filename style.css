@@ -626,6 +626,12 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 	max-width: 440px;
 }
 
+@media (max-width: 440px) {
+	.wc-block-mini-cart__drawer {
+		max-width: 100%;
+	}
+}
+
 .wc-block-mini-cart__drawer .wc-block-components-drawer__content {
 	background: var(--mh-paper);
 	display: flex;

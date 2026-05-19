@@ -301,8 +301,6 @@ add_filter(
 				return 'Shipping address';
 			case 'Payment options':
 				return 'Payment';
-			case 'Go to checkout':
-				return __( 'proceed to checkout →', 'mercantile-hook-loop' );
 		}
 		return $translation;
 	},

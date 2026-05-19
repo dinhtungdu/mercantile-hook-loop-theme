@@ -25,7 +25,7 @@ $button_attrs = wp_json_encode(
 	<!-- /wp:paragraph -->
 
 	<!-- wp:woocommerce/mini-cart-shopping-button-block <?php echo $button_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> -->
-	<div class="wp-block-woocommerce-mini-cart-shopping-button-block"></div>
+	<div class="wp-block-woocommerce-mini-cart-shopping-button-block has-paper-color has-ink-background-color has-text-color has-background"></div>
 	<!-- /wp:woocommerce/mini-cart-shopping-button-block -->
 </div>
 <!-- /wp:group -->

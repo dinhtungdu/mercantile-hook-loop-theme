@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.14
+Version: 0.2.15
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1119,6 +1119,26 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 .checkout-view .wc-block-checkout-terms-block a {
   color: var(--mh-wp);
+  border-bottom: 1px dashed var(--mh-wp);
+}
+
+/* Guest checkout notice */
+.checkout-view #wc-guest-checkout-notice {
+  color: var(--mh-ink);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Optional field toggles */
+.checkout-view .wc-block-components-address-form__address_2-toggle {
+  display: inline-block !important;
+  width: auto;
+  cursor: pointer;
+  color: var(--mh-wp);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
   border-bottom: 1px dashed var(--mh-wp);
 }
 

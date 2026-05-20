@@ -1690,11 +1690,12 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
     flex-direction: column;
   }
   .cart-view table.wc-block-cart-items .wc-block-cart-items__row {
-    grid-template-columns: 68px minmax(0, 1fr);
+    grid-template-columns: 68px minmax(0, 1fr) auto;
   }
   .cart-view table.wc-block-cart-items .wc-block-cart-item__total {
-    grid-column: 2;
-    text-align: left;
+    grid-column: 3;
+    grid-row: 1;
+    text-align: right;
   }
 }
 

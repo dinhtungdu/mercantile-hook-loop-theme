@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.6
+Version: 0.2.7
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1014,33 +1014,59 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 
 /* Form fields */
-.checkout-view .wc-block-components-text-input input,
-.checkout-view .wc-block-components-text-input select,
-.checkout-view .wc-block-components-text-input textarea,
-.checkout-view .wc-block-components-address-form input,
-.checkout-view .wc-block-components-address-form select {
-  border: 1px solid var(--mh-rule) !important;
-  background: #fff !important;
-  padding: 10px 12px !important;
-  font-family: "JetBrains Mono", ui-monospace, monospace !important;
-  font-size: 13px !important;
-  color: var(--mh-ink) !important;
-  border-radius: 0 !important;
-  line-height: 1.4;
-  box-sizing: border-box;
-  width: 100%;
+.checkout-view .wc-block-components-text-input,
+.checkout-view .wc-blocks-components-select__container {
+  position: static !important;
 }
 .checkout-view .wc-block-components-text-input label,
-.checkout-view .wc-block-components-address-form label {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+.checkout-view .wc-block-components-address-form label,
+.checkout-view .wc-blocks-components-select__label {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  transform: none !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--mh-slate-2) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.2 !important;
   text-transform: uppercase;
-  color: var(--mh-slate-2);
+}
+.checkout-view .wc-block-components-text-input input,
+.checkout-view .wc-block-components-text-input textarea,
+.checkout-view .wc-block-components-address-form input,
+.checkout-view .wc-blocks-components-select__select {
+  width: 100%;
+  min-height: 64px !important;
+  box-sizing: border-box;
+  border: 1px solid var(--mh-rule) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: var(--mh-slate-2) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.4 !important;
+}
+.checkout-view .wc-block-components-text-input input,
+.checkout-view .wc-block-components-text-input textarea,
+.checkout-view .wc-block-components-address-form input {
+  padding: 18px 24px !important;
+}
+.checkout-view .wc-blocks-components-select__select {
+  height: 64px !important;
+  padding: 0 54px 0 24px !important;
 }
 .checkout-view .wc-block-components-text-input input:focus,
-.checkout-view .wc-block-components-text-input select:focus,
-.checkout-view .wc-block-components-text-input textarea:focus {
+.checkout-view .wc-block-components-text-input textarea:focus,
+.checkout-view .wc-blocks-components-select__select:focus {
   outline: none;
   border-color: var(--mh-wp) !important;
   box-shadow: 0 0 0 1px var(--mh-wp);

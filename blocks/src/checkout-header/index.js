@@ -36,10 +36,14 @@ function Edit() {
 				</div>
 			</div>
 			<div className="step-nav">
-				<div className="step done">
+				<a
+					className="step done"
+					href="/cart/"
+					onClick={ ( event ) => event.preventDefault() }
+				>
 					<span className="n">01</span>
 					<span>{ __( 'cart', 'mercantile-hook-loop' ) }</span>
-				</div>
+				</a>
 				<div className="step now">
 					<span className="n">02</span>
 					<span>{ __( 'details', 'mercantile-hook-loop' ) }</span>

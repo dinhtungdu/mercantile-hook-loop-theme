@@ -938,6 +938,16 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   align-items: baseline;
   border-right: 1px solid var(--mh-rule);
 }
+.checkout-view .step-nav a.step {
+  text-decoration: none;
+}
+.checkout-view .step-nav a.step:hover {
+  color: var(--mh-wp);
+}
+.checkout-view .step-nav a.step:hover .n {
+  border-color: var(--mh-wp);
+  color: var(--mh-wp);
+}
 .checkout-view .step-nav .step .n {
   color: var(--mh-slate-2);
   font-size: 9px;

@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.9
+Version: 0.2.10
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1036,7 +1036,7 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   background: transparent !important;
   color: var(--mh-slate-2) !important;
   font-family: "JetBrains Mono", ui-monospace, monospace !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   letter-spacing: 0.08em !important;
   line-height: 1.2 !important;
@@ -1047,14 +1047,14 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 .checkout-view .wc-block-components-address-form input,
 .checkout-view .wc-blocks-components-select__select {
   width: 100%;
-  min-height: 64px !important;
+  min-height: 56px !important;
   box-sizing: border-box;
   border: 1px solid var(--mh-rule) !important;
   border-radius: 0 !important;
   background: #fff !important;
   color: var(--mh-slate-2) !important;
   font-family: "JetBrains Mono", ui-monospace, monospace !important;
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: 600 !important;
   letter-spacing: 0.04em !important;
   line-height: 1.4 !important;
@@ -1063,11 +1063,11 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 .checkout-view .wc-block-components-text-input input,
 .checkout-view .wc-block-components-text-input textarea,
 .checkout-view .wc-block-components-address-form input {
-  padding: 18px 24px !important;
+  padding: 14px 20px !important;
 }
 .checkout-view .wc-blocks-components-select__select {
-  height: 64px !important;
-  padding: 0 54px 0 24px !important;
+  height: 56px !important;
+  padding: 0 48px 0 20px !important;
 }
 .checkout-view .wc-block-components-text-input input:focus,
 .checkout-view .wc-block-components-text-input textarea:focus,

@@ -668,6 +668,10 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   text-transform: uppercase;
 }
 
+.mh-mini-cart-footer .wp-block-button__link {
+  border: 1px solid var(--mh-wp-d);
+}
+
 .wp-block-woocommerce-cart
   .wc-block-components-button.wc-block-cart__submit-button,
 .wc-block-components-checkout-place-order-button {

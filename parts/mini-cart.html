@@ -22,16 +22,65 @@
       <!-- /wp:woocommerce/mini-cart-products-table-block -->
     </div>
     <!-- /wp:woocommerce/mini-cart-items-block -->
-    <!-- wp:woocommerce/mini-cart-footer-block -->
-    <div class="wp-block-woocommerce-mini-cart-footer-block">
-      <!-- wp:woocommerce/mini-cart-cart-button-block -->
-      <div class="wp-block-woocommerce-mini-cart-cart-button-block"></div>
-      <!-- /wp:woocommerce/mini-cart-cart-button-block -->
-      <!-- wp:woocommerce/mini-cart-checkout-button-block -->
-      <div class="wp-block-woocommerce-mini-cart-checkout-button-block"></div>
-      <!-- /wp:woocommerce/mini-cart-checkout-button-block -->
+    <!-- wp:group {"className":"mh-mini-cart-footer","style":{"border":{"top":{"color":"var:preset|color|rule","width":"1px","style":"solid"}},"spacing":{"padding":{"top":"18px","right":"20px","bottom":"20px","left":"20px"},"blockGap":"8px"},"typography":{"fontSize":"12px","lineHeight":"1.5"}},"backgroundColor":"paper-2","textColor":"ink","fontFamily":"jetbrains-mono","layout":{"type":"default"}} -->
+    <div class="wp-block-group mh-mini-cart-footer has-ink-color has-paper-2-background-color has-text-color has-background has-jetbrains-mono-font-family" style="border-top-color:var(--wp--preset--color--rule);border-top-style:solid;border-top-width:1px;padding-top:18px;padding-right:20px;padding-bottom:20px;padding-left:20px;font-size:12px;line-height:1.5">
+      <!-- wp:group {"style":{"spacing":{"blockGap":"16px"},"typography":{"fontSize":"12px","fontWeight":"400","lineHeight":"1.5"}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+      <div class="wp-block-group" style="font-size:12px;font-weight:400;line-height:1.5">
+        <!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"textColor":"slate"} -->
+        <p class="has-slate-color has-text-color" style="margin-top:0;margin-bottom:0">subtotal</p>
+        <!-- /wp:paragraph -->
+
+        <!-- wp:mercantile/mini-cart-subtotal {"align":"right","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"textColor":"ink"} /-->
+      </div>
+      <!-- /wp:group -->
+
+      <!-- wp:group {"style":{"spacing":{"blockGap":"16px"},"typography":{"fontSize":"12px","fontWeight":"400","lineHeight":"1.5"}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+      <div class="wp-block-group" style="font-size:12px;font-weight:400;line-height:1.5">
+        <!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"textColor":"slate"} -->
+        <p class="has-slate-color has-text-color" style="margin-top:0;margin-bottom:0">shipping</p>
+        <!-- /wp:paragraph -->
+
+        <!-- wp:paragraph {"align":"right","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"textColor":"ink"} -->
+        <p class="has-text-align-right has-ink-color has-text-color" style="margin-top:0;margin-bottom:0">calc at checkout</p>
+        <!-- /wp:paragraph -->
+      </div>
+      <!-- /wp:group -->
+
+      <!-- wp:group {"style":{"border":{"top":{"color":"var:preset|color|rule","width":"1px","style":"solid"}},"spacing":{"padding":{"top":"8px"},"margin":{"top":"12px"},"blockGap":"16px"},"typography":{"fontSize":"15px","fontWeight":"700","lineHeight":"1.5"}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+      <div class="wp-block-group" style="border-top-color:var(--wp--preset--color--rule);border-top-style:solid;border-top-width:1px;margin-top:12px;padding-top:8px;font-size:15px;font-weight:700;line-height:1.5">
+        <!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"textColor":"ink"} -->
+        <p class="has-ink-color has-text-color" style="margin-top:0;margin-bottom:0">total</p>
+        <!-- /wp:paragraph -->
+
+        <!-- wp:mercantile/mini-cart-subtotal {"align":"right","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"textColor":"ink"} /-->
+      </div>
+      <!-- /wp:group -->
+
+      <!-- wp:buttons {"style":{"spacing":{"blockGap":"0","margin":{"top":"16px","bottom":"0"}}},"layout":{"type":"flex","justifyContent":"center"}} -->
+      <div class="wp-block-buttons" style="margin-top:16px;margin-bottom:0">
+        <!-- wp:button {"width":100,"backgroundColor":"wp","textColor":"card","style":{"border":{"radius":"0px"},"spacing":{"padding":{"top":"12px","bottom":"12px","left":"12px","right":"12px"}},"typography":{"fontSize":"12px","fontWeight":"600","letterSpacing":"0.08em","textTransform":"uppercase"}}} -->
+        <div class="wp-block-button has-custom-width wp-block-button__width-100">
+          <a
+            class="wp-block-button__link has-card-color has-wp-background-color has-text-color has-background has-custom-font-size wp-element-button"
+            href="/checkout/"
+            style="border-radius:0px;padding-top:12px;padding-right:12px;padding-bottom:12px;padding-left:12px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase"
+            >PROCEED TO CHECKOUT →</a
+          >
+        </div>
+        <!-- /wp:button -->
+      </div>
+      <!-- /wp:buttons -->
+
+      <!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"12px","bottom":"0"}},"typography":{"fontSize":"10px","fontWeight":"400","lineHeight":"1.5"}},"textColor":"slate-2"} -->
+      <p
+        class="has-slate-2-color has-text-color"
+        style="margin-top:12px;margin-bottom:0;font-size:10px;font-weight:400;line-height:1.5"
+      >
+        ships worldwide · profits to the WordPress Foundation · 14-day defect window
+      </p>
+      <!-- /wp:paragraph -->
     </div>
-    <!-- /wp:woocommerce/mini-cart-footer-block -->
+    <!-- /wp:group -->
   </div>
   <!-- /wp:woocommerce/filled-mini-cart-contents-block -->
 

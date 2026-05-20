@@ -1,0 +1,40 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/mini-cart-subtotal",
+	"version": "1.0.0",
+	"title": "Mini-Cart Subtotal",
+	"category": "theme",
+	"description": "Dynamic subtotal text for the customized Mini-Cart footer.",
+	"icon": "cart",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"align": {
+			"type": "string"
+		},
+		"textColor": {
+			"type": "string"
+		},
+		"style": {
+			"type": "object"
+		}
+	},
+	"supports": {
+		"html": false,
+		"color": {
+			"text": true,
+			"background": false,
+			"link": false
+		},
+		"spacing": {
+			"margin": true
+		},
+		"typography": {
+			"fontSize": true,
+			"__experimentalFontWeight": true,
+			"lineHeight": true
+		}
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.13
+Version: 0.2.14
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1120,6 +1120,42 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 .checkout-view .wc-block-checkout-terms-block a {
   color: var(--mh-wp);
   border-bottom: 1px dashed var(--mh-wp);
+}
+
+/* Order note */
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox {
+  margin: 0;
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox label {
+  display: inline-flex;
+  width: auto;
+  cursor: pointer;
+  color: var(--mh-wp);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  border-bottom: 1px dashed var(--mh-wp);
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox input,
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox svg {
+  display: none;
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox__label {
+  margin: 0;
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-textarea {
+  width: 100%;
+  min-height: 64px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--mh-rule);
+  border-radius: 0;
+  background: #fff;
+  color: var(--mh-ink);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 14px;
+  line-height: 1.4;
+  resize: vertical;
 }
 
 /* Place order button */

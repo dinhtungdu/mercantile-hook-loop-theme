@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.18
+Version: 0.2.21
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1104,6 +1104,46 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 .checkout-view .wc-block-components-radio-control__option input[type="radio"] {
   accent-color: var(--mh-wp);
+}
+
+.checkout-view #shipping-option .wc-block-components-radio-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__input {
+  position: static !important;
+  width: 13px !important;
+  height: 13px !important;
+  margin: 0 !important;
+  appearance: auto !important;
+  accent-color: var(--mh-wp);
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__input::before {
+  content: none !important;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__option-layout,
+.checkout-view #shipping-option .wc-block-components-radio-control__label-group {
+  display: contents;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__label {
+  color: var(--mh-ink);
+  font-weight: 400;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__secondary-label {
+  color: var(--mh-ink);
+  font-weight: 600;
+  text-align: right;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__description {
+  display: none;
 }
 
 /* Terms */

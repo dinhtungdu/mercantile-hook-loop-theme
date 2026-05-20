@@ -55,18 +55,6 @@ body {
   overflow: hidden;
 }
 
-/* ===== Hero =====
-   Surface hooks for parts/hero.html. Meta strip and rail row are
-   core/columns (rail row nests a non-stacking columns pair to keep
-   the two spec lists side-by-side at every viewport). Wordmark is
-   core/heading; separator is core/separator; spec rows are core/group
-   flex rows. Wrapper chrome — font-family, font-size, color,
-   letter-spacing, padding (fluid clamp()s set on the block), border
-   — is set on each block via supports + default attributes in the
-   template part. Only two bits supports can't express stay here:
-   the wordmark's letter-spacing/text-wrap and the blurb's
-   max-width. */
-
 /* Wordmark — typography is mostly delivered by core: theme.json h1
    sets UnifrakturCook 700/line-height 1, the "wordmark" font-size
    preset supplies the clamp, and ink color is the heading default.
@@ -1740,15 +1728,4 @@ body.mh-pdp-open {
 body.mh-pdp-embed,
 body.mh-pdp-embed .mh-pdp-wrap {
   background: transparent !important;
-}
-
-/* Hero spec-list rows — allow the label + value flex pair to wrap at
-   narrow widths so long values (e.g. `mercantile@wordpress.org`) drop
-   below the label instead of breaking mid-word. The mobile alignment
-   of the counts/updated stat lives in the mercantile/site-stat block's
-   own style.css, scoped to the block class. */
-@media (max-width: 781px) {
-  .mh-hero .wp-block-columns .wp-block-group {
-    flex-wrap: wrap;
-  }
 }

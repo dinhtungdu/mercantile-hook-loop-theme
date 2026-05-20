@@ -24,8 +24,6 @@ $kind       = isset( $attributes['kind'] ) ? (string) $attributes['kind'] : 'cou
 $text_align = isset( $attributes['textAlign'] ) ? (string) $attributes['textAlign'] : 'left';
 
 // Launch date for the prototype's "vol." counter — increments weekly.
-// Treat this as the masthead's vol. 01 anchor; if Tung wants to shift the
-// rhythm (biweekly, monthly), change this date or the divisor below.
 $vol_one_anchor = '2026-04-13';
 
 $inner = '';

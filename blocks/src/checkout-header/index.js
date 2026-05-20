@@ -30,6 +30,14 @@ function Step( { className, href, label, number } ) {
 function Edit( { attributes } ) {
 	const { current = 'checkout' } = attributes;
 	const isCart = 'cart' === current;
+	const isCheckout = 'checkout' === current;
+	const isConfirm = 'confirm' === current;
+	let detailsClass = 'step';
+	if ( isCheckout ) {
+		detailsClass = 'step now';
+	} else if ( isConfirm ) {
+		detailsClass = 'step done';
+	}
 	const blockProps = useBlockProps( {
 		className: 'checkout-head',
 	} );
@@ -69,13 +77,13 @@ function Edit( { attributes } ) {
 					label={ __( 'cart', 'mercantile-hook-loop' ) }
 				/>
 				<Step
-					className={ `step ${ isCart ? '' : 'now' }` }
-					href={ isCart ? '/checkout/' : undefined }
+					className={ detailsClass }
+					href={ isCheckout ? undefined : '/checkout/' }
 					number="02"
 					label={ __( 'details', 'mercantile-hook-loop' ) }
 				/>
 				<Step
-					className="step"
+					className={ `step ${ isConfirm ? 'now' : '' }` }
 					number="03"
 					label={ __( 'confirm', 'mercantile-hook-loop' ) }
 				/>

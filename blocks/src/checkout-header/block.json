@@ -12,7 +12,7 @@
 		"current": {
 			"type": "string",
 			"default": "checkout",
-			"enum": [ "cart", "checkout" ]
+			"enum": [ "cart", "checkout", "confirm" ]
 		}
 	},
 	"supports": {

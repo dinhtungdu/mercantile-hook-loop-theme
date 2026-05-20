@@ -1452,6 +1452,7 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   display: block;
   width: 100%;
   border-collapse: collapse;
+  border-bottom: 0;
 }
 .cart-view table.wc-block-cart-items thead {
   display: none;
@@ -1461,6 +1462,9 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 .cart-view table.wc-block-cart-items .wc-block-cart-items__row {
   border-bottom: 1px solid var(--mh-rule);
+}
+.cart-view table.wc-block-cart-items .wc-block-cart-items__row:last-child {
+  border-bottom: 0;
 }
 .cart-view table.wc-block-cart-items .wc-block-cart-items__row > td {
   display: block;

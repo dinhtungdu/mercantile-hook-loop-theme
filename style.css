@@ -668,6 +668,40 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   text-transform: uppercase;
 }
 
+.mh-mini-cart-title {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  mask-image: none !important;
+  margin: 8px 16px 24px !important;
+  padding-bottom: 0 !important;
+  text-transform: uppercase;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-drawer__close {
+  top: 16px !important;
+  right: 20px !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--mh-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+  box-sizing: border-box;
+}
+
+.wc-block-mini-cart__drawer .wc-block-components-drawer__close svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
 .mh-mini-cart-footer .wp-block-button__link {
   border: 1px solid var(--mh-wp-d);
 }

@@ -34,6 +34,13 @@ body {
   color: var(--mh-ink);
 }
 
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 ::selection {
   background: var(--mh-wp);
   color: #fff;
@@ -126,7 +133,6 @@ body {
   border: 1px solid var(--mh-ink) !important;
   border-radius: 0 !important;
   padding: 6px 10px !important;
-  font-family: "JetBrains Mono", ui-monospace, monospace !important;
   font-size: 12px !important;
   line-height: 1.4 !important;
   letter-spacing: 0 !important;
@@ -148,7 +154,6 @@ body {
    visible with a `·` separator inline before it. Mono-styled to match
    the count. */
 .mh-section-head .wc-block-mini-cart__button .wc-block-mini-cart__amount {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
   font-weight: 400;
   color: var(--mh-paper);
@@ -180,7 +185,6 @@ body {
 .mh-section-head .wc-block-mini-cart__quantity-badge {
   background: transparent !important;
   color: var(--mh-paper) !important;
-  font-family: "JetBrains Mono", ui-monospace, monospace !important;
   font-size: 12px !important;
   font-weight: 400 !important;
   position: static !important;
@@ -208,7 +212,6 @@ body {
 .mh-section-head .wc-block-mini-cart__badge {
   background: transparent !important;
   color: var(--mh-paper) !important;
-  font-family: "JetBrains Mono", ui-monospace, monospace !important;
   font-size: 12px !important;
   font-weight: 400 !important;
   position: static !important;
@@ -231,7 +234,6 @@ body {
   content: "cart";
   color: var(--mh-paper);
   margin-right: 6px;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
   font-weight: 400;
   text-transform: lowercase;
@@ -262,7 +264,6 @@ body {
   border-right: 1px solid var(--mh-rule);
   border-bottom: 1px solid var(--mh-rule);
   padding: 14px 20px;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10.5px;
   color: var(--mh-slate);
   letter-spacing: 0.02em;
@@ -430,7 +431,6 @@ body {
 }
 
 .mh-side-label {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10px;
   color: var(--mh-slate);
   text-transform: uppercase;
@@ -452,7 +452,6 @@ body {
   border-radius: 4px;
   background: #fff;
   color: var(--mh-wp);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -487,7 +486,6 @@ body {
   border-radius: 4px;
   background: #fff;
   color: var(--mh-wp);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -521,7 +519,6 @@ body {
 
 /* Revisions log */
 .mh-revisions {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10.5px;
   color: var(--mh-slate);
   line-height: 1.8;
@@ -533,7 +530,6 @@ body {
 
 .wp-block-woocommerce-add-to-cart-form .quantity input,
 .woocommerce-variation-add-to-cart .quantity input {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   border: 1px solid var(--mh-rule);
   background: #fff;
   padding: 10px 8px;
@@ -545,7 +541,6 @@ body {
   background: var(--mh-wp);
   border: 1px solid var(--mh-wp-d);
   color: #fff;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -572,7 +567,6 @@ body {
   --pill-background-color: var(--mh-card);
   border-color: var(--pill-color);
   padding: 8px 12px;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
   font-weight: 600;
 }
@@ -592,7 +586,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 
 .product_meta,
 .wp-block-woocommerce-product-meta {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   color: var(--mh-slate);
   letter-spacing: 0.04em;
@@ -607,7 +600,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 .woocommerce-notices-wrapper .woocommerce-message,
 .woocommerce-notices-wrapper .woocommerce-info,
 .woocommerce-notices-wrapper .woocommerce-error {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 12px;
   border: 1px solid var(--mh-rule);
   background: var(--mh-paper-2);
@@ -622,11 +614,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 
 /* Cart + checkout typography */
-.wp-block-woocommerce-cart,
-.wp-block-woocommerce-checkout {
-  font-family: "Newsreader", Georgia, serif;
-}
-
 .wp-block-woocommerce-cart .wc-block-components-product-name,
 .wp-block-woocommerce-checkout .wc-block-components-product-name {
   font-family: "Newsreader", Georgia, serif;
@@ -660,7 +647,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   border: 1px solid var(--mh-ink);
   border-radius: 0;
   padding: 10px 16px;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   font-weight: 400;
   line-height: 1.5;
@@ -689,7 +675,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   border-radius: 0;
   background: transparent;
   color: var(--mh-ink);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 18px;
   font-weight: 400;
   line-height: 18px;
@@ -777,7 +762,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   table.wc-block-cart-items.wc-block-mini-cart-items
   .wc-block-components-product-details {
   color: var(--mh-slate);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10px;
   line-height: 1.5;
 }
@@ -798,7 +782,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   border-color: var(--mh-rule);
   border-radius: 0;
   background-color: transparent;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
 }
 
 .wp-block-woocommerce-mini-cart-contents
@@ -848,7 +831,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   .wp-block-woocommerce-mini-cart-items-block
   .wc-block-cart-item__total {
   color: var(--mh-ink);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.5;

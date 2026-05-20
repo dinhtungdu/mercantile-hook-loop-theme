@@ -1708,8 +1708,16 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   padding: 0;
   background: transparent;
 }
-.checkout-view .wc-block-components-checkout-order-summary__title,
-.checkout-view .wc-block-components-checkout-order-summary__title-text {
+.checkout-view .wc-block-components-checkout-order-summary__title {
+  margin-right: 0;
+  margin-left: 0;
+  padding-right: 0;
+  padding-left: 0;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-order-summary-block
+  .wc-block-components-checkout-order-summary__title
+  .wc-block-components-checkout-order-summary__title-text {
   margin-right: 0;
   margin-left: 0;
 }

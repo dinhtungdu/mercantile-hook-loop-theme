@@ -921,7 +921,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   min-height: 0;
   padding: 0;
   color: var(--mh-slate);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10px;
   line-height: 1.5;
   text-decoration: underline;
@@ -1473,7 +1472,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 .cart-view .wc-block-cart__totals-title,
 .cart-view .wp-block-woocommerce-cart-order-summary-heading-block {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;

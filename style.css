@@ -1568,7 +1568,7 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 .cart-view .wp-block-woocommerce-cart-order-summary-shipping-block {
   border-bottom: 1px solid var(--mh-rule);
-  padding-bottom: 14px;
+  padding: 14px 0;
 }
 .cart-view
   .wp-block-woocommerce-cart-order-summary-block

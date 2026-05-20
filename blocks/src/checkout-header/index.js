@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
 import metadata from './block.json';
+import './style.css';
 
 function Edit() {
 	const blockProps = useBlockProps( {

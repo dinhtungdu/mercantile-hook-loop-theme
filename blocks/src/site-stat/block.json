@@ -1,0 +1,48 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "mercantile/site-stat",
+	"version": "1.0.0",
+	"title": "Site Stat",
+	"category": "theme",
+	"description": "Dynamic masthead stat — product/category counts, volume + date, or last-updated time. Driven by live WooCommerce and WordPress data so the masthead never drifts from reality.",
+	"icon": "chart-bar",
+	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"kind": {
+			"type": "string",
+			"default": "counts",
+			"enum": [ "counts", "date", "time" ]
+		},
+		"textAlign": {
+			"type": "string",
+			"default": "left",
+			"enum": [ "left", "center", "right" ]
+		}
+	},
+	"supports": {
+		"html": false,
+		"className": true,
+		"customClassName": true,
+		"color": {
+			"text": true,
+			"background": false
+		},
+		"typography": {
+			"fontSize": true,
+			"fontFamily": true,
+			"letterSpacing": true,
+			"textTransform": true,
+			"fontStyle": true,
+			"fontWeight": true,
+			"lineHeight": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": false
+		}
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

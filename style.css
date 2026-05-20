@@ -55,18 +55,6 @@ body {
   overflow: hidden;
 }
 
-/* ===== Hero =====
-   Surface hooks for parts/hero.html. Meta strip and rail row are
-   core/columns (rail row nests a non-stacking columns pair to keep
-   the two spec lists side-by-side at every viewport). Wordmark is
-   core/heading; separator is core/separator; spec rows are core/group
-   flex rows. Wrapper chrome — font-family, font-size, color,
-   letter-spacing, padding (fluid clamp()s set on the block), border
-   — is set on each block via supports + default attributes in the
-   template part. Only two bits supports can't express stay here:
-   the wordmark's letter-spacing/text-wrap and the blurb's
-   max-width. */
-
 /* Wordmark — typography is mostly delivered by core: theme.json h1
    sets UnifrakturCook 700/line-height 1, the "wordmark" font-size
    preset supplies the clamp, and ink color is the heading default.
@@ -80,6 +68,23 @@ body {
    block-supports analog for max-width on a paragraph. */
 .mh-blurb {
   max-width: 38ch;
+}
+
+@media (max-width: 781px) {
+  .mh-hero-meta {
+    flex-direction: column;
+    gap: 0;
+    font-size: 8.5px !important;
+  }
+  .mh-hero-meta > .wp-block-group {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mh-hero-meta > .wp-block-group > * {
+    margin: 0 !important;
+  }
 }
 
 /* ===== Section head =====

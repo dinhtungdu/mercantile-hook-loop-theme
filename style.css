@@ -70,6 +70,23 @@ body {
   max-width: 38ch;
 }
 
+@media (max-width: 781px) {
+  .mh-hero-meta {
+    flex-direction: column;
+    gap: 0;
+    font-size: 8.5px !important;
+  }
+  .mh-hero-meta > .wp-block-group {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mh-hero-meta > .wp-block-group > * {
+    margin: 0 !important;
+  }
+}
+
 /* ===== Section head =====
    Outer surface chrome (sticky position, background, border-bottom,
    padding, flex layout, font-family) lives on the wp:group attributes

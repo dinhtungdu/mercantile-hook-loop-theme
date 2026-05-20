@@ -882,81 +882,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   padding: 0;
 }
 
-.checkout-view .ckhead {
-  border-bottom: 1px solid var(--mh-rule);
-  padding: 16px var(--mh-gutter);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 11px;
-  color: var(--mh-slate);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  background: var(--mh-paper-2);
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.checkout-view .ckhead .crumb a {
-  color: var(--mh-ink);
-  text-decoration: none;
-  border-bottom: 1px dashed var(--mh-slate-2);
-}
-.checkout-view .ckhead .crumb a:hover {
-  border-bottom-color: var(--mh-wp);
-  color: var(--mh-wp);
-}
-.checkout-view .ckhead .crumb b {
-  color: var(--mh-ink);
-  margin: 0 8px;
-}
-.checkout-view .ckhead .meta {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  color: var(--mh-slate-2);
-  flex-wrap: wrap;
-}
-.checkout-view .ckhead .meta b {
-  color: var(--mh-ink);
-}
-
-.checkout-view .step-nav {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--mh-rule);
-  padding: 0 var(--mh-gutter);
-  background: var(--mh-paper);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 11px;
-}
-.checkout-view .step-nav .step {
-  padding: 14px 18px;
-  color: var(--mh-slate-2);
-  display: flex;
-  gap: 8px;
-  align-items: baseline;
-  border-right: 1px solid var(--mh-rule);
-}
-.checkout-view .step-nav .step .n {
-  color: var(--mh-slate-2);
-  font-size: 9px;
-  border: 1px solid var(--mh-rule);
-  padding: 1px 5px;
-  border-radius: 1px;
-}
-.checkout-view .step-nav .step.now {
-  color: var(--mh-ink);
-}
-.checkout-view .step-nav .step.now .n {
-  background: var(--mh-ink);
-  color: var(--mh-paper);
-  border-color: var(--mh-ink);
-}
-.checkout-view .step-nav .step.done {
-  color: var(--mh-slate);
-}
-
 /* WooCommerce Checkout Block proper */
 .checkout-view .wc-block-checkout,
 .checkout-view .wp-block-woocommerce-checkout {
@@ -1415,14 +1340,6 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
     order: 1;
     position: static;
     border-bottom: 1px solid var(--mh-rule);
-  }
-  .checkout-view .step-nav {
-    padding: 0 20px;
-    overflow-x: auto;
-  }
-  .checkout-view .step-nav .step {
-    padding: 12px 14px;
-    flex-shrink: 0;
   }
 }
 

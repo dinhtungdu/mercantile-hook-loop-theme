@@ -1,0 +1,109 @@
+.checkout-head .ckhead {
+	border-bottom: 1px solid var(--mh-rule);
+	padding: 16px var(--mh-gutter);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+	color: var(--mh-slate);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	background: var(--mh-paper-2);
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.checkout-head .ckhead .crumb a {
+	color: var(--mh-ink);
+	text-decoration: none;
+	border-bottom: 1px dashed var(--mh-slate-2);
+}
+
+.checkout-head .ckhead .crumb a:hover {
+	border-bottom-color: var(--mh-wp);
+	color: var(--mh-wp);
+}
+
+.checkout-head .ckhead .crumb b {
+	color: var(--mh-ink);
+	margin: 0 8px;
+}
+
+.checkout-head .ckhead .meta {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	color: var(--mh-slate-2);
+	flex-wrap: wrap;
+}
+
+.checkout-head .ckhead .meta b {
+	color: var(--mh-ink);
+}
+
+.checkout-head .step-nav {
+	display: flex;
+	gap: 0;
+	border-bottom: 1px solid var(--mh-rule);
+	padding: 0 var(--mh-gutter);
+	background: var(--mh-paper);
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 11px;
+}
+
+.checkout-head .step-nav .step {
+	padding: 14px 18px;
+	color: var(--mh-slate-2);
+	display: flex;
+	gap: 8px;
+	align-items: baseline;
+	border-right: 1px solid var(--mh-rule);
+}
+
+.checkout-head .step-nav a.step {
+	text-decoration: none;
+}
+
+.checkout-head .step-nav a.step:hover {
+	color: var(--mh-wp);
+}
+
+.checkout-head .step-nav a.step:hover .n {
+	border-color: var(--mh-wp);
+	color: var(--mh-wp);
+}
+
+.checkout-head .step-nav .step .n {
+	color: var(--mh-slate-2);
+	font-size: 9px;
+	border: 1px solid var(--mh-rule);
+	padding: 1px 5px;
+	border-radius: 1px;
+}
+
+.checkout-head .step-nav .step.now {
+	color: var(--mh-ink);
+}
+
+.checkout-head .step-nav .step.now .n {
+	background: var(--mh-ink);
+	color: var(--mh-paper);
+	border-color: var(--mh-ink);
+}
+
+.checkout-head .step-nav .step.done {
+	color: var(--mh-slate);
+}
+
+@media (max-width: 800px) {
+	.checkout-head .step-nav {
+		padding: 0 20px;
+		overflow-x: auto;
+	}
+
+	.checkout-head .step-nav .step {
+		padding: 12px 14px;
+		flex-shrink: 0;
+	}
+}

@@ -4,7 +4,32 @@ import { useBlockProps } from '@wordpress/block-editor';
 import metadata from './block.json';
 import './style.css';
 
-function Edit() {
+function Step( { className, href, label, number } ) {
+	const content = (
+		<>
+			<span className="n">{ number }</span>
+			<span>{ label }</span>
+		</>
+	);
+
+	if ( href ) {
+		return (
+			<a
+				className={ className }
+				href={ href }
+				onClick={ ( event ) => event.preventDefault() }
+			>
+				{ content }
+			</a>
+		);
+	}
+
+	return <div className={ className }>{ content }</div>;
+}
+
+function Edit( { attributes } ) {
+	const { current = 'checkout' } = attributes;
+	const isCart = 'cart' === current;
 	const blockProps = useBlockProps( {
 		className: 'checkout-head',
 	} );
@@ -37,22 +62,23 @@ function Edit() {
 				</div>
 			</div>
 			<div className="step-nav">
-				<a
-					className="step done"
-					href="/cart/"
-					onClick={ ( event ) => event.preventDefault() }
-				>
-					<span className="n">01</span>
-					<span>{ __( 'cart', 'mercantile-hook-loop' ) }</span>
-				</a>
-				<div className="step now">
-					<span className="n">02</span>
-					<span>{ __( 'details', 'mercantile-hook-loop' ) }</span>
-				</div>
-				<div className="step">
-					<span className="n">03</span>
-					<span>{ __( 'confirm', 'mercantile-hook-loop' ) }</span>
-				</div>
+				<Step
+					className={ `step ${ isCart ? 'now' : 'done' }` }
+					href={ isCart ? undefined : '/cart/' }
+					number="01"
+					label={ __( 'cart', 'mercantile-hook-loop' ) }
+				/>
+				<Step
+					className={ `step ${ isCart ? '' : 'now' }` }
+					href={ isCart ? '/checkout/' : undefined }
+					number="02"
+					label={ __( 'details', 'mercantile-hook-loop' ) }
+				/>
+				<Step
+					className="step"
+					number="03"
+					label={ __( 'confirm', 'mercantile-hook-loop' ) }
+				/>
 			</div>
 		</section>
 	);

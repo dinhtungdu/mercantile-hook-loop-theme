@@ -20,7 +20,10 @@ $wrapper_attrs = get_block_wrapper_attributes(
 		'aria-label' => __( 'Checkout progress', 'mercantile-hook-loop' ),
 	)
 );
-$cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' );
+$current      = isset( $attributes['current'] ) ? (string) $attributes['current'] : 'checkout';
+$is_cart_step = 'cart' === $current || ( function_exists( 'is_cart' ) && is_cart() );
+$cart_url     = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' );
+$checkout_url = function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_url() : home_url( '/checkout/' );
 ?>
 <section <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 	<div class="ckhead">
@@ -31,8 +34,13 @@ $cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url(
 		</div>
 	</div>
 	<div class="step-nav">
-		<a class="step done" href="<?php echo esc_url( $cart_url ); ?>"><span class="n">01</span><span><?php echo esc_html__( 'cart', 'mercantile-hook-loop' ); ?></span></a>
-		<div class="step now"><span class="n">02</span><span><?php echo esc_html__( 'details', 'mercantile-hook-loop' ); ?></span></div>
+		<?php if ( $is_cart_step ) : ?>
+			<div class="step now"><span class="n">01</span><span><?php echo esc_html__( 'cart', 'mercantile-hook-loop' ); ?></span></div>
+			<a class="step" href="<?php echo esc_url( $checkout_url ); ?>"><span class="n">02</span><span><?php echo esc_html__( 'details', 'mercantile-hook-loop' ); ?></span></a>
+		<?php else : ?>
+			<a class="step done" href="<?php echo esc_url( $cart_url ); ?>"><span class="n">01</span><span><?php echo esc_html__( 'cart', 'mercantile-hook-loop' ); ?></span></a>
+			<div class="step now"><span class="n">02</span><span><?php echo esc_html__( 'details', 'mercantile-hook-loop' ); ?></span></div>
+		<?php endif; ?>
 		<div class="step"><span class="n">03</span><span><?php echo esc_html__( 'confirm', 'mercantile-hook-loop' ); ?></span></div>
 	</div>
 </section>

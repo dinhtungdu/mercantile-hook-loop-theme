@@ -8,6 +8,13 @@
 	"description": "Checkout crumb, trust meta, and step navigation for the checkout template.",
 	"icon": "cart",
 	"textdomain": "mercantile-hook-loop",
+	"attributes": {
+		"current": {
+			"type": "string",
+			"default": "checkout",
+			"enum": [ "cart", "checkout" ]
+		}
+	},
 	"supports": {
 		"html": false,
 		"className": true,

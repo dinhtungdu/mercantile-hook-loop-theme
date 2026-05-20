@@ -63,11 +63,12 @@ body {
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
-
-/* Blurb paragraph — caps measure at 38ch like the prototype. No
-   block-supports analog for max-width on a paragraph. */
-.mh-blurb {
-  max-width: 38ch;
+@media (min-width: 782px) {
+  /* Blurb paragraph — caps measure at 38ch like the prototype. No
+    block-supports analog for max-width on a paragraph. */
+  .mh-blurb {
+    max-width: 38ch;
+  }
 }
 
 @media (max-width: 781px) {
@@ -84,6 +85,10 @@ body {
 
   .mh-hero-meta > .wp-block-group > * {
     margin: 0 !important;
+  }
+
+  .mh-hero-info {
+    font-size: 8.5px;
   }
 }
 

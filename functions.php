@@ -45,6 +45,30 @@ add_action(
 );
 
 add_action(
+	'init',
+	function () {
+		$slug     = 'mercantile-hook-loop/mini-cart-checkout-button';
+		$registry = WP_Block_Patterns_Registry::get_instance();
+		if ( $registry->is_registered( $slug ) ) {
+			return;
+		}
+
+		ob_start();
+		include get_theme_file_path( 'patterns/mini-cart-checkout-button.php' );
+		$content = ob_get_clean();
+
+		register_block_pattern(
+			$slug,
+			array(
+				'title'    => __( 'Mini Cart Checkout Button', 'mercantile-hook-loop' ),
+				'inserter' => false,
+				'content'  => $content,
+			)
+		);
+	}
+);
+
+add_action(
 	'wp_enqueue_scripts',
 	function () {
 		wp_enqueue_style(

@@ -513,6 +513,18 @@ or editing blocks here.
     output through `html_entity_decode( wp_strip_all_tags( wc_price(
     $p ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' )` first.
 
+47. **Never filter gettext to change product or checkout UI copy.**
+    `gettext` / `gettext_woocommerce` filters are global string
+    interception, not template customization. They can hit admin,
+    emails, blocks, REST responses, and unrelated frontend surfaces;
+    they also fight translation files and make future localization
+    debugging misery confetti. Change copy at the owning layer instead:
+    block attributes, template parts, render-block filters scoped to a
+    specific block, WooCommerce-specific hooks with narrow context, or
+    CSS-hidden replacement only when markup gives no sane hook. If the
+    only path is gettext, the design is probably asking WordPress to
+    wear pants on its head — push back.
+
 ## Project layout for theme-local blocks
 
 ```

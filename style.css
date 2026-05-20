@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.5
+Version: 0.2.27
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1014,33 +1014,73 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 }
 
 /* Form fields */
-.checkout-view .wc-block-components-text-input input,
-.checkout-view .wc-block-components-text-input select,
-.checkout-view .wc-block-components-text-input textarea,
-.checkout-view .wc-block-components-address-form input,
-.checkout-view .wc-block-components-address-form select {
-  border: 1px solid var(--mh-rule) !important;
-  background: #fff !important;
-  padding: 10px 12px !important;
-  font-family: "JetBrains Mono", ui-monospace, monospace !important;
-  font-size: 13px !important;
-  color: var(--mh-ink) !important;
-  border-radius: 0 !important;
-  line-height: 1.4;
-  box-sizing: border-box;
-  width: 100%;
+.checkout-view .wc-block-components-text-input,
+.checkout-view .wc-blocks-components-select__container {
+  position: static !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: transparent !important;
+}
+.checkout-view .wc-blocks-components-select__container {
+  position: relative !important;
+}
+.checkout-view .wc-blocks-components-select__container svg {
+  top: auto !important;
+  right: 12px !important;
+  bottom: 8px !important;
+  transform: none !important;
 }
 .checkout-view .wc-block-components-text-input label,
-.checkout-view .wc-block-components-address-form label {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+.checkout-view .wc-block-components-address-form label,
+.checkout-view .wc-blocks-components-select__label {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  transform: none !important;
+  width: auto !important;
+  height: auto !important;
+  order: 1;
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--mh-slate-2) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1.2 !important;
   text-transform: uppercase;
-  color: var(--mh-slate-2);
+}
+.checkout-view .wc-block-components-text-input input,
+.checkout-view .wc-block-components-text-input textarea,
+.checkout-view .wc-block-components-address-form input,
+.checkout-view .wc-blocks-components-select__select {
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  box-sizing: border-box;
+  border: 1px solid var(--mh-rule) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: var(--mh-ink) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.4 !important;
+  order: 2;
+}
+.checkout-view .wc-block-components-text-input input,
+.checkout-view .wc-block-components-text-input textarea,
+.checkout-view .wc-block-components-address-form input {
+  padding: 10px 12px !important;
+}
+.checkout-view .wc-blocks-components-select__select {
+  padding: 10px 36px 10px 12px !important;
 }
 .checkout-view .wc-block-components-text-input input:focus,
-.checkout-view .wc-block-components-text-input select:focus,
-.checkout-view .wc-block-components-text-input textarea:focus {
+.checkout-view .wc-block-components-text-input textarea:focus,
+.checkout-view .wc-blocks-components-select__select:focus {
   outline: none;
   border-color: var(--mh-wp) !important;
   box-shadow: 0 0 0 1px var(--mh-wp);
@@ -1062,24 +1102,168 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   box-shadow: 0 0 0 1px var(--mh-wp);
   background: var(--mh-paper-2);
 }
+.checkout-view #shipping-option .wc-block-components-radio-control__option--checked,
+.checkout-view #shipping-option .wc-block-components-radio-control__option-checked {
+  box-shadow: 0 0 0 1px var(--mh-wp) !important;
+}
 .checkout-view .wc-block-components-radio-control__option input[type="radio"] {
   accent-color: var(--mh-wp);
 }
 
+.checkout-view #shipping-option .wc-block-components-radio-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control::after {
+  content: none !important;
+  display: none !important;
+}
+.checkout-view #shipping-option .wc-block-components-shipping-rates-control__package {
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 0 !important;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__input {
+  position: static !important;
+  width: 13px !important;
+  height: 13px !important;
+  margin: 0 !important;
+  appearance: auto !important;
+  accent-color: var(--mh-wp);
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__input::before {
+  content: none !important;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__option-layout,
+.checkout-view #shipping-option .wc-block-components-radio-control__label-group {
+  display: contents;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__label {
+  color: var(--mh-ink);
+  font-weight: 400;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__secondary-label {
+  color: var(--mh-ink);
+  font-weight: 600;
+  text-align: right;
+}
+.checkout-view #shipping-option .wc-block-components-radio-control__description {
+  display: none;
+}
+
 /* Terms */
+.checkout-view .wc-block-checkout__terms,
+.checkout-view .wp-block-woocommerce-checkout-terms-block {
+  border-top: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 .checkout-view .wc-block-checkout-terms-block label,
-.checkout-view .wp-block-woocommerce-checkout-terms-block label {
+.checkout-view .wp-block-woocommerce-checkout-terms-block label,
+.checkout-view .wp-block-woocommerce-checkout-terms-block .wc-block-components-checkbox__label {
+  color: var(--mh-slate);
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 11px;
-  color: var(--mh-slate);
   line-height: 1.55;
 }
 .checkout-view .wc-block-checkout-terms-block input[type="checkbox"] {
   accent-color: var(--mh-wp);
 }
-.checkout-view .wc-block-checkout-terms-block a {
+.checkout-view .wc-block-checkout-terms-block a,
+.checkout-view .wp-block-woocommerce-checkout-terms-block a {
   color: var(--mh-wp);
-  border-bottom: 1px dashed var(--mh-wp);
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--mh-wp);
+  text-underline-offset: 4px;
+}
+
+/* Guest checkout notice */
+.checkout-view #wc-guest-checkout-notice {
+  color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* Optional field toggles */
+.checkout-view .wc-block-components-address-form__address_2-toggle {
+  display: inline-block !important;
+  flex: 0 0 100%;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  color: var(--mh-wp);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  border-bottom: 0;
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--mh-wp);
+  text-underline-offset: 4px;
+}
+
+/* Order note */
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox {
+  margin: 0;
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox label {
+  display: inline-flex;
+  width: auto;
+  cursor: pointer;
+  color: var(--mh-wp);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  border-bottom: 0;
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--mh-wp);
+  text-underline-offset: 4px;
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox input,
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox svg {
+  display: none;
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-checkbox__label {
+  margin: 0;
+}
+.checkout-view .wc-block-checkout__add-note .wc-block-components-textarea {
+  width: 100%;
+  min-height: 64px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--mh-rule);
+  border-radius: 0;
+  background: #fff;
+  color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+/* Checkout actions */
+.checkout-view .wc-block-components-checkout-return-to-cart-button {
+  color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  text-decoration: none;
 }
 
 /* Place order button */

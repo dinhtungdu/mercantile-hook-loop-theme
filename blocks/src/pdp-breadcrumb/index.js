@@ -13,7 +13,7 @@ import './style.css';
  * to the server render.
  */
 registerBlockType( metadata.name, {
-	edit() {
+	edit: function Edit() {
 		const blockProps = useBlockProps( { className: 'mh-pdp__header' } );
 
 		return (

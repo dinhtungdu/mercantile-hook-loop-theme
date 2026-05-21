@@ -83,7 +83,7 @@ const ItemEditor = ( { item, index, total, update, remove, move } ) => (
 );
 
 registerBlockType( metadata.name, {
-	edit( { attributes, setAttributes } ) {
+	edit: function Edit( { attributes, setAttributes } ) {
 		const items = Array.isArray( attributes.items ) ? attributes.items : [];
 
 		const update = ( i, partial ) =>
@@ -121,10 +121,7 @@ registerBlockType( metadata.name, {
 			<>
 				<InspectorControls>
 					<PanelBody
-						title={ __(
-							'Ticker items',
-							'mercantile-hook-loop'
-						) }
+						title={ __( 'Ticker items', 'mercantile-hook-loop' ) }
 					>
 						{ items.map( ( item, i ) => (
 							<ItemEditor

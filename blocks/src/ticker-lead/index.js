@@ -26,7 +26,7 @@ const SiteMarkSvg = ( { size } ) => (
 );
 
 registerBlockType( metadata.name, {
-	edit( { attributes, setAttributes } ) {
+	edit: function Edit( { attributes, setAttributes } ) {
 		const { href, ariaLabel, pauseMs = 5000, size = 14 } = attributes;
 		const blockProps = useBlockProps( {
 			className: 'mh-ticker__lead',

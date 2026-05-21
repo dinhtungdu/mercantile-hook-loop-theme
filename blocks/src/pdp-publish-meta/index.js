@@ -10,7 +10,7 @@ import './style.css';
  * representative placeholder values.
  */
 registerBlockType( metadata.name, {
-	edit() {
+	edit: function Edit() {
 		const blockProps = useBlockProps( { className: 'mh-pdp__panel' } );
 
 		return (

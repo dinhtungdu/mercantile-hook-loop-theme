@@ -11,7 +11,7 @@ import './style.css';
  * placeholder copy.
  */
 registerBlockType( metadata.name, {
-	edit() {
+	edit: function Edit() {
 		const blockProps = useBlockProps( { className: 'mh-pdp__permalink' } );
 
 		return (

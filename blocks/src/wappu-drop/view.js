@@ -22,8 +22,7 @@ store( 'mercantile/wappu-drop', {
 		drop() {
 			if (
 				window.matchMedia &&
-				window.matchMedia( '(prefers-reduced-motion: reduce)' )
-					.matches
+				window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches
 			) {
 				return;
 			}

@@ -5,7 +5,7 @@ import metadata from './block.json';
 import './style.css';
 
 registerBlockType( metadata.name, {
-	edit() {
+	edit: function Edit() {
 		const blockProps = useBlockProps( {
 			className: 'mh-cell__stamp is-instock',
 		} );

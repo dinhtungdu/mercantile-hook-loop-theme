@@ -11,7 +11,7 @@ import './style.css';
  * full set with representative state.
  */
 registerBlockType( metadata.name, {
-	edit() {
+	edit: function Edit() {
 		const blockProps = useBlockProps( { className: 'mh-flags' } );
 
 		return (

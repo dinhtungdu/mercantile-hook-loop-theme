@@ -916,6 +916,22 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
     .cart-view
   )
   table.wc-block-cart-items
+  .wc-block-cart-items__row
+  .wc-block-cart-item__quantity
+  .wc-block-cart-item__remove-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:is(
+    .wp-block-woocommerce-mini-cart-contents
+      .wp-block-woocommerce-mini-cart-items-block,
+    .cart-view
+  )
+  table.wc-block-cart-items
+  .wc-block-cart-items__row
+  .wc-block-cart-item__quantity
   .wc-block-cart-item__remove-link
   svg {
   width: 16px;

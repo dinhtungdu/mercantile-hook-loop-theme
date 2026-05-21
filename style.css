@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.32
+Version: 0.2.33
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1115,7 +1115,14 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
 .checkout-view .wc-block-components-text-input input,
 .checkout-view .wc-block-components-text-input textarea,
 .checkout-view .wc-block-components-address-form input {
-  padding: 10px 12px !important;
+  padding-top: 10px !important;
+  padding-right: 12px !important;
+  padding-bottom: 10px !important;
+}
+.checkout-view .wc-block-components-text-input input:not(.phone-input),
+.checkout-view .wc-block-components-text-input textarea,
+.checkout-view .wc-block-components-address-form input:not(.phone-input) {
+  padding-left: 12px !important;
 }
 .checkout-view .wc-blocks-components-select__select {
   padding: 10px 36px 10px 12px !important;
@@ -2089,6 +2096,42 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   font-size: 10px;
   letter-spacing: 0.04em;
   line-height: 1.4;
+}
+
+/* Stripe's card fields are a cross-origin iframe, so regular input CSS
+   cannot reach the actual controls. Scale the frame as one unit to keep
+   the card/date/CVC fields in rhythm with the rest of checkout. */
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wcpay-payment-element-wrapper {
+  min-height: 82px !important;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wcpay-payment-element {
+  zoom: 0.82;
+}
+@supports not (zoom: 1) {
+  .checkout-view
+    .wp-block-woocommerce-checkout-payment-block
+    .wcpay-payment-element {
+    width: 121.951%;
+    margin-bottom: -16px;
+    transform: scale(0.82);
+    transform-origin: top left;
+  }
+}
+
+.checkout-view .woopay-save-new-user-container .iti,
+.checkout-view .woopay-save-new-user-container .iti input.phone-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+.checkout-view .woopay-save-new-user-container .iti__flag-container {
+  z-index: 2;
+}
+.checkout-view .woopay-save-new-user-container .iti__selected-flag {
+  height: 100%;
 }
 
 /* Totals — drop WC's own border on the footer/wrapper so we don't double up

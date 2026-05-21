@@ -2,7 +2,7 @@
 Theme Name: Mercantile Hook Loop
 Theme URI: https://mercantile.wordpress.org/
 Description: Editorial-zine block theme for the WordPress merch shop. A monospace ticker, a giant Fraktur wordmark, a four-column product grid, and an oversized typographic band — all riffing on the wp-admin palette.
-Version: 0.2.27
+Version: 0.2.30
 Author: Automattic
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1745,17 +1745,63 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   height: auto;
 }
 
-/* Payment radio — let WC's native layout breathe; remove the grid override
-   inherited from the prototype's shipping-method radios. */
+/* Payment method selector — WC renders gateways as accordion wrappers,
+   not the prototype's single-label shipping rows. Put card chrome on the
+   wrapper so the selected gateway description stays inside the row. */
 .checkout-view
   .wp-block-woocommerce-checkout-payment-block
-  .wc-block-components-radio-control__option,
+  .wc-block-components-radio-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control::after {
+  content: none !important;
+  display: none !important;
+}
 .checkout-view
   .wp-block-woocommerce-checkout-payment-block
   .wc-block-components-radio-control-accordion-option {
-  display: block;
-  padding: 12px 14px 12px 38px;
-  position: relative;
+  box-sizing: border-box;
+  padding: 12px 14px !important;
+  border: 1px solid var(--mh-rule) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  color: var(--mh-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control-accordion-option--checked-option-highlighted,
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control-accordion-option:has(
+    .wc-block-components-radio-control__input:checked
+  ) {
+  border-color: var(--mh-wp) !important;
+  box-shadow: 0 0 0 1px var(--mh-wp) !important;
+  background: var(--mh-paper-2) !important;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__option {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer;
 }
 .checkout-view
   .wp-block-woocommerce-checkout-payment-block
@@ -1764,10 +1810,70 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
   .wp-block-woocommerce-checkout-payment-block
   .wc-block-components-radio-control__option
   input[type="radio"] {
-  position: absolute;
-  left: 14px;
-  top: 14px;
-  margin: 0;
+  position: static !important;
+  width: 13px !important;
+  height: 13px !important;
+  min-width: 13px !important;
+  margin: 0 !important;
+  appearance: auto !important;
+  accent-color: var(--mh-wp);
+  align-self: center;
+  transform: none !important;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__input:focus,
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control-accordion-option:focus-within {
+  border-color: var(--mh-wp) !important;
+  box-shadow: 0 0 0 1px var(--mh-wp) !important;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__input::before {
+  content: none !important;
+  display: none !important;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__option-layout {
+  display: block;
+  min-width: 0;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__label-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control__label {
+  color: var(--mh-ink);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.checkout-view
+  .wp-block-woocommerce-checkout-payment-block
+  .wc-block-components-radio-control-accordion-content {
+  margin: 2px 0 0 25px !important;
+  padding: 0 !important;
+  color: var(--mh-slate-2);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
 }
 
 /* Totals — drop WC's own border on the footer/wrapper so we don't double up

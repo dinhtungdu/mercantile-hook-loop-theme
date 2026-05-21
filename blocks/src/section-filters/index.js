@@ -7,7 +7,7 @@ import metadata from './block.json';
 import './style.css';
 
 registerBlockType( metadata.name, {
-	edit( { attributes, setAttributes } ) {
+	edit: function Edit( { attributes, setAttributes } ) {
 		const { categories } = attributes;
 		const blockProps = useBlockProps();
 

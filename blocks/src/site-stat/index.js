@@ -18,6 +18,10 @@ import './style.css';
  * paragraph behaves like a normal `<p>` in the canvas (no ServerSideRender
  * wrapper, no extra layout boxes). The Inspector notice tells the editor
  * user that the values shown here are not the ones that will ship.
+ *
+ * @param {Object} root0      Preview props.
+ * @param {string} root0.kind Statistic kind.
+ * @return {JSX.Element|string} Preview content.
  */
 function PreviewContent( { kind } ) {
 	switch ( kind ) {
@@ -49,7 +53,7 @@ function PreviewContent( { kind } ) {
 }
 
 registerBlockType( metadata.name, {
-	edit( { attributes, setAttributes } ) {
+	edit: function Edit( { attributes, setAttributes } ) {
 		const { kind, textAlign } = attributes;
 
 		const extraClasses = [
@@ -110,9 +114,7 @@ registerBlockType( metadata.name, {
 									value: 'time',
 								},
 							] }
-							onChange={ ( v ) =>
-								setAttributes( { kind: v } )
-							}
+							onChange={ ( v ) => setAttributes( { kind: v } ) }
 							__nextHasNoMarginBottom
 							__next40pxDefaultSize
 						/>

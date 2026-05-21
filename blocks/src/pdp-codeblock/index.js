@@ -10,7 +10,7 @@ import './style.css';
  * (view.js) is front-end only — inert in the editor.
  */
 registerBlockType( metadata.name, {
-	edit() {
+	edit: function Edit() {
 		const blockProps = useBlockProps( { className: 'mh-shortcode' } );
 
 		return (

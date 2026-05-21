@@ -6,7 +6,7 @@ import metadata from './block.json';
 import './style.css';
 
 registerBlockType( metadata.name, {
-	edit( { attributes, setAttributes } ) {
+	edit: function Edit( { attributes, setAttributes } ) {
 		const { label, prefix, count = 1 } = attributes;
 		const blockProps = useBlockProps( {
 			className: 'mh-ticker__tab is-new',

@@ -6,7 +6,7 @@ import metadata from './block.json';
 import './style.css';
 
 registerBlockType( metadata.name, {
-	edit( { attributes, setAttributes } ) {
+	edit: function Edit( { attributes, setAttributes } ) {
 		const { cartUrl, label } = attributes;
 		const blockProps = useBlockProps( { className: 'mh-ticker__tab' } );
 
@@ -27,14 +27,9 @@ registerBlockType( metadata.name, {
 							}
 						/>
 						<TextControl
-							label={ __(
-								'Label',
-								'mercantile-hook-loop'
-							) }
+							label={ __( 'Label', 'mercantile-hook-loop' ) }
 							value={ label || '' }
-							onChange={ ( v ) =>
-								setAttributes( { label: v } )
-							}
+							onChange={ ( v ) => setAttributes( { label: v } ) }
 						/>
 					</PanelBody>
 				</InspectorControls>
@@ -43,8 +38,7 @@ registerBlockType( metadata.name, {
 						href={ cartUrl || '#' }
 						onClick={ ( e ) => e.preventDefault() }
 					>
-						{ label || 'cart' }{ ' ' }
-						<strong>0</strong>
+						{ label || 'cart' } <strong>0</strong>
 					</a>
 				</p>
 			</>

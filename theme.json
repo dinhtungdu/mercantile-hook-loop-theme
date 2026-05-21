@@ -114,7 +114,6 @@
 			},
 			"heading": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--newsreader)",
 					"fontWeight": "500",
 					"lineHeight": "1.15",
 					"letterSpacing": "-0.005em"
@@ -123,7 +122,6 @@
 			},
 			"h1": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--unifraktur)",
 					"fontWeight": "700",
 					"fontSize": "clamp(48px, 8vw, 96px)",
 					"lineHeight": "1"
@@ -131,7 +129,6 @@
 			},
 			"h2": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--unifraktur)",
 					"fontWeight": "700",
 					"fontSize": "clamp(32px, 4vw, 56px)",
 					"lineHeight": "1"

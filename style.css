@@ -916,6 +916,18 @@ label.wc-block-add-to-cart-with-options-variation-selector-attribute-options__pi
     .cart-view
   )
   table.wc-block-cart-items
+  .wc-block-cart-item__remove-link
+  svg {
+  width: 16px;
+  height: 16px;
+}
+
+:is(
+    .wp-block-woocommerce-mini-cart-contents
+      .wp-block-woocommerce-mini-cart-items-block,
+    .cart-view
+  )
+  table.wc-block-cart-items
   .wc-block-cart-item__total {
   color: var(--mh-ink);
   font-size: 13px;

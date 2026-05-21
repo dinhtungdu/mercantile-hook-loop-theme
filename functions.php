@@ -206,6 +206,56 @@ add_filter(
 );
 
 /**
+ * Confirm a rendered product-card link points to a same-origin product.
+ *
+ * The modal rewrites browser history to the clicked URL's clean path, so an
+ * off-site absolute URL must never be allowed to opt into the iframe flow.
+ */
+function mercantile_hook_loop_is_product_permalink_href( $href ) {
+	if ( ! is_string( $href ) ) {
+		return false;
+	}
+
+	$href = trim( $href );
+	if ( '' === $href ) {
+		return false;
+	}
+
+	$home_parts = wp_parse_url( home_url( '/' ) );
+	$href_parts = wp_parse_url( $href );
+	if ( false === $home_parts || false === $href_parts || empty( $home_parts['host'] ) ) {
+		return false;
+	}
+
+	if ( empty( $href_parts['host'] ) && ! empty( $href_parts['scheme'] ) ) {
+		return false;
+	}
+
+	$home_scheme = strtolower( $home_parts['scheme'] ?? 'https' );
+	$href_scheme = strtolower( $href_parts['scheme'] ?? $home_scheme );
+	$home_host   = strtolower( $home_parts['host'] );
+	$href_host   = strtolower( $href_parts['host'] ?? $home_host );
+	$home_port   = isset( $home_parts['port'] ) ? (int) $home_parts['port'] : ( 'http' === $home_scheme ? 80 : 443 );
+	$href_port   = isset( $href_parts['port'] ) ? (int) $href_parts['port'] : ( 'http' === $href_scheme ? 80 : 443 );
+
+	if ( $href_scheme !== $home_scheme || $href_host !== $home_host || $href_port !== $home_port ) {
+		return false;
+	}
+
+	$path = $href_parts['path'] ?? '';
+	if ( '' === $path || 0 !== strpos( $path, '/' ) ) {
+		return false;
+	}
+
+	$origin       = $home_scheme . '://' . $home_host . ( isset( $home_parts['port'] ) ? ':' . $home_parts['port'] : '' );
+	$product_url  = $origin . $path;
+	$product_url .= isset( $href_parts['query'] ) ? '?' . $href_parts['query'] : '';
+	$product_id   = url_to_postid( $product_url );
+
+	return $product_id && 'product' === get_post_type( $product_id );
+}
+
+/**
  * Wire every product link inside a wc:product-collection to show the
  * loading overlay and navigate to the product page. Covers catalog grids
  * (home / archive / search) and the related-products sidebar on the
@@ -225,7 +275,7 @@ add_filter(
 		$p = new WP_HTML_Tag_Processor( $block_content );
 		while ( $p->next_tag( 'a' ) ) {
 			$href = $p->get_attribute( 'href' );
-			if ( is_string( $href ) && false !== strpos( $href, '/product/' ) ) {
+			if ( mercantile_hook_loop_is_product_permalink_href( $href ) ) {
 				$p->set_attribute( 'data-wp-on--click', 'mercantile/pdp-modal::callbacks.openFromLink' );
 			}
 		}
@@ -270,4 +320,3 @@ add_action(
  * woocommerce/product-specifications block. The single-product template
  * places them directly. See CLAUDE.md for the supports-first rationale.
  */
-

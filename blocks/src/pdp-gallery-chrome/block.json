@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Toolbar strip above the product gallery: per-product 'fig. NN · CATEGORY' badge on the left, image counter pill on the right. Clicking the pill advances to the next gallery image (wraps back to the first after the last) by hooking WooCommerce's product-gallery store.",
 	"icon": "format-gallery",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"ancestor": [ "woocommerce/product-gallery" ],
 	"attributes": {
 		"backgroundColor": {

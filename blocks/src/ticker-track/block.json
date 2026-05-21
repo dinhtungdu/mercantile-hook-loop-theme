@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Marquee track of one-line announcements. Items live as block attributes (text + variant), edited from the inspector. Render duplicates the list for a seamless loop.",
 	"icon": "controls-repeat",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"items": {
 			"type": "array",

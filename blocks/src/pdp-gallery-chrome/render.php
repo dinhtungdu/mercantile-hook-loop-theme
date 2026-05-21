@@ -42,7 +42,7 @@ $is_preview = 0 === $post_id;
 
 if ( $is_preview ) {
 	$fig_num    = '42';
-	$category   = __( 'apparel', 'mercantile-hook-loop' );
+	$category   = __( 'apparel', 'mercantile-2026' );
 	$total      = 3;
 	$start_idx  = 1;
 } else {
@@ -71,12 +71,12 @@ if ( $is_preview ) {
 }
 
 $fig_label = $category
-	? sprintf( '%s %s · %s', __( 'fig.', 'mercantile-hook-loop' ), $fig_num, $category )
-	: sprintf( '%s %s', __( 'fig.', 'mercantile-hook-loop' ), $fig_num );
+	? sprintf( '%s %s · %s', __( 'fig.', 'mercantile-2026' ), $fig_num, $category )
+	: sprintf( '%s %s', __( 'fig.', 'mercantile-2026' ), $fig_num );
 
 $counter = sprintf(
 	/* translators: 1: current image index, 2: total image count. */
-	__( 'see more · %1$d/%2$d', 'mercantile-hook-loop' ),
+	__( 'see more · %1$d/%2$d', 'mercantile-2026' ),
 	$start_idx,
 	$total
 );

@@ -24,10 +24,10 @@ function Edit() {
 	return (
 		<div { ...blockProps }>
 			<span className="mh-gallery-chrome__fig">
-				{ __( 'fig. 00 · category', 'mercantile-hook-loop' ) }
+				{ __( 'fig. 00 · category', 'mercantile-2026' ) }
 			</span>
 			<button type="button" className="mh-gallery-chrome__pill" disabled>
-				{ __( 'see more · 1/N', 'mercantile-hook-loop' ) }
+				{ __( 'see more · 1/N', 'mercantile-2026' ) }
 			</button>
 		</div>
 	);

@@ -6,7 +6,7 @@ import metadata from './block.json';
 function Edit() {
 	const blockProps = useBlockProps();
 
-	return <p { ...blockProps }>{ __( '$28.00', 'mercantile-hook-loop' ) }</p>;
+	return <p { ...blockProps }>{ __( '$28.00', 'mercantile-2026' ) }</p>;
 }
 
 registerBlockType( metadata.name, {

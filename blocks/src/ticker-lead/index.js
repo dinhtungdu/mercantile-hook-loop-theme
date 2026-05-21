@@ -35,32 +35,24 @@ registerBlockType( metadata.name, {
 		return (
 			<>
 				<InspectorControls>
-					<PanelBody
-						title={ __( 'Ticker Lead', 'mercantile-hook-loop' ) }
-					>
+					<PanelBody title={ __( 'Ticker Lead', 'mercantile-2026' ) }>
 						<TextControl
 							label={ __(
 								'Mark link URL (defaults to home)',
-								'mercantile-hook-loop'
+								'mercantile-2026'
 							) }
 							value={ href || '' }
 							onChange={ ( v ) => setAttributes( { href: v } ) }
 						/>
 						<TextControl
-							label={ __(
-								'Mark aria-label',
-								'mercantile-hook-loop'
-							) }
+							label={ __( 'Mark aria-label', 'mercantile-2026' ) }
 							value={ ariaLabel || '' }
 							onChange={ ( v ) =>
 								setAttributes( { ariaLabel: v } )
 							}
 						/>
 						<RangeControl
-							label={ __(
-								'Mark size (px)',
-								'mercantile-hook-loop'
-							) }
+							label={ __( 'Mark size (px)', 'mercantile-2026' ) }
 							value={ size }
 							min={ 10 }
 							max={ 64 }
@@ -69,7 +61,7 @@ registerBlockType( metadata.name, {
 						<RangeControl
 							label={ __(
 								'Pause duration (ms)',
-								'mercantile-hook-loop'
+								'mercantile-2026'
 							) }
 							value={ pauseMs }
 							min={ 1000 }
@@ -94,7 +86,7 @@ registerBlockType( metadata.name, {
 						<SiteMarkSvg size={ size } />
 					</span>
 					<span className="mh-ticker__live">
-						{ __( 'LIVE', 'mercantile-hook-loop' ) }
+						{ __( 'LIVE', 'mercantile-2026' ) }
 					</span>
 				</div>
 			</>

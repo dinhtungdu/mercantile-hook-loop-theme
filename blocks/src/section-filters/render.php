@@ -54,7 +54,7 @@ if ( is_product_taxonomy() ) {
 $shop_url   = wc_get_page_permalink( 'shop' );
 $default_label = isset( $attributes['label'] ) && '' !== $attributes['label']
 	? (string) $attributes['label']
-	: __( '§ CATALOG', 'mercantile-hook-loop' );
+	: __( '§ CATALOG', 'mercantile-2026' );
 
 // Surface the query context inline: `§ SEARCH: COZY` on a search,
 // `§ DRINKWARE` on a category archive, otherwise the configured label.
@@ -64,7 +64,7 @@ $default_label = isset( $attributes['label'] ) && '' !== $attributes['label']
 if ( is_search() ) {
 	$q          = get_search_query();
 	/* translators: %s: search query term. */
-	$label_text = sprintf( __( '§ SEARCH: %s', 'mercantile-hook-loop' ), strtoupper( $q ) );
+	$label_text = sprintf( __( '§ SEARCH: %s', 'mercantile-2026' ), strtoupper( $q ) );
 } elseif ( is_product_taxonomy() ) {
 	$current_term = get_queried_object();
 	if ( $current_term && isset( $current_term->name ) ) {
@@ -76,8 +76,8 @@ if ( is_search() ) {
 	$label_text = $default_label;
 }
 
-$all_label   = __( 'All', 'mercantile-hook-loop' );
-$select_aria = __( 'Filter products', 'mercantile-hook-loop' );
+$all_label   = __( 'All', 'mercantile-2026' );
+$select_aria = __( 'Filter products', 'mercantile-2026' );
 
 $wrapper_attrs = get_block_wrapper_attributes(
 	array(

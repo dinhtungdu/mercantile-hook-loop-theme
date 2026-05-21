@@ -17,13 +17,13 @@ registerBlockType( metadata.name, {
 		return (
 			<div { ...blockProps }>
 				<span className="mh-pill is-blue">
-					{ __( 'highlighted', 'mercantile-hook-loop' ) }
+					{ __( 'highlighted', 'mercantile-2026' ) }
 				</span>
 				<span className="mh-pill">
-					{ __( 'indexed', 'mercantile-hook-loop' ) }
+					{ __( 'indexed', 'mercantile-2026' ) }
 				</span>
 				<span className="mh-pill is-pink">
-					{ __( 'in stock', 'mercantile-hook-loop' ) }
+					{ __( 'in stock', 'mercantile-2026' ) }
 				</span>
 			</div>
 		);

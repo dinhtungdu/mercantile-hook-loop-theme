@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Tiny `+ New` tab for the ticker bar. Click drops one Wapuu sticker that drifts down and fades. Pure Interactivity API + CSS keyframes — no extra dependencies.",
 	"icon": "smiley",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"label": {
 			"type": "string",
@@ -28,8 +28,21 @@
 		"style": {
 			"type": "object",
 			"default": {
-				"spacing": { "padding": { "top": "0", "right": "12px", "bottom": "0", "left": "12px" } },
-				"border": { "left": { "color": "var:preset|color|divider-on-ink", "width": "1px", "style": "solid" } }
+				"spacing": {
+					"padding": {
+						"top": "0",
+						"right": "12px",
+						"bottom": "0",
+						"left": "12px"
+					}
+				},
+				"border": {
+					"left": {
+						"color": "var:preset|color|divider-on-ink",
+						"width": "1px",
+						"style": "solid"
+					}
+				}
 			}
 		}
 	},

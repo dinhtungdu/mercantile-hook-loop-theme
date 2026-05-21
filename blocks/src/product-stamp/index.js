@@ -11,7 +11,7 @@ registerBlockType( metadata.name, {
 		} );
 		return (
 			<span { ...blockProps }>
-				{ __( 'In stock', 'mercantile-hook-loop' ) }
+				{ __( 'In stock', 'mercantile-2026' ) }
 			</span>
 		);
 	},

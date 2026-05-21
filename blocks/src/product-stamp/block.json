@@ -7,9 +7,13 @@
 	"category": "theme",
 	"description": "Always-visible stock status badge for a product. Renders an icon + label based on the product's real stock status (in stock, out of stock, on backorder) — unlike wc:product-stock-indicator which hides itself when in stock.",
 	"icon": "tag",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"usesContext": [ "postId", "query", "queryId" ],
-	"ancestor": [ "woocommerce/all-products", "woocommerce/product-template", "core/post-template" ],
+	"ancestor": [
+		"woocommerce/all-products",
+		"woocommerce/product-template",
+		"core/post-template"
+	],
 	"supports": {
 		"html": false,
 		"color": {

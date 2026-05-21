@@ -16,12 +16,12 @@ registerBlockType( metadata.name, {
 
 		const rows = [
 			{
-				key: __( 'SKU', 'mercantile-hook-loop' ),
+				key: __( 'SKU', 'mercantile-2026' ),
 				value: 'WP-COD-IS-POE-TEE',
 			},
-			{ key: __( 'price', 'mercantile-hook-loop' ), value: '$48.00' },
-			{ key: __( 'category', 'mercantile-hook-loop' ), value: 'Apparel' },
-			{ key: __( 'tags', 'mercantile-hook-loop' ), value: '#new #wapuu' },
+			{ key: __( 'price', 'mercantile-2026' ), value: '$48.00' },
+			{ key: __( 'category', 'mercantile-2026' ), value: 'Apparel' },
+			{ key: __( 'tags', 'mercantile-2026' ), value: '#new #wapuu' },
 			{ key: 'material', value: 'Cotton' },
 		];
 

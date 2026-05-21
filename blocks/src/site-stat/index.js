@@ -79,37 +79,35 @@ registerBlockType( metadata.name, {
 					/>
 				</BlockControls>
 				<InspectorControls>
-					<PanelBody
-						title={ __( 'Site Stat', 'mercantile-hook-loop' ) }
-					>
+					<PanelBody title={ __( 'Site Stat', 'mercantile-2026' ) }>
 						<Notice status="info" isDismissible={ false }>
 							{ __(
 								'The editor shows a placeholder. The front-end will display live values (product/category counts, current date, or server time).',
-								'mercantile-hook-loop'
+								'mercantile-2026'
 							) }
 						</Notice>
 						<SelectControl
-							label={ __( 'Kind', 'mercantile-hook-loop' ) }
+							label={ __( 'Kind', 'mercantile-2026' ) }
 							value={ kind }
 							options={ [
 								{
 									label: __(
 										'Product + category counts',
-										'mercantile-hook-loop'
+										'mercantile-2026'
 									),
 									value: 'counts',
 								},
 								{
 									label: __(
 										'Volume + date',
-										'mercantile-hook-loop'
+										'mercantile-2026'
 									),
 									value: 'date',
 								},
 								{
 									label: __(
 										'Updated time',
-										'mercantile-hook-loop'
+										'mercantile-2026'
 									),
 									value: 'time',
 								},

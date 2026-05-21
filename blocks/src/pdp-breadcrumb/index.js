@@ -21,14 +21,14 @@ registerBlockType( metadata.name, {
 				<div className="mh-pdp__crumb">
 					<span>mercantile</span>
 					<span className="sl">/</span>
-					<span>{ __( 'category', 'mercantile-hook-loop' ) }</span>
+					<span>{ __( 'category', 'mercantile-2026' ) }</span>
 					<span className="sl">/</span>
-					<b>{ __( 'product title', 'mercantile-hook-loop' ) }</b>
+					<b>{ __( 'product title', 'mercantile-2026' ) }</b>
 				</div>
 				<button
 					className="mh-pdp__close"
 					type="button"
-					aria-label={ __( 'Go back', 'mercantile-hook-loop' ) }
+					aria-label={ __( 'Go back', 'mercantile-2026' ) }
 				>
 					&times;
 				</button>

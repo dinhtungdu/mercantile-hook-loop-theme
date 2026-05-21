@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "The wp-admin Publish meta-box mimic in the single-product sidebar — status / visibility / stock rows rendered from real WooCommerce product state.",
 	"icon": "yes-alt",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"supports": {
 		"html": false,
 		"className": true,

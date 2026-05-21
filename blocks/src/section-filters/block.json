@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Shop filter chips (all / category) with real-time WooCommerce product counts. Chip clicks use Interactivity API client-side navigation to swap the product grid without a full reload.",
 	"icon": "filter",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"categories": {
 			"type": "string",

@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Live cart link for the ticker bar. The item count is derived from WooCommerce's Interactivity API cart store and updates whenever a product is added or removed anywhere on the page.",
 	"icon": "cart",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"cartUrl": {
 			"type": "string",
@@ -24,8 +24,21 @@
 		"style": {
 			"type": "object",
 			"default": {
-				"spacing": { "padding": { "top": "0", "right": "12px", "bottom": "0", "left": "12px" } },
-				"border": { "left": { "color": "var:preset|color|divider-on-ink", "width": "1px", "style": "solid" } }
+				"spacing": {
+					"padding": {
+						"top": "0",
+						"right": "12px",
+						"bottom": "0",
+						"left": "12px"
+					}
+				},
+				"border": {
+					"left": {
+						"color": "var:preset|color|divider-on-ink",
+						"width": "1px",
+						"style": "solid"
+					}
+				}
 			}
 		}
 	},

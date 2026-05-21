@@ -44,22 +44,22 @@ $rows = array();
 
 $sku = $product->get_sku();
 if ( $sku ) {
-	$rows[] = $render_row( __( 'SKU', 'mercantile-hook-loop' ), esc_html( $sku ) );
+	$rows[] = $render_row( __( 'SKU', 'mercantile-2026' ), esc_html( $sku ) );
 }
 
 $price_html = $product->get_price_html();
 if ( $price_html ) {
-	$rows[] = $render_row( __( 'price', 'mercantile-hook-loop' ), $price_html, 'mh-pdp__spec-price' );
+	$rows[] = $render_row( __( 'price', 'mercantile-2026' ), $price_html, 'mh-pdp__spec-price' );
 }
 
 $category_list = wc_get_product_category_list( $product->get_id(), ', ' );
 if ( $category_list ) {
-	$rows[] = $render_row( __( 'category', 'mercantile-hook-loop' ), $category_list, 'mh-pdp__spec-cat' );
+	$rows[] = $render_row( __( 'category', 'mercantile-2026' ), $category_list, 'mh-pdp__spec-cat' );
 }
 
 $tag_list = wc_get_product_tag_list( $product->get_id(), ' ' );
 if ( $tag_list ) {
-	$rows[] = $render_row( __( 'tags', 'mercantile-hook-loop' ), $tag_list, 'mh-pdp__spec-tags' );
+	$rows[] = $render_row( __( 'tags', 'mercantile-2026' ), $tag_list, 'mh-pdp__spec-tags' );
 }
 
 foreach ( $product->get_attributes() as $attribute ) {

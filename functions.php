@@ -1,6 +1,6 @@
 <?php
 /**
- * Mercantile Hook Loop bootstrap.
+ * Mercantile 2026 bootstrap.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,16 +48,16 @@ add_action(
 	'wp_enqueue_scripts',
 	function () {
 		wp_enqueue_style(
-			'mercantile-hook-loop-fonts',
+			'mercantile-2026-fonts',
 			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=UnifrakturCook:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap',
 			array(),
 			null
 		);
 
 		wp_enqueue_style(
-			'mercantile-hook-loop-style',
+			'mercantile-2026-style',
 			get_stylesheet_uri(),
-			array( 'mercantile-hook-loop-fonts' ),
+			array( 'mercantile-2026-fonts' ),
 			wp_get_theme()->get( 'Version' )
 		);
 	}
@@ -86,7 +86,7 @@ add_action(
 			return;
 		}
 		wp_enqueue_script_module(
-			'mercantile-hook-loop/pdp-modal',
+			'mercantile-2026/pdp-modal',
 			get_template_directory_uri() . '/assets/js/pdp-modal.js',
 			array( '@wordpress/interactivity' ),
 			wp_get_theme()->get( 'Version' )
@@ -97,15 +97,15 @@ add_action(
 				array(
 					'homeUrl'       => home_url( '/' ),
 					'loadingLabels' => array(
-						__( 'compiling…', 'mercantile-hook-loop' ),
-						__( 'unwrapping it…', 'mercantile-hook-loop' ),
-						__( 'running the_content()…', 'mercantile-hook-loop' ),
-						__( 'pulling from wp-content/merch…', 'mercantile-hook-loop' ),
-						__( 'polishing the kerning…', 'mercantile-hook-loop' ),
-						__( 'committing markup…', 'mercantile-hook-loop' ),
-						__( 'wapuu woke up…', 'mercantile-hook-loop' ),
-						__( "did_action( 'preview' )…", 'mercantile-hook-loop' ),
-						__( 'fetching, gently…', 'mercantile-hook-loop' ),
+						__( 'compiling…', 'mercantile-2026' ),
+						__( 'unwrapping it…', 'mercantile-2026' ),
+						__( 'running the_content()…', 'mercantile-2026' ),
+						__( 'pulling from wp-content/merch…', 'mercantile-2026' ),
+						__( 'polishing the kerning…', 'mercantile-2026' ),
+						__( 'committing markup…', 'mercantile-2026' ),
+						__( 'wapuu woke up…', 'mercantile-2026' ),
+						__( "did_action( 'preview' )…", 'mercantile-2026' ),
+						__( 'fetching, gently…', 'mercantile-2026' ),
 					),
 				)
 			);
@@ -143,7 +143,7 @@ add_action(
 		>
 			<iframe
 				class="mh-pdp-dialog__frame"
-				title="<?php esc_attr_e( 'Product details', 'mercantile-hook-loop' ); ?>"
+				title="<?php esc_attr_e( 'Product details', 'mercantile-2026' ); ?>"
 			></iframe>
 			<div class="mh-pdp-dialog__loading" aria-hidden="true">
 				<pre class="mh-wapuu-ascii"></pre>
@@ -211,7 +211,7 @@ add_filter(
  * The modal rewrites browser history to the clicked URL's clean path, so an
  * off-site absolute URL must never be allowed to opt into the iframe flow.
  */
-function mercantile_hook_loop_is_product_permalink_href( $href ) {
+function mercantile_2026_is_product_permalink_href( $href ) {
 	if ( ! is_string( $href ) ) {
 		return false;
 	}
@@ -275,7 +275,7 @@ add_filter(
 		$p = new WP_HTML_Tag_Processor( $block_content );
 		while ( $p->next_tag( 'a' ) ) {
 			$href = $p->get_attribute( 'href' );
-			if ( mercantile_hook_loop_is_product_permalink_href( $href ) ) {
+			if ( mercantile_2026_is_product_permalink_href( $href ) ) {
 				$p->set_attribute( 'data-wp-on--click', 'mercantile/pdp-modal::callbacks.openFromLink' );
 			}
 		}
@@ -298,15 +298,15 @@ add_action(
 			return;
 		}
 		wp_enqueue_style(
-			'mercantile-hook-loop-fonts-editor',
+			'mercantile-2026-fonts-editor',
 			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=UnifrakturCook:wght@700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap',
 			array(),
 			null
 		);
 		wp_enqueue_style(
-			'mercantile-hook-loop-style-editor',
+			'mercantile-2026-style-editor',
 			get_stylesheet_uri(),
-			array( 'mercantile-hook-loop-fonts-editor' ),
+			array( 'mercantile-2026-fonts-editor' ),
 			wp_get_theme()->get( 'Version' )
 		);
 	}

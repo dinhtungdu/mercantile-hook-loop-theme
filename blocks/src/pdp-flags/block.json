@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Product-state pills for the single-product template — highlighted / indexed / in stock — each derived from real WooCommerce product state (featured, catalog visibility, stock status).",
 	"icon": "tag",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"supports": {
 		"html": false,
 		"className": true,

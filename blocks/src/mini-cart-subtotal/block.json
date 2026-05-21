@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Dynamic subtotal text for the customized Mini-Cart footer.",
 	"icon": "cart",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"align": {
 			"type": "string"

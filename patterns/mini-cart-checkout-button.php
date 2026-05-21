@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Mini Cart Checkout Button
- * Slug: mercantile-hook-loop/mini-cart-checkout-button
+ * Slug: mercantile-2026/mini-cart-checkout-button
  * Inserter: no
  */
 
@@ -17,7 +17,7 @@ $checkout_url = function_exists( 'wc_get_checkout_url' )
 			class="wp-block-button__link has-card-color has-wp-background-color has-text-color has-background has-custom-font-size wp-element-button"
 			href="<?php echo esc_url( $checkout_url ); ?>"
 			style="border-radius:0px;padding-top:12px;padding-right:12px;padding-bottom:12px;padding-left:12px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase"
-		><?php esc_html_e( 'PROCEED TO CHECKOUT →', 'mercantile-hook-loop' ); ?></a>
+		><?php esc_html_e( 'PROCEED TO CHECKOUT →', 'mercantile-2026' ); ?></a>
 	</div>
 	<!-- /wp:button -->
 </div>

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $href     = ! empty( $attributes['href'] ) ? esc_url( $attributes['href'] ) : esc_url( home_url( '/' ) );
-$label    = isset( $attributes['ariaLabel'] ) ? (string) $attributes['ariaLabel'] : __( 'Mercantile home', 'mercantile-hook-loop' );
+$label    = isset( $attributes['ariaLabel'] ) ? (string) $attributes['ariaLabel'] : __( 'Mercantile home', 'mercantile-2026' );
 $pause_ms = isset( $attributes['pauseMs'] ) ? max( 500, (int) $attributes['pauseMs'] ) : 5000;
 $size     = isset( $attributes['size'] ) ? (int) $attributes['size'] : 14;
 
@@ -31,9 +31,9 @@ $size     = isset( $attributes['size'] ) ? (int) $attributes['size'] : 14;
 // changes after first paint), not state. Only `isPaused` and the derived
 // `label` are reactive state — those mutate at runtime. The label getter
 // in view.js reads the two strings out of getConfig().
-$live_text  = __( 'LIVE', 'mercantile-hook-loop' );
-$stop_text  = __( 'STOP', 'mercantile-hook-loop' );
-$pause_aria = __( 'Pause ticker', 'mercantile-hook-loop' );
+$live_text  = __( 'LIVE', 'mercantile-2026' );
+$stop_text  = __( 'STOP', 'mercantile-2026' );
+$pause_aria = __( 'Pause ticker', 'mercantile-2026' );
 
 wp_interactivity_config(
 	'mercantile/ticker-lead',

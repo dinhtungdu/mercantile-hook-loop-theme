@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Dynamic masthead stat — product/category counts, volume + date, or last-updated time. Driven by live WooCommerce and WordPress data so the masthead never drifts from reality.",
 	"icon": "chart-bar",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"kind": {
 			"type": "string",

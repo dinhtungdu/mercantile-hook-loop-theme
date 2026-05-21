@@ -32,25 +32,25 @@ $pills = array();
 
 if ( $product->is_featured() ) {
 	$pills[] = array(
-		'text'    => __( 'highlighted', 'mercantile-hook-loop' ),
+		'text'    => __( 'highlighted', 'mercantile-2026' ),
 		'variant' => 'is-blue',
 	);
 }
 
 if ( in_array( $product->get_catalog_visibility(), array( 'visible', 'catalog' ), true ) ) {
 	$pills[] = array(
-		'text'    => __( 'indexed', 'mercantile-hook-loop' ),
+		'text'    => __( 'indexed', 'mercantile-2026' ),
 		'variant' => '',
 	);
 }
 
 $pills[] = $product->is_in_stock()
 	? array(
-		'text'    => __( 'in stock', 'mercantile-hook-loop' ),
+		'text'    => __( 'in stock', 'mercantile-2026' ),
 		'variant' => 'is-pink',
 	)
 	: array(
-		'text'    => __( 'out of stock', 'mercantile-hook-loop' ),
+		'text'    => __( 'out of stock', 'mercantile-2026' ),
 		'variant' => '',
 	);
 

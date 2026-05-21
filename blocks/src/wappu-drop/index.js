@@ -15,23 +15,21 @@ registerBlockType( metadata.name, {
 		return (
 			<>
 				<InspectorControls>
-					<PanelBody
-						title={ __( 'Wapuu Drop', 'mercantile-hook-loop' ) }
-					>
+					<PanelBody title={ __( 'Wapuu Drop', 'mercantile-2026' ) }>
 						<TextControl
-							label={ __( 'Prefix', 'mercantile-hook-loop' ) }
+							label={ __( 'Prefix', 'mercantile-2026' ) }
 							value={ prefix || '' }
 							onChange={ ( v ) => setAttributes( { prefix: v } ) }
 						/>
 						<TextControl
-							label={ __( 'Label', 'mercantile-hook-loop' ) }
+							label={ __( 'Label', 'mercantile-2026' ) }
 							value={ label || '' }
 							onChange={ ( v ) => setAttributes( { label: v } ) }
 						/>
 						<RangeControl
 							label={ __(
 								'Wapuus per click',
-								'mercantile-hook-loop'
+								'mercantile-2026'
 							) }
 							value={ count }
 							min={ 1 }

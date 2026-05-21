@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Editor-style breadcrumb header for the single-product template — mercantile / shop / category / title — with a close (×) button wired to the PDP modal's close action. Renders real product data.",
 	"icon": "arrow-left-alt2",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"supports": {
 		"html": false,
 		"className": true,

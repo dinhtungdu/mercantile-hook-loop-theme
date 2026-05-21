@@ -1,6 +1,6 @@
-# Mercantile Hook Loop
+# Mercantile 2026
 
-Mercantile Hook Loop is a WordPress block theme for WooCommerce with an editorial storefront treatment: a sticky ticker, oversized typography, a dense catalog grid, and a wp-admin-inspired color system.
+Mercantile 2026 is a WordPress block theme for WooCommerce with an editorial storefront treatment: a sticky ticker, oversized typography, a dense catalog grid, and a wp-admin-inspired color system.
 
 ## Requirements
 
@@ -9,7 +9,7 @@ Mercantile Hook Loop is a WordPress block theme for WooCommerce with an editoria
 
 ## Installation
 
-1. Copy this directory to `wp-content/themes/mercantile-hook-loop`.
+1. Copy this directory to `wp-content/themes/mercantile-2026`.
 2. Activate the theme in WordPress.
 3. Make sure WooCommerce is active so the product templates render correctly.
 

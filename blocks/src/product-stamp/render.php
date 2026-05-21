@@ -28,9 +28,9 @@ if ( ! $product ) {
 
 $status = $product->get_stock_status();
 $labels = array(
-	'instock'     => __( 'In stock', 'mercantile-hook-loop' ),
-	'outofstock'  => __( 'Out of stock', 'mercantile-hook-loop' ),
-	'onbackorder' => __( 'On backorder', 'mercantile-hook-loop' ),
+	'instock'     => __( 'In stock', 'mercantile-2026' ),
+	'outofstock'  => __( 'Out of stock', 'mercantile-2026' ),
+	'onbackorder' => __( 'On backorder', 'mercantile-2026' ),
 );
 $label  = isset( $labels[ $status ] ) ? $labels[ $status ] : $labels['instock'];
 

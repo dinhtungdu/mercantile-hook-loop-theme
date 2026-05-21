@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Checkout crumb, trust meta, and step navigation for the checkout template.",
 	"icon": "cart",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"current": {
 			"type": "string",

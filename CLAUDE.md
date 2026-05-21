@@ -1,4 +1,4 @@
-# Mercantile Hook Loop — block-theme working notes
+# Mercantile 2026 — block-theme working notes
 
 Lessons captured while converting this theme away from `wp:html` islands
 toward a real block-native composition. Keep these in mind before adding
@@ -142,8 +142,8 @@ or editing blocks here.
 
 17. **All user-facing strings flow through a translation function.**
     PHP: `__()` / `esc_html__()` / `esc_attr__()` with textdomain
-    `'mercantile-hook-loop'`. JS (editor): `__( 'foo',
-    'mercantile-hook-loop' )` from `@wordpress/i18n`. Applies even to
+    `'mercantile-2026'`. JS (editor): `__( 'foo',
+    'mercantile-2026' )` from `@wordpress/i18n`. Applies even to
     "hardcoded" labels like `LIVE` / `STOP` — hardcoded means
     not author-editable, not English-only.
 18. **block.json attribute `default` values are NOT auto-translated.**

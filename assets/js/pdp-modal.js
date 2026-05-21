@@ -1,5 +1,5 @@
 /**
- * Mercantile Hook Loop — PDP modal via a native <dialog> + <iframe>.
+ * Mercantile 2026 — PDP modal via a native <dialog> + <iframe>.
  *
  * This module runs in two contexts and branches on `isEmbedded`:
  *

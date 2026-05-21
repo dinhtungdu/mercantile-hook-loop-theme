@@ -12,8 +12,8 @@ import metadata from './block.json';
 import './style.css';
 
 const VARIANT_OPTIONS = [
-	{ label: __( 'Default', 'mercantile-hook-loop' ), value: 'default' },
-	{ label: __( 'Wapuu', 'mercantile-hook-loop' ), value: 'wapuu' },
+	{ label: __( 'Default', 'mercantile-2026' ), value: 'default' },
+	{ label: __( 'Wapuu', 'mercantile-2026' ), value: 'wapuu' },
 ];
 
 const itemClass = ( variant ) =>
@@ -33,12 +33,12 @@ const ItemEditor = ( { item, index, total, update, remove, move } ) => (
 			onChange={ ( text ) => update( index, { text } ) }
 			help={ __(
 				'Allowed inline HTML: <strong>, <em>, <span class="mh-mono-blue">.',
-				'mercantile-hook-loop'
+				'mercantile-2026'
 			) }
 			rows={ 2 }
 		/>
 		<SelectControl
-			label={ __( 'Variant', 'mercantile-hook-loop' ) }
+			label={ __( 'Variant', 'mercantile-2026' ) }
 			value={ item.variant || 'default' }
 			options={ VARIANT_OPTIONS }
 			onChange={ ( variant ) => update( index, { variant } ) }
@@ -76,7 +76,7 @@ const ItemEditor = ( { item, index, total, update, remove, move } ) => (
 				isDestructive
 				onClick={ () => remove( index ) }
 			>
-				{ __( 'Remove', 'mercantile-hook-loop' ) }
+				{ __( 'Remove', 'mercantile-2026' ) }
 			</Button>
 		</div>
 	</div>
@@ -121,7 +121,7 @@ registerBlockType( metadata.name, {
 			<>
 				<InspectorControls>
 					<PanelBody
-						title={ __( 'Ticker items', 'mercantile-hook-loop' ) }
+						title={ __( 'Ticker items', 'mercantile-2026' ) }
 					>
 						{ items.map( ( item, i ) => (
 							<ItemEditor
@@ -135,7 +135,7 @@ registerBlockType( metadata.name, {
 							/>
 						) ) }
 						<Button variant="primary" onClick={ add }>
-							{ __( 'Add item', 'mercantile-hook-loop' ) }
+							{ __( 'Add item', 'mercantile-2026' ) }
 						</Button>
 					</PanelBody>
 				</InspectorControls>

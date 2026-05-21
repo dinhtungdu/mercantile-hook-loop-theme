@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $wrapper_attrs = get_block_wrapper_attributes(
 	array(
 		'class'      => 'checkout-head',
-		'aria-label' => __( 'Checkout progress', 'mercantile-hook-loop' ),
+		'aria-label' => __( 'Checkout progress', 'mercantile-2026' ),
 	)
 );
 $current = isset( $attributes['current'] ) ? (string) $attributes['current'] : 'checkout';
@@ -37,23 +37,23 @@ $checkout_url     = function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_u
 ?>
 <section <?php echo $wrapper_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 	<div class="ckhead">
-		<div class="crumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html__( '← shop', 'mercantile-hook-loop' ); ?></a><b>/</b><?php echo esc_html__( 'checkout', 'mercantile-hook-loop' ); ?></div>
+		<div class="crumb"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html__( '← shop', 'mercantile-2026' ); ?></a><b>/</b><?php echo esc_html__( 'checkout', 'mercantile-2026' ); ?></div>
 		<div class="meta">
-			<span><?php echo esc_html__( 'SSL', 'mercantile-hook-loop' ); ?> · <b><?php echo esc_html__( 'secure', 'mercantile-hook-loop' ); ?></b></span>
-			<span><?php echo esc_html__( 'est. ship', 'mercantile-hook-loop' ); ?> · <b><?php echo esc_html__( '1–2 business days', 'mercantile-hook-loop' ); ?></b></span>
+			<span><?php echo esc_html__( 'SSL', 'mercantile-2026' ); ?> · <b><?php echo esc_html__( 'secure', 'mercantile-2026' ); ?></b></span>
+			<span><?php echo esc_html__( 'est. ship', 'mercantile-2026' ); ?> · <b><?php echo esc_html__( '1–2 business days', 'mercantile-2026' ); ?></b></span>
 		</div>
 	</div>
 	<div class="step-nav">
 		<?php if ( $is_cart_step ) : ?>
-			<div class="step now"><span class="n">01</span><span><?php echo esc_html__( 'cart', 'mercantile-hook-loop' ); ?></span></div>
+			<div class="step now"><span class="n">01</span><span><?php echo esc_html__( 'cart', 'mercantile-2026' ); ?></span></div>
 		<?php else : ?>
-			<a class="step done" href="<?php echo esc_url( $cart_url ); ?>"><span class="n">01</span><span><?php echo esc_html__( 'cart', 'mercantile-hook-loop' ); ?></span></a>
+			<a class="step done" href="<?php echo esc_url( $cart_url ); ?>"><span class="n">01</span><span><?php echo esc_html__( 'cart', 'mercantile-2026' ); ?></span></a>
 		<?php endif; ?>
 		<?php if ( $is_checkout_step ) : ?>
-			<div class="step now"><span class="n">02</span><span><?php echo esc_html__( 'details', 'mercantile-hook-loop' ); ?></span></div>
+			<div class="step now"><span class="n">02</span><span><?php echo esc_html__( 'details', 'mercantile-2026' ); ?></span></div>
 		<?php else : ?>
-			<a class="step <?php echo $is_confirm_step ? 'done' : ''; ?>" href="<?php echo esc_url( $checkout_url ); ?>"><span class="n">02</span><span><?php echo esc_html__( 'details', 'mercantile-hook-loop' ); ?></span></a>
+			<a class="step <?php echo $is_confirm_step ? 'done' : ''; ?>" href="<?php echo esc_url( $checkout_url ); ?>"><span class="n">02</span><span><?php echo esc_html__( 'details', 'mercantile-2026' ); ?></span></a>
 		<?php endif; ?>
-		<div class="step <?php echo $is_confirm_step ? 'now' : ''; ?>"><span class="n">03</span><span><?php echo esc_html__( 'confirm', 'mercantile-hook-loop' ); ?></span></div>
+		<div class="step <?php echo $is_confirm_step ? 'now' : ''; ?>"><span class="n">03</span><span><?php echo esc_html__( 'confirm', 'mercantile-2026' ); ?></span></div>
 	</div>
 </section>

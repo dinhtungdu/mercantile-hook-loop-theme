@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Editor-style permalink row for the single-product template — permalink: <site>/product/<slug> · modified <date> — with the slug highlighted and the real last-modified time. Renders real product data.",
 	"icon": "admin-links",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"supports": {
 		"html": false,
 		"className": true,

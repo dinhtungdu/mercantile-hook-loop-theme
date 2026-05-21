@@ -53,5 +53,5 @@ printf(
 	esc_url( home_url( '/' ) ),
 	$cat_html, // Pre-escaped above.
 	esc_html( strtolower( $product->get_name() ) ),
-	esc_attr__( 'Go back', 'mercantile-hook-loop' )
+	esc_attr__( 'Go back', 'mercantile-2026' )
 );

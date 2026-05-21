@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "The Details panel body in the single-product sidebar — price, category, tags, and per-product attributes, every value pulled live from the current WooCommerce product. The panel heading stays a separate core/heading block.",
 	"icon": "list-view",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"supports": {
 		"html": false,
 		"className": true,

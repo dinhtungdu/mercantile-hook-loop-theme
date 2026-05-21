@@ -13,13 +13,11 @@ registerBlockType( metadata.name, {
 		return (
 			<>
 				<InspectorControls>
-					<PanelBody
-						title={ __( 'Cart Tab', 'mercantile-hook-loop' ) }
-					>
+					<PanelBody title={ __( 'Cart Tab', 'mercantile-2026' ) }>
 						<TextControl
 							label={ __(
 								'Cart URL (defaults to wc_get_cart_url)',
-								'mercantile-hook-loop'
+								'mercantile-2026'
 							) }
 							value={ cartUrl || '' }
 							onChange={ ( v ) =>
@@ -27,7 +25,7 @@ registerBlockType( metadata.name, {
 							}
 						/>
 						<TextControl
-							label={ __( 'Label', 'mercantile-hook-loop' ) }
+							label={ __( 'Label', 'mercantile-2026' ) }
 							value={ label || '' }
 							onChange={ ( v ) => setAttributes( { label: v } ) }
 						/>

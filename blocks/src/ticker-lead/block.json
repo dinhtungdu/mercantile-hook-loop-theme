@@ -7,7 +7,7 @@
 	"category": "theme",
 	"description": "Site mark + LIVE indicator that anchors the ticker bar. The pulsing status dot is rendered as a CSS ::before on the LIVE label.",
 	"icon": "podio",
-	"textdomain": "mercantile-hook-loop",
+	"textdomain": "mercantile-2026",
 	"attributes": {
 		"href": {
 			"type": "string",
@@ -36,9 +36,22 @@
 		"style": {
 			"type": "object",
 			"default": {
-				"spacing": { "padding": { "top": "0", "right": "12px", "bottom": "0", "left": "12px" } },
+				"spacing": {
+					"padding": {
+						"top": "0",
+						"right": "12px",
+						"bottom": "0",
+						"left": "12px"
+					}
+				},
 				"typography": { "fontWeight": "600" },
-				"border": { "right": { "color": "var:preset|color|divider-on-ink", "width": "1px", "style": "solid" } }
+				"border": {
+					"right": {
+						"color": "var:preset|color|divider-on-ink",
+						"width": "1px",
+						"style": "solid"
+					}
+				}
 			}
 		}
 	},

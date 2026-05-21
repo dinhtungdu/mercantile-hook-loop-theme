@@ -45,27 +45,22 @@ function Edit( { attributes } ) {
 	return (
 		<section
 			{ ...blockProps }
-			aria-label={ __( 'Checkout progress', 'mercantile-hook-loop' ) }
+			aria-label={ __( 'Checkout progress', 'mercantile-2026' ) }
 		>
 			<div className="ckhead">
 				<div className="crumb">
-					<span>← { __( 'shop', 'mercantile-hook-loop' ) }</span>
+					<span>← { __( 'shop', 'mercantile-2026' ) }</span>
 					<b>/</b>
-					{ __( 'checkout', 'mercantile-hook-loop' ) }
+					{ __( 'checkout', 'mercantile-2026' ) }
 				</div>
 				<div className="meta">
 					<span>
-						{ __( 'SSL', 'mercantile-hook-loop' ) } ·{ ' ' }
-						<b>{ __( 'secure', 'mercantile-hook-loop' ) }</b>
+						{ __( 'SSL', 'mercantile-2026' ) } ·{ ' ' }
+						<b>{ __( 'secure', 'mercantile-2026' ) }</b>
 					</span>
 					<span>
-						{ __( 'est. ship', 'mercantile-hook-loop' ) } ·{ ' ' }
-						<b>
-							{ __(
-								'1–2 business days',
-								'mercantile-hook-loop'
-							) }
-						</b>
+						{ __( 'est. ship', 'mercantile-2026' ) } ·{ ' ' }
+						<b>{ __( '1–2 business days', 'mercantile-2026' ) }</b>
 					</span>
 				</div>
 			</div>
@@ -74,18 +69,18 @@ function Edit( { attributes } ) {
 					className={ `step ${ isCart ? 'now' : 'done' }` }
 					href={ isCart ? undefined : '/cart/' }
 					number="01"
-					label={ __( 'cart', 'mercantile-hook-loop' ) }
+					label={ __( 'cart', 'mercantile-2026' ) }
 				/>
 				<Step
 					className={ detailsClass }
 					href={ isCheckout ? undefined : '/checkout/' }
 					number="02"
-					label={ __( 'details', 'mercantile-hook-loop' ) }
+					label={ __( 'details', 'mercantile-2026' ) }
 				/>
 				<Step
 					className={ `step ${ isConfirm ? 'now' : '' }` }
 					number="03"
-					label={ __( 'confirm', 'mercantile-hook-loop' ) }
+					label={ __( 'confirm', 'mercantile-2026' ) }
 				/>
 			</div>
 		</section>

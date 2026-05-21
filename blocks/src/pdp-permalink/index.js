@@ -18,11 +18,10 @@ registerBlockType( metadata.name, {
 			<div { ...blockProps }>
 				permalink: <span className="k">{ '/product/' }</span>
 				<b className="hl-blue">
-					{ __( 'product-slug', 'mercantile-hook-loop' ) }
+					{ __( 'product-slug', 'mercantile-2026' ) }
 				</b>
 				<span className="mh-pdp__permalink-meta">
-					&middot;{ ' ' }
-					{ __( 'modified just now', 'mercantile-hook-loop' ) }
+					&middot; { __( 'modified just now', 'mercantile-2026' ) }
 				</span>
 			</div>
 		);

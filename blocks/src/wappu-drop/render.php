@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // localized by whoever typed it into the inspector).
 $label  = isset( $attributes['label'] ) && '' !== $attributes['label']
 	? (string) $attributes['label']
-	: __( 'New', 'mercantile-hook-loop' );
+	: __( 'New', 'mercantile-2026' );
 $prefix = isset( $attributes['prefix'] ) && '' !== $attributes['prefix']
 	? (string) $attributes['prefix']
 	: '+';

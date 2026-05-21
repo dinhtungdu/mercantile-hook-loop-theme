@@ -15,19 +15,16 @@ registerBlockType( metadata.name, {
 			<>
 				<InspectorControls>
 					<PanelBody
-						title={ __(
-							'Section Filters',
-							'mercantile-hook-loop'
-						) }
+						title={ __( 'Section Filters', 'mercantile-2026' ) }
 					>
 						<TextControl
 							label={ __(
 								'Category slugs (comma separated)',
-								'mercantile-hook-loop'
+								'mercantile-2026'
 							) }
 							help={ __(
 								'Product category slugs rendered as chips, in display order.',
-								'mercantile-hook-loop'
+								'mercantile-2026'
 							) }
 							value={ categories || '' }
 							onChange={ ( v ) =>
